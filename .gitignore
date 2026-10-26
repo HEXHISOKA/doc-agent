@@ -1,0 +1,38 @@
+# ---- 依赖与缓存 ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# ---- 凭据（本仓库不存放实例配置）----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---- 外部数据集（体积大，来源见 README 第八节，按需自行下载）----
+data/
+*.parquet
+
+# ---- 运行时产物 ----
+out/
+*.log
+*.tmp
+.pytest_cache/
+
+# ---- 非自造的测试图片（版权与体积原因不进仓库）----
+testset/images/a_hf_procurement/
+testset/images/c_offdomain/
+
+# ---- 编辑器与系统 ----
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- 交付物 ----
+*.docx
+*.pdf

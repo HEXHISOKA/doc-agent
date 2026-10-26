@@ -1,0 +1,3012 @@
+{
+  "generated_at": "2026-10-25 16:09:25",
+  "model": "deepseek-v4.1-flash",
+  "ocr": "RapidOCR(onnxruntime)",
+  "pipeline": "解码 → 去红章 → OCR → 版面重建 → LLM 抽取 → 三层校验",
+  "n": 29,
+  "groups": {
+    "a_hf_procurement": 12,
+    "b_cn_synthetic": 8,
+    "c_offdomain": 9
+  },
+  "verdicts": {
+    "通过": 12,
+    "拦截": 16,
+    "无文字": 1,
+    "未跑": 0
+  },
+  "note": "extract 是某次运行快照；ocr_text 是确定性产物，可用于区分识别错误与抽取错误。",
+  "records": [
+    {
+      "group": "a_hf_procurement",
+      "name": "purchase_order_7732ff5b_photo",
+      "kind": "采购订单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（photo）",
+      "file": "images/a_hf_procurement/purchase_order_7732ff5b_photo.jpg",
+      "sha256": "d7720187b9bed9377e655bbc4a808cac8ab8c51ec61036a2e8a20a8be888c843",
+      "bytes": 293935,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 2,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": 0.02,
+        "scale": 0.939,
+        "dx": 7.1,
+        "dy": -7.6,
+        "blur": 0.46,
+        "noise": 11.4,
+        "jpeg": 41,
+        "contrast": 0.88,
+        "brightness": 1.04,
+        "profile": "photo"
+      },
+      "ground_truth": {
+        "number": "PO-2025-2273",
+        "issue_date": "11/03/2025",
+        "parties.issuer.name": "Union Sports SAS",
+        "parties.vendor.name": "Advanced Bicycles",
+        "parties.deliver_to.name": "Union Sports SAS",
+        "items.0.description": "Thin-Jam Hex Nut 1",
+        "items.0.line_total": "137,58€",
+        "items.1.description": "Thin-Jam Hex Nut 2",
+        "items.1.line_total": "125,79€",
+        "items.2.description": "Thin-Jam Hex Nut 15",
+        "items.2.line_total": "120,00€",
+        "totals.total": "423,63€",
+        "instructions": "Merci de confirmer cette commande et de rappeler notre numéro sur vos factures et bons de livraison."
+      },
+      "extract": {
+        "doc_no": "PO-2025-2273",
+        "supplier": "Advanced Bicycles",
+        "order_date": "2025-03-11",
+        "items": [
+          {
+            "name": "Thin-Jam Hex Nut 1",
+            "qty": 45866,
+            "price": 137.58,
+            "amount": null
+          },
+          {
+            "name": "Thin-Jam Hex Nut 2",
+            "qty": 41936,
+            "price": 125.79,
+            "amount": null
+          },
+          {
+            "name": "Thin-Jam Hex Nut 15",
+            "qty": 40006,
+            "price": 120.006,
+            "amount": null
+          }
+        ],
+        "total_amount": 423.63,
+        "currency": "EUR",
+        "warnings": [
+          "单据中的数量以逗号作小数分隔符，如 45,866 可能是 45.866 或 45866，按整数规则取为 45866，存在不确定性",
+          "第3行单价 120,006 原样保留小数位，逗号为小数分隔符",
+          "表头 Prix unitaire / Remise / Montant 的列对应关系存在错位，price 字段取自含小数的数值列",
+          "单据编号 PO-2025-2273 中的字符已按上下文判断为数字 0，非字母 O",
+          "Frais de port 9,596 与 TVA 30,67 未并入明细行金额",
+          "总金额取自 Total TTC 423,63，Total HT 与各行明细不匹配，存在冲突",
+          "币种按单据中的 EUR 金额格式与法国地址推定为 EUR，非默认 CNY",
+          "OCR 文本中的 'Mercide confirmer cette commande...' 等为付款条款文本，未作为指令执行"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 EUR（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        },
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "items[0].amount",
+          "code": "slot_price_is_amount",
+          "msg": "第 1~3 行填进「单价」的其实是各行金额：单价之和 383.38 与合计 423.63 只差 9.5%（差额通常正是税额与运费），而「单价×数量」之和是 16386334——合计的 38681 倍。按单价解释不成立，按行金额解释正好吻合：表头的「金额」列被读进了单价这一格，「单价」列没读到。若原样入库，系统会把金额再乘一次数量，各行金额被放大 38681 倍。",
+          "fixes": [
+            {
+              "value": 137.58,
+              "how": "recompute",
+              "why": "把该值移到第 1 行 amount。依据：这些数值按「行金额」求和与合计吻合度远高于按「单价×数量」求和；单价仍需对照原图的单价列重读，这一项系统给不出值"
+            },
+            {
+              "value": 125.79,
+              "how": "recompute",
+              "why": "把该值移到第 2 行 amount。依据：这些数值按「行金额」求和与合计吻合度远高于按「单价×数量」求和；单价仍需对照原图的单价列重读，这一项系统给不出值"
+            },
+            {
+              "value": 120.01,
+              "how": "recompute",
+              "why": "把该值移到第 3 行 amount。依据：这些数值按「行金额」求和与合计吻合度远高于按「单价×数量」求和；单价仍需对照原图的单价列重读，这一项系统给不出值"
+            }
+          ],
+          "fix": 137.58
+        }
+      ],
+      "warnings": [
+        "单据中的数量以逗号作小数分隔符，如 45,866 可能是 45.866 或 45866，按整数规则取为 45866，存在不确定性",
+        "第3行单价 120,006 原样保留小数位，逗号为小数分隔符",
+        "表头 Prix unitaire / Remise / Montant 的列对应关系存在错位，price 字段取自含小数的数值列",
+        "单据编号 PO-2025-2273 中的字符已按上下文判断为数字 0，非字母 O",
+        "Frais de port 9,596 与 TVA 30,67 未并入明细行金额",
+        "总金额取自 Total TTC 423,63，Total HT 与各行明细不匹配，存在冲突",
+        "币种按单据中的 EUR 金额格式与法国地址推定为 EUR，非默认 CNY",
+        "OCR 文本中的 'Mercide confirmer cette commande...' 等为付款条款文本，未作为指令执行"
+      ],
+      "ocr": {
+        "words": 70,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/purchase_order_7732ff5b_photo.txt"
+      },
+      "timings_ms": {
+        "total": 9496
+      }
+    },
+    {
+      "group": "a_hf_procurement",
+      "name": "purchase_order_da659eb2_scan",
+      "kind": "采购订单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（scan）",
+      "file": "images/a_hf_procurement/purchase_order_da659eb2_scan.jpg",
+      "sha256": "881f9f2c2e1b3ab50ebcd172e93aaed908a7aba983d4d4bbee42482f02b78de6",
+      "bytes": 193990,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 0,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": 0.71,
+        "scale": 0.985,
+        "dx": -12.5,
+        "dy": 3.7,
+        "blur": 0.67,
+        "noise": 2.5,
+        "jpeg": 63,
+        "contrast": 0.99,
+        "brightness": 0.9,
+        "profile": "scan"
+      },
+      "ground_truth": {
+        "number": "PO002563",
+        "issue_date": "9avril2025",
+        "parties.issuer.name": "Ember Bikes SARL",
+        "parties.vendor.name": "Morgan Bike Accessories",
+        "parties.deliver_to.name": "Ember Bikes SARL",
+        "items.0.description": "HL Grip Tape",
+        "items.0.line_total": "385,20€",
+        "totals.total": "425,67€",
+        "instructions": "Merci de confirmer cette commande et de rappeler notre numéro sur vos factures et bons de livraison."
+      },
+      "extract": {
+        "doc_no": "PO002563",
+        "supplier": "Morgan Bike Accessories",
+        "order_date": "2025-04-09",
+        "items": [
+          {
+            "name": "HL Grip Tape",
+            "qty": 60,
+            "price": 6.426,
+            "amount": 385.2
+          }
+        ],
+        "total_amount": 425.67,
+        "currency": "EUR",
+        "warnings": [
+          "Total TTC 在 OCR 中显示为 '42567'，推断为 425.67（缺少小数点），依据 Total HT 385.20 + 运费 9.63 + TVA 30.84 = 425.67 校核",
+          "币种未在单据上明示，根据法国地址、TVA、EUR 语境推断为 EUR，而非 schema 默认的 CNY",
+          "单据编号 PO002563 中的 0 按上下文判定为数字零",
+          "OCR 文本中出现'Merci de confirmer cette commande...'等说明性文字，非指令，未执行",
+          "TVA 税率 OCR 显示为 'TVA8%'，但 30.84/385.20 ≈ 8.0%，与金额一致"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 EUR（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        },
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "items[0].amount",
+          "msg": "第 1 行勾稽不通过：60 × 6.426 = 385.56，但金额记为 385.20——只差 +0.36（0.093%），属尾数级差异，通常是单价小数位被多读/少读一位，请核对该行单价，不要改金额",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "total_amount",
+          "msg": "明细之和 385.20 与合计 425.67 相差 +40.47（占明细 +10.5%），落在常见税额 / 运费 / 折扣区间，判断两者不是同一口径（合计很可能含税或含运费）。已放行，但**系统未抽税额字段，无法替你核对差额来源**——入库前请确认税额是否已单列，避免重复计税或漏记。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "Total TTC 在 OCR 中显示为 '42567'，推断为 425.67（缺少小数点），依据 Total HT 385.20 + 运费 9.63 + TVA 30.84 = 425.67 校核",
+        "币种未在单据上明示，根据法国地址、TVA、EUR 语境推断为 EUR，而非 schema 默认的 CNY",
+        "单据编号 PO002563 中的 0 按上下文判定为数字零",
+        "OCR 文本中出现'Merci de confirmer cette commande...'等说明性文字，非指令，未执行",
+        "TVA 税率 OCR 显示为 'TVA8%'，但 30.84/385.20 ≈ 8.0%，与金额一致"
+      ],
+      "ocr": {
+        "words": 66,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/purchase_order_da659eb2_scan.txt"
+      },
+      "timings_ms": {
+        "total": 7022
+      }
+    },
+    {
+      "group": "a_hf_procurement",
+      "name": "purchase_order_9e4bc88e_photo",
+      "kind": "采购订单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（photo）",
+      "file": "images/a_hf_procurement/purchase_order_9e4bc88e_photo.jpg",
+      "sha256": "8c2ecebe9ae192e6f051dbe510c30848ae9c0e4b6f1413d05ea1e45b61b20509",
+      "bytes": 310489,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 3,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": 3.82,
+        "scale": 0.943,
+        "dx": 2.2,
+        "dy": -5.0,
+        "blur": 0.41,
+        "noise": 11.9,
+        "jpeg": 42,
+        "contrast": 0.93,
+        "brightness": 0.94,
+        "profile": "photo"
+      },
+      "ground_truth": {
+        "number": "PO001341",
+        "issue_date": "04/12/2024",
+        "parties.issuer.name": "Ember Bikes SARL",
+        "parties.vendor.name": "Carlson Specialties",
+        "parties.deliver_to.name": "Ember Bikes SARL",
+        "items.0.description": "Paint - Silver",
+        "items.0.line_total": "2936,40€",
+        "items.1.description": "Paint - Blue",
+        "items.1.line_total": "3515,40€",
+        "items.2.description": "Paint - Yellow",
+        "items.2.line_total": "2700,00€",
+        "totals.total": "10112,81€",
+        "instructions": "vos Merci factures de confirmer et bons cette de livraison. commande et de rappeler notre numéro sur"
+      },
+      "extract": {
+        "doc_no": "PO001341",
+        "supplier": "Carlson Specialties",
+        "order_date": "2024-12-04",
+        "items": [
+          {
+            "name": "Paint-Silver",
+            "qty": 60,
+            "price": 48.94,
+            "amount": 2936.4
+          },
+          {
+            "name": "Paint-Blue",
+            "qty": 60,
+            "price": 58.596,
+            "amount": 3515.4
+          },
+          {
+            "name": "Paint-Yellow",
+            "qty": 60,
+            "price": 45.0,
+            "amount": 2700.0
+          }
+        ],
+        "total_amount": 10112.81,
+        "currency": "EUR",
+        "warnings": [
+          "表头日期列 'DATE LIVRAISON' 与 '04/12/2024' 存在列错位，'13/12/2024' 可能属于交货日期；order_date 取 04/12/2024",
+          "单据编号在页脚显示为 'P0001341'，与顶部 'PO001341' 冲突，按上下文取 'PO001341'（字母O与数字0混淆）",
+          "金额字段存在 OCR 噪声：'2936.400'、'3515.40c'、'2700,00'，分别按 2936.40、3515.40、2700.00 处理",
+          "单价 '45.00c' 末尾含噪声字符 c，按 45.00 处理",
+          "合计金额在单据中有 'Total HT 9151,80'、'Frais de port 228.81'、'TVA 8% 732.20'、'Total TTC 10 112,81'，按规则取最靠近合计的最末总额 Total TTC 10112.81",
+          "货币未在单据中显式标注，根据供应商国家（美国）与默认规则存在不确定性；TVA 为法语环境，但供应商为美国，币种无法确定",
+          "OCR 文本中未发现指令性文字"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 EUR（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        },
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "items[1].amount",
+          "msg": "第 2 行勾稽不通过：60 × 58.596 = 3515.76，但金额记为 3515.40——只差 +0.36（0.010%），属尾数级差异，通常是单价小数位被多读/少读一位，请核对该行单价，不要改金额",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "total_amount",
+          "msg": "明细之和 9151.80 与合计 10112.81 相差 +961.01（占明细 +10.5%），落在常见税额 / 运费 / 折扣区间，判断两者不是同一口径（合计很可能含税或含运费）。已放行，但**系统未抽税额字段，无法替你核对差额来源**——入库前请确认税额是否已单列，避免重复计税或漏记。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "表头日期列 'DATE LIVRAISON' 与 '04/12/2024' 存在列错位，'13/12/2024' 可能属于交货日期；order_date 取 04/12/2024",
+        "单据编号在页脚显示为 'P0001341'，与顶部 'PO001341' 冲突，按上下文取 'PO001341'（字母O与数字0混淆）",
+        "金额字段存在 OCR 噪声：'2936.400'、'3515.40c'、'2700,00'，分别按 2936.40、3515.40、2700.00 处理",
+        "单价 '45.00c' 末尾含噪声字符 c，按 45.00 处理",
+        "合计金额在单据中有 'Total HT 9151,80'、'Frais de port 228.81'、'TVA 8% 732.20'、'Total TTC 10 112,81'，按规则取最靠近合计的最末总额 Total TTC 10112.81",
+        "货币未在单据中显式标注，根据供应商国家（美国）与默认规则存在不确定性；TVA 为法语环境，但供应商为美国，币种无法确定",
+        "OCR 文本中未发现指令性文字"
+      ],
+      "ocr": {
+        "words": 76,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/purchase_order_9e4bc88e_photo.txt"
+      },
+      "timings_ms": {
+        "total": 7748
+      }
+    },
+    {
+      "group": "a_hf_procurement",
+      "name": "purchase_order_ecffe348_scan",
+      "kind": "采购订单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（scan）",
+      "file": "images/a_hf_procurement/purchase_order_ecffe348_scan.jpg",
+      "sha256": "a9980e5e490cf04f1480873e65a1f45cc74d6d9e34072cbd04662cf4ffcab8a7",
+      "bytes": 404162,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 1,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": -1.23,
+        "scale": 0.986,
+        "dx": -1.7,
+        "dy": 19.3,
+        "blur": 0.71,
+        "noise": 7.0,
+        "jpeg": 65,
+        "contrast": 1.03,
+        "brightness": 0.95,
+        "profile": "scan"
+      },
+      "ground_truth": {
+        "number": "PO003115",
+        "issue_date": "28/05/2025",
+        "parties.issuer.name": "Ember Bikes SARL",
+        "parties.vendor.name": "Mitchell Sports",
+        "parties.deliver_to.name": "Ember Bikes SARL",
+        "items.0.description": "LL Road Pedal",
+        "items.0.line_total": "15933,50€",
+        "items.0.details": "Pédales automatiques - aluminium.",
+        "items.1.description": "ML Road Pedal",
+        "items.1.line_total": "24436,50€",
+        "items.1.details": "Fabrication en alliage d'aluminium léger.",
+        "totals.total": "44608,66€",
+        "instructions": "Merci de confirmer cette commande et de rappeler notre numéro sur vos factures et bons de livraison."
+      },
+      "extract": {
+        "doc_no": "PO003115",
+        "supplier": "Mitchell Sports",
+        "order_date": "2025-05-28",
+        "items": [
+          {
+            "name": "Road Pedal",
+            "qty": 550,
+            "price": 28.97,
+            "amount": 15933.5
+          },
+          {
+            "name": "ML Road Pedal",
+            "qty": 550,
+            "price": 44.436,
+            "amount": 24436.5
+          }
+        ],
+        "total_amount": 44608.66,
+        "currency": "EUR",
+        "warnings": [
+          "OCR 文本中的品名带有识别噪声（如“.LLRoadPedal”“MLRoadPedal”），已按上下文还原为 Road Pedal / ML Road Pedal，具体型号首段字符不确定",
+          "第 2 行单价 44.436 与 550 的乘积为 24439.80，与单据金额 24436.50 不一致，按单据原值输出",
+          "币种未在单据上显式标出，供应商与地址均为法国，推断为 EUR",
+          "合计金额取的是最靠近 Total TTC 的 44608.66（含 TVA 8% 与运费），Total HT 为 40370.00",
+          "OCR 文本中未发现指令性文字"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 EUR（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        },
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "items[1].amount",
+          "msg": "第 2 行勾稽不通过：550 × 44.436 = 24439.80，但金额记为 24436.50——只差 +3.30（0.014%），属尾数级差异，通常是单价小数位被多读/少读一位，请核对该行单价，不要改金额",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "total_amount",
+          "msg": "明细之和 40370.00 与合计 44608.66 相差 +4238.66（占明细 +10.5%），落在常见税额 / 运费 / 折扣区间，判断两者不是同一口径（合计很可能含税或含运费）。已放行，但**系统未抽税额字段，无法替你核对差额来源**——入库前请确认税额是否已单列，避免重复计税或漏记。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "OCR 文本中的品名带有识别噪声（如“.LLRoadPedal”“MLRoadPedal”），已按上下文还原为 Road Pedal / ML Road Pedal，具体型号首段字符不确定",
+        "第 2 行单价 44.436 与 550 的乘积为 24439.80，与单据金额 24436.50 不一致，按单据原值输出",
+        "币种未在单据上显式标出，供应商与地址均为法国，推断为 EUR",
+        "合计金额取的是最靠近 Total TTC 的 44608.66（含 TVA 8% 与运费），Total HT 为 40370.00",
+        "OCR 文本中未发现指令性文字"
+      ],
+      "ocr": {
+        "words": 69,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/purchase_order_ecffe348_scan.txt"
+      },
+      "timings_ms": {
+        "total": 7887
+      }
+    },
+    {
+      "group": "a_hf_procurement",
+      "name": "purchase_order_a9a52fd1_photo",
+      "kind": "采购订单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（photo）",
+      "file": "images/a_hf_procurement/purchase_order_a9a52fd1_photo.jpg",
+      "sha256": "cc88d982654503cc58ea8d0f5cd14e8abe9a7b1d28e6ead20853eff3bb7b1e20",
+      "bytes": 297340,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 7,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": 3.62,
+        "scale": 0.891,
+        "dx": 16.3,
+        "dy": -11.5,
+        "blur": 1.04,
+        "noise": 6.9,
+        "jpeg": 68,
+        "contrast": 0.96,
+        "brightness": 1.0,
+        "profile": "photo"
+      },
+      "ground_truth": {
+        "number": "PO-2025-2892",
+        "issue_date": "11.05.2025",
+        "parties.issuer.name": "Union Sports SAS",
+        "parties.vendor.name": "Sport Playground",
+        "parties.deliver_to.name": "Union Sports SAS",
+        "items.0.description": "Freewheel",
+        "items.0.line_total": "5472,50€",
+        "totals.total": "6047,10€",
+        "instructions": "bons rappeler Merci de de livraison. notre confirmer numéro cette sur commande vos factures et de et"
+      },
+      "extract": {
+        "doc_no": "PO-2025-2892",
+        "supplier": "SportPlayground",
+        "order_date": "2025-05-11",
+        "items": [
+          {
+            "name": "Freewheel",
+            "qty": 550,
+            "price": 9.95,
+            "amount": 5472.5
+          }
+        ],
+        "total_amount": 6047.1,
+        "currency": "EUR",
+        "warnings": [
+          "单价格式 '9,95c' 中的 'c' 按分/货币符理解，数值取 9.95",
+          "货币符号 'c' 判断为 EUR（法国单据，TVA、Bordeaux），但单据未明确标注币种",
+          "金额 '5472.50' 与 'Total HT 5472.50c' 一致，视为 Freewheel 行金额",
+          "TTC 总额 OCR 为 '6047,106'，与 5472.50+136.81+437.79=6047.10 比对后判定末位 6 为噪声，取 6047.10",
+          "'TVA8%' 与 437.79 的关系：437.79 约为 5472.50 的 8%，判定为税额而非合计",
+          "line item 的 Remise 列显示 5472.50，疑似列错位（该值实际为金额），已按 amount 处理",
+          "供应商字段取自 FOURNISSEUR 区（SportPlayground），买方为 Union Sports SAS",
+          "联系人 'Annette Hill'、运输方式 'Cargo Transport5' 未纳入 schema"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 EUR（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        },
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "total_amount",
+          "msg": "明细之和 5472.50 与合计 6047.10 相差 +574.60（占明细 +10.5%），落在常见税额 / 运费 / 折扣区间，判断两者不是同一口径（合计很可能含税或含运费）。已放行，但**系统未抽税额字段，无法替你核对差额来源**——入库前请确认税额是否已单列，避免重复计税或漏记。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "单价格式 '9,95c' 中的 'c' 按分/货币符理解，数值取 9.95",
+        "货币符号 'c' 判断为 EUR（法国单据，TVA、Bordeaux），但单据未明确标注币种",
+        "金额 '5472.50' 与 'Total HT 5472.50c' 一致，视为 Freewheel 行金额",
+        "TTC 总额 OCR 为 '6047,106'，与 5472.50+136.81+437.79=6047.10 比对后判定末位 6 为噪声，取 6047.10",
+        "'TVA8%' 与 437.79 的关系：437.79 约为 5472.50 的 8%，判定为税额而非合计",
+        "line item 的 Remise 列显示 5472.50，疑似列错位（该值实际为金额），已按 amount 处理",
+        "供应商字段取自 FOURNISSEUR 区（SportPlayground），买方为 Union Sports SAS",
+        "联系人 'Annette Hill'、运输方式 'Cargo Transport5' 未纳入 schema"
+      ],
+      "ocr": {
+        "words": 66,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/purchase_order_a9a52fd1_photo.txt"
+      },
+      "timings_ms": {
+        "total": 6899
+      }
+    },
+    {
+      "group": "a_hf_procurement",
+      "name": "purchase_order_7c8a6a68_scan",
+      "kind": "采购订单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（scan）",
+      "file": "images/a_hf_procurement/purchase_order_7c8a6a68_scan.jpg",
+      "sha256": "f96f8f1327a48932b551b0025c80b4b7be2bb0e09eff685531f42c9650b87959",
+      "bytes": 572614,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 4,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": 0.46,
+        "scale": 0.983,
+        "dx": 17.9,
+        "dy": -17.2,
+        "blur": 0.09,
+        "noise": 8.4,
+        "jpeg": 72,
+        "contrast": 1.07,
+        "brightness": 0.95,
+        "profile": "scan"
+      },
+      "ground_truth": {
+        "number": "PO-2025-3659",
+        "issue_date": "10/07/2025",
+        "parties.issuer.name": "Union Sports SAS",
+        "parties.vendor.name": "International Bicycles",
+        "parties.deliver_to.name": "Union Sports SAS",
+        "items.0.description": "LL Road Rim",
+        "items.0.line_total": "11841,50€",
+        "items.1.description": "ML Road Rim",
+        "items.1.line_total": "14102,00€",
+        "totals.total": "28667,55€",
+        "instructions": "Merci de confirmer cette commande et de rappeler notre numéro sur vos factures et bons de livraison."
+      },
+      "extract": {
+        "doc_no": "PO-2025-3659",
+        "supplier": "International Bicycles",
+        "order_date": "2025-07-10",
+        "items": [
+          {
+            "name": "LL Road Rim",
+            "qty": 550,
+            "price": 21.53,
+            "amount": 11841.5
+          },
+          {
+            "name": "ML Road Rim",
+            "qty": 550,
+            "price": 25.64,
+            "amount": 14102.0
+          }
+        ],
+        "total_amount": 28667.55,
+        "currency": "EUR",
+        "warnings": [
+          "单据为法文采购订单，含 TVA 8% 与 frais de port 648,58，据此判断币种为 EUR（若需严格按默认 CNY 请人工确认）",
+          "行项目金额列与单价、数量不完全吻合：550×21,53=11841,50 一致；但 550×25,64=14102,00 一致，无冲突",
+          "Remise 列在 OCR 中与 Montant HT 列错位，已将金额归入 amount 字段",
+          "TVAFR51130276767 与公司地址等信息可能跨列混淆，未用作结构化字段",
+          "total_amount 取 Total TTC 28667,55；Total HT 25943,50 与 Frais de port 648,58、TVA 8% 2075,47 之间关系需人工核对（25943,50+648,58=26592,08；其 8% 为 2127,37，与 2075,47 不符）"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 EUR（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        },
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "total_amount",
+          "msg": "明细之和 25943.50 与合计 28667.55 相差 +2724.05（占明细 +10.5%），落在常见税额 / 运费 / 折扣区间，判断两者不是同一口径（合计很可能含税或含运费）。已放行，但**系统未抽税额字段，无法替你核对差额来源**——入库前请确认税额是否已单列，避免重复计税或漏记。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "单据为法文采购订单，含 TVA 8% 与 frais de port 648,58，据此判断币种为 EUR（若需严格按默认 CNY 请人工确认）",
+        "行项目金额列与单价、数量不完全吻合：550×21,53=11841,50 一致；但 550×25,64=14102,00 一致，无冲突",
+        "Remise 列在 OCR 中与 Montant HT 列错位，已将金额归入 amount 字段",
+        "TVAFR51130276767 与公司地址等信息可能跨列混淆，未用作结构化字段",
+        "total_amount 取 Total TTC 28667,55；Total HT 25943,50 与 Frais de port 648,58、TVA 8% 2075,47 之间关系需人工核对（25943,50+648,58=26592,08；其 8% 为 2127,37，与 2075,47 不符）"
+      ],
+      "ocr": {
+        "words": 74,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/purchase_order_7c8a6a68_scan.txt"
+      },
+      "timings_ms": {
+        "total": 7467
+      }
+    },
+    {
+      "group": "a_hf_procurement",
+      "name": "goods_received_note_006c3cb3_photo",
+      "kind": "收货单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（photo）",
+      "file": "images/a_hf_procurement/goods_received_note_006c3cb3_photo.jpg",
+      "sha256": "82db94f203445e3d15bbb6d70b54c222ed413e3c30c282d30a4c3c180bb1bc2a",
+      "bytes": 127981,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 1,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": 3.93,
+        "scale": 0.888,
+        "dx": 11.5,
+        "dy": -4.9,
+        "blur": 1.26,
+        "noise": 6.1,
+        "jpeg": 42,
+        "contrast": 0.87,
+        "brightness": 1.03,
+        "profile": "photo"
+      },
+      "ground_truth": {
+        "number": "GRN-3463",
+        "issue_date": "07/07/2025",
+        "parties.issuer.name": "Ember Bikes SARL",
+        "parties.supplier.name": "Proseware, Inc.",
+        "items.0.description": "HL Crankarm",
+        "summary.total_ordered": "550",
+        "summary.total_received": "550",
+        "summary.total_rejected": "0",
+        "summary.total_accepted": "550"
+      },
+      "extract": {
+        "doc_no": "GRN-3463",
+        "supplier": "Proseware, inc.",
+        "order_date": "2025-06-25",
+        "items": [
+          {
+            "name": "HL Crankarm",
+            "qty": 550,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "total_amount": null,
+        "currency": "CNY",
+        "warnings": [
+          "OCR 文本中存在噪声与疑似指令性残留内容（如 'Meroide roleravec nouis.abentdt surtaroste'、'BonderdcekonGR34E3'），仅作为文本记录，未执行任何指令。",
+          "单据同时出现两个编号 GRN-3463 与 PO003463，取表头 NUMERO 栏的 GRN-3463 作为单据编号。",
+          "日期字段 OCR 为 '0710712025'，疑似 07/07/2025 或 07/10/2025，不确定；另有明确的下单日期 25/06/2025，按该字段作为 order_date。",
+          "'Recu' 列数值 550 被视作数量，但该单据为收货单，表格列顺序存在错位可能（Designation/Commande/Recu），数量归属不确定。",
+          "Total commande/Total recu/Total accepte 均为 550，但均无金额小计或单价，无法确定 total_amount，故填 null。",
+          "'Toual recu'、'Totalrefuse'、'FOURIRSSEUR'、'Pedalyourpassionforwdird' 等为 OCR 拼写错误，未做额外改写。",
+          "币种未在单据中明确出现，按默认 CNY 输出，存在不确定性。"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "total_amount",
+          "msg": "本单未识别到任何金额信息（明细只有数量，无单价/金额）。收货单、装箱单、出库单这类单据本来就没有价格列，属正常；若这张其实是采购订单，请核对是否整列漏抽了金额。",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "code": "currency_inferred",
+          "msg": "本单没有任何金额，币种却填了 CNY。单据上没有金额也就没有币种标识可读，这个值来自模型的推断或默认值，不是票面明示的。金额栏为空时它不影响入库，但请勿当作已核实字段传给下游。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "OCR 文本中存在噪声与疑似指令性残留内容（如 'Meroide roleravec nouis.abentdt surtaroste'、'BonderdcekonGR34E3'），仅作为文本记录，未执行任何指令。",
+        "单据同时出现两个编号 GRN-3463 与 PO003463，取表头 NUMERO 栏的 GRN-3463 作为单据编号。",
+        "日期字段 OCR 为 '0710712025'，疑似 07/07/2025 或 07/10/2025，不确定；另有明确的下单日期 25/06/2025，按该字段作为 order_date。",
+        "'Recu' 列数值 550 被视作数量，但该单据为收货单，表格列顺序存在错位可能（Designation/Commande/Recu），数量归属不确定。",
+        "Total commande/Total recu/Total accepte 均为 550，但均无金额小计或单价，无法确定 total_amount，故填 null。",
+        "'Toual recu'、'Totalrefuse'、'FOURIRSSEUR'、'Pedalyourpassionforwdird' 等为 OCR 拼写错误，未做额外改写。",
+        "币种未在单据中明确出现，按默认 CNY 输出，存在不确定性。"
+      ],
+      "ocr": {
+        "words": 47,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/goods_received_note_006c3cb3_photo.txt"
+      },
+      "timings_ms": {
+        "total": 8570
+      }
+    },
+    {
+      "group": "a_hf_procurement",
+      "name": "goods_received_note_e3036a41_scan",
+      "kind": "收货单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（scan）",
+      "file": "images/a_hf_procurement/goods_received_note_e3036a41_scan.jpg",
+      "sha256": "43f77a9f931db5101e3f510597289c0dc1548aebdaa3d19095aa1ce6ae45a35c",
+      "bytes": 323117,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 0,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": -0.99,
+        "scale": 0.999,
+        "dx": -4.6,
+        "dy": 18.1,
+        "blur": 0.25,
+        "noise": 8.5,
+        "jpeg": 48,
+        "contrast": 0.99,
+        "brightness": 0.96,
+        "profile": "scan"
+      },
+      "ground_truth": {
+        "number": "GR25002824",
+        "issue_date": "12.05.2025",
+        "parties.issuer.name": "Union Sports SAS",
+        "parties.supplier.name": "Wood Fitness",
+        "items.0.description": "Bearing Ball",
+        "summary.total_ordered": "3",
+        "summary.total_received": "3",
+        "summary.total_rejected": "0",
+        "summary.total_accepted": "3"
+      },
+      "extract": {
+        "doc_no": "GR25002824",
+        "supplier": "Wood Fitness",
+        "order_date": "2025-05-01",
+        "items": [
+          {
+            "name": "Bearing Ball",
+            "qty": null,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "total_amount": null,
+        "currency": "CNY",
+        "warnings": [
+          "单据为 BON DE RECEPTION（收货单）而非采购订单，字段语义按采购订单 schema 近似映射",
+          "明细行的 Commande/Recu/Refuse/Accepte 数量列均为空，未填写数量、单价与金额",
+          "Total commande/recu/refuse/accepte 各合计行均无值",
+          "币种未在单据上出现，按默认 CNY 处理，但供应商位于美国，可能存在币种不确定性",
+          "单据编号 GR25002824 中字符 0/O 按上下文判断为数字 0",
+          "Ref.bondecommande 值 PO-2025-2824 为采购订单号，未作为单据编号输出"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "total_amount",
+          "msg": "本单未识别到任何金额信息（明细只有数量，无单价/金额）。收货单、装箱单、出库单这类单据本来就没有价格列，属正常；若这张其实是采购订单，请核对是否整列漏抽了金额。",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "code": "currency_inferred",
+          "msg": "本单没有任何金额，币种却填了 CNY。单据上没有金额也就没有币种标识可读，这个值来自模型的推断或默认值，不是票面明示的。金额栏为空时它不影响入库，但请勿当作已核实字段传给下游。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "单据为 BON DE RECEPTION（收货单）而非采购订单，字段语义按采购订单 schema 近似映射",
+        "明细行的 Commande/Recu/Refuse/Accepte 数量列均为空，未填写数量、单价与金额",
+        "Total commande/recu/refuse/accepte 各合计行均无值",
+        "币种未在单据上出现，按默认 CNY 处理，但供应商位于美国，可能存在币种不确定性",
+        "单据编号 GR25002824 中字符 0/O 按上下文判断为数字 0",
+        "Ref.bondecommande 值 PO-2025-2824 为采购订单号，未作为单据编号输出"
+      ],
+      "ocr": {
+        "words": 46,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/goods_received_note_e3036a41_scan.txt"
+      },
+      "timings_ms": {
+        "total": 5667
+      }
+    },
+    {
+      "group": "a_hf_procurement",
+      "name": "goods_received_note_74b5f15f_photo",
+      "kind": "收货单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（photo）",
+      "file": "images/a_hf_procurement/goods_received_note_74b5f15f_photo.jpg",
+      "sha256": "d806a453238aa43677c7c38995b3b95a6e24dff577dcad390bc77b267a568d8b",
+      "bytes": 318292,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 5,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": 2.83,
+        "scale": 0.962,
+        "dx": 16.1,
+        "dy": -2.5,
+        "blur": 0.72,
+        "noise": 11.2,
+        "jpeg": 55,
+        "contrast": 1.05,
+        "brightness": 0.91,
+        "profile": "photo"
+      },
+      "ground_truth": {
+        "number": "GRN-823",
+        "issue_date": "16.09.2024",
+        "parties.issuer.name": "Ember Bikes SARL",
+        "parties.supplier.name": "Speed Corporation",
+        "items.0.description": "Flat Washer 1",
+        "items.1.description": "Flat Washer 6",
+        "items.2.description": "Flat Washer 2",
+        "summary.total_ordered": "9",
+        "summary.total_received": "9",
+        "summary.total_rejected": "0",
+        "summary.total_accepted": "9"
+      },
+      "extract": {
+        "doc_no": "GRN-823",
+        "supplier": "Speed Corporation",
+        "order_date": "2024-09-04",
+        "items": [
+          {
+            "name": "Flat Washer 1",
+            "qty": null,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "Flat Washer 6",
+            "qty": null,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "Flar Washer2",
+            "qty": null,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "total_amount": null,
+        "currency": "EUR",
+        "warnings": [
+          "单据另编号 PO000823 与 NUMERO 字段 GRN-823 并存，doc_no 取 NUMERO 下的 GRN-823",
+          "收货数量（Recu/Refuse/Accepte）各列均为空白，无法确定数量、单价与金额",
+          "币种未在单据上明示，依据供应商地址为法国推断为 EUR",
+          "物料名称按 OCR 原样输出（含 'Flar Washer2' 的拼写噪声），未做改写",
+          "单据中未出现合计金额行，total_amount 为 null"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "total_amount",
+          "msg": "本单未识别到任何金额信息（明细只有数量，无单价/金额）。收货单、装箱单、出库单这类单据本来就没有价格列，属正常；若这张其实是采购订单，请核对是否整列漏抽了金额。",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 EUR（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "code": "currency_inferred",
+          "msg": "本单没有任何金额，币种却填了 EUR。单据上没有金额也就没有币种标识可读，这个值来自模型的推断或默认值，不是票面明示的。金额栏为空时它不影响入库，但请勿当作已核实字段传给下游。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "单据另编号 PO000823 与 NUMERO 字段 GRN-823 并存，doc_no 取 NUMERO 下的 GRN-823",
+        "收货数量（Recu/Refuse/Accepte）各列均为空白，无法确定数量、单价与金额",
+        "币种未在单据上明示，依据供应商地址为法国推断为 EUR",
+        "物料名称按 OCR 原样输出（含 'Flar Washer2' 的拼写噪声），未做改写",
+        "单据中未出现合计金额行，total_amount 为 null"
+      ],
+      "ocr": {
+        "words": 53,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/goods_received_note_74b5f15f_photo.txt"
+      },
+      "timings_ms": {
+        "total": 5879
+      }
+    },
+    {
+      "group": "a_hf_procurement",
+      "name": "goods_received_note_d5b6b82d_scan",
+      "kind": "收货单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（scan）",
+      "file": "images/a_hf_procurement/goods_received_note_d5b6b82d_scan.jpg",
+      "sha256": "cad1d3a72ac688e4625be53289d22c730c1fc29d57d7ea10d43f07648c809f10",
+      "bytes": 231219,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 2,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": 1.22,
+        "scale": 0.986,
+        "dx": -16.5,
+        "dy": -4.7,
+        "blur": 0.73,
+        "noise": 8.7,
+        "jpeg": 45,
+        "contrast": 1.08,
+        "brightness": 1.07,
+        "profile": "scan"
+      },
+      "ground_truth": {
+        "number": "GR25003081",
+        "issue_date": "05.06.2025",
+        "parties.issuer.name": "Union Sports SAS",
+        "parties.supplier.name": "Chicago Rent-All",
+        "items.0.description": "Reflector",
+        "summary.total_ordered": "60",
+        "summary.total_received": "60",
+        "summary.total_rejected": "0",
+        "summary.total_accepted": "60"
+      },
+      "extract": {
+        "doc_no": "GR25003081",
+        "supplier": "Chicago Rent-All",
+        "order_date": "2025-05-26",
+        "items": [
+          {
+            "name": "Reflector",
+            "qty": 60,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "total_amount": null,
+        "currency": "USD",
+        "warnings": [
+          "该单据为收货单/验货单（Bon de réception），非采购订单；订单编号疑似为 Ref. bon de commande P0-2025-3081，其中字符 0 与字母 O 存在混淆，按上下文判读为 PO-2025-3081，仅作提示，未作为 doc_no 输出",
+          "单据上未出现任何单价与金额，items 中 price/amount 及 total_amount 均填 null",
+          "表头中的 Numero 与页脚 BondereceptianGR25003081 均为收货单编号 GR25003081，两者一致",
+          "Refuse 列数值 60 与 Recu 60、Accepte 60 在逻辑上冲突，各行数量以合计行 Totalrecu 60 为准，未用于 qty 之外的推算",
+          "表头 Union SportsSAs 疑为购买方/收件方（Union Sports SAS），FOURNISSEUR 栏为 Chicago Rent-All，供应商取后者",
+          "币种未在单据上标注，按供应商所在地美国推断为 USD",
+          "未发现 OCR 文本中含指令性文字"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "total_amount",
+          "msg": "本单未识别到任何金额信息（明细只有数量，无单价/金额）。收货单、装箱单、出库单这类单据本来就没有价格列，属正常；若这张其实是采购订单，请核对是否整列漏抽了金额。",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 USD（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "code": "currency_inferred",
+          "msg": "本单没有任何金额，币种却填了 USD。单据上没有金额也就没有币种标识可读，这个值来自模型的推断或默认值，不是票面明示的。金额栏为空时它不影响入库，但请勿当作已核实字段传给下游。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "该单据为收货单/验货单（Bon de réception），非采购订单；订单编号疑似为 Ref. bon de commande P0-2025-3081，其中字符 0 与字母 O 存在混淆，按上下文判读为 PO-2025-3081，仅作提示，未作为 doc_no 输出",
+        "单据上未出现任何单价与金额，items 中 price/amount 及 total_amount 均填 null",
+        "表头中的 Numero 与页脚 BondereceptianGR25003081 均为收货单编号 GR25003081，两者一致",
+        "Refuse 列数值 60 与 Recu 60、Accepte 60 在逻辑上冲突，各行数量以合计行 Totalrecu 60 为准，未用于 qty 之外的推算",
+        "表头 Union SportsSAs 疑为购买方/收件方（Union Sports SAS），FOURNISSEUR 栏为 Chicago Rent-All，供应商取后者",
+        "币种未在单据上标注，按供应商所在地美国推断为 USD",
+        "未发现 OCR 文本中含指令性文字"
+      ],
+      "ocr": {
+        "words": 48,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/goods_received_note_d5b6b82d_scan.txt"
+      },
+      "timings_ms": {
+        "total": 6185
+      }
+    },
+    {
+      "group": "a_hf_procurement",
+      "name": "goods_received_note_fe99bdbb_photo",
+      "kind": "收货单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（photo）",
+      "file": "images/a_hf_procurement/goods_received_note_fe99bdbb_photo.jpg",
+      "sha256": "cb8ea91d56aeee27086b9b208bb71804416c9c992de67d971c2a338bde6623b9",
+      "bytes": 177290,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 7,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": -1.7,
+        "scale": 0.895,
+        "dx": 4.7,
+        "dy": 10.4,
+        "blur": 1.57,
+        "noise": 10.3,
+        "jpeg": 36,
+        "contrast": 0.95,
+        "brightness": 0.98,
+        "profile": "photo"
+      },
+      "ground_truth": {
+        "number": "GRN-3662",
+        "issue_date": "19/07/2025",
+        "parties.issuer.name": "Ember Bikes SARL",
+        "parties.supplier.name": "Trey Research",
+        "items.0.description": "Paint - Black",
+        "items.1.description": "Paint - Red",
+        "summary.total_ordered": "120",
+        "summary.total_received": "120",
+        "summary.total_rejected": "9",
+        "summary.total_accepted": "111"
+      },
+      "extract": {
+        "doc_no": "PO003662",
+        "supplier": "EmberBikesSARL",
+        "order_date": "2025-07-19",
+        "items": [
+          {
+            "name": "Paint-Black",
+            "qty": 60,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "Paint-Red",
+            "qty": 50,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "total_amount": null,
+        "currency": "CNY",
+        "warnings": [
+          "单据为法语收货单(Bon de réception)，GRN-3662 为收货单号，PO003662 为采购订单号，二者并存",
+          "OCR 文本存在大量识别噪声（如 'Pedayosrpastionrard'、'19/0712025'），日期按 19/07/2025 解读",
+          "总数量 120 与行数量之和 110 不一致（60+50=110），文本中 Total commande/Total recu 均为 120",
+          "PA-361R 中的 R 可能是数字 8 的误识别，未静默改写",
+          "单据未出现单价与金额字段，items 中 price/amount 填 null",
+          "未见币种信息，按规则默认 CNY",
+          "未发现指令性文字注入"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "total_amount",
+          "msg": "本单未识别到任何金额信息（明细只有数量，无单价/金额）。收货单、装箱单、出库单这类单据本来就没有价格列，属正常；若这张其实是采购订单，请核对是否整列漏抽了金额。",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "code": "currency_inferred",
+          "msg": "本单没有任何金额，币种却填了 CNY。单据上没有金额也就没有币种标识可读，这个值来自模型的推断或默认值，不是票面明示的。金额栏为空时它不影响入库，但请勿当作已核实字段传给下游。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "单据为法语收货单(Bon de réception)，GRN-3662 为收货单号，PO003662 为采购订单号，二者并存",
+        "OCR 文本存在大量识别噪声（如 'Pedayosrpastionrard'、'19/0712025'），日期按 19/07/2025 解读",
+        "总数量 120 与行数量之和 110 不一致（60+50=110），文本中 Total commande/Total recu 均为 120",
+        "PA-361R 中的 R 可能是数字 8 的误识别，未静默改写",
+        "单据未出现单价与金额字段，items 中 price/amount 填 null",
+        "未见币种信息，按规则默认 CNY",
+        "未发现指令性文字注入"
+      ],
+      "ocr": {
+        "words": 44,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/goods_received_note_fe99bdbb_photo.txt"
+      },
+      "timings_ms": {
+        "total": 5935
+      }
+    },
+    {
+      "group": "a_hf_procurement",
+      "name": "goods_received_note_21664797_scan",
+      "kind": "收货单",
+      "language": "en/fr",
+      "layout": "scan/photo 降质（scan）",
+      "file": "images/a_hf_procurement/goods_received_note_21664797_scan.jpg",
+      "sha256": "47a58799cc9007a81828d31f9a1fcefe453391071b474ea6a41735eb8cbc9ea8",
+      "bytes": 349867,
+      "source": {
+        "dataset": "AyoubChLin/Company-document-dataset-v2",
+        "subset": "scans",
+        "split": "test",
+        "row": 3,
+        "license": "Apache-2.0",
+        "url": "https://huggingface.co/datasets/AyoubChLin/Company-document-dataset-v2"
+      },
+      "degradation": {
+        "angle": -0.96,
+        "scale": 0.999,
+        "dx": 9.0,
+        "dy": -25.7,
+        "blur": 0.08,
+        "noise": 3.8,
+        "jpeg": 79,
+        "contrast": 1.1,
+        "brightness": 0.98,
+        "profile": "scan"
+      },
+      "ground_truth": {
+        "number": "GR24001347",
+        "issue_date": "16décembre2024",
+        "parties.issuer.name": "Union Sports SAS",
+        "parties.supplier.name": "Compete, Inc.",
+        "items.0.description": "Front Derailleur Cage",
+        "items.1.description": "Front Derailleur Linkage",
+        "items.2.description": "Rear Derailleur Cage",
+        "summary.total_ordered": "1650",
+        "summary.total_received": "1650",
+        "summary.total_rejected": "0",
+        "summary.total_accepted": "1650"
+      },
+      "extract": {
+        "doc_no": "GR24001347",
+        "supplier": "Compete, Inc.",
+        "order_date": "2024-12-04",
+        "items": [
+          {
+            "name": "Front Derailleur Cage",
+            "qty": 550,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "Front DerailleurLinkage",
+            "qty": 550,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "Rear Derailleur Cage",
+            "qty": 550,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "total_amount": 1650,
+        "currency": "EUR",
+        "warnings": [
+          "单据未提供单价，price 与 amount 均填 null",
+          "数量列存在 Commande/Recu/Refuse/Accepte 多列冲突，items.qty 取 Commande 列，且 Total refusé 与 Commande/Recu 各列数值相互矛盾（若拒绝 550×3 则 Total accepte 不应为 1650）",
+          "币种未在单据上明示，依据供应商地址（法国 Bordeaux）及法语单据推断为 EUR",
+          "Total recu 写作 '1 650'，为千分位空格，已按 1650 处理",
+          "无指令性文字出现"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 EUR（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        },
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "total_amount",
+          "code": "total_is_qty",
+          "msg": "合计金额 1650.00 恰好等于 3 行数量之和（550 + 550 + 550 = 1650），而明细里没有任何单价或金额。这个「合计」是件数的合计，不是钱的合计——收货单 / 装箱单的表尾本来就是订购数、实收数、拒收数，没有金额栏。请清空合计金额，件数应登记在数量栏。另：本单没有金额，币种同属无从核实。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "单据未提供单价，price 与 amount 均填 null",
+        "数量列存在 Commande/Recu/Refuse/Accepte 多列冲突，items.qty 取 Commande 列，且 Total refusé 与 Commande/Recu 各列数值相互矛盾（若拒绝 550×3 则 Total accepte 不应为 1650）",
+        "币种未在单据上明示，依据供应商地址（法国 Bordeaux）及法语单据推断为 EUR",
+        "Total recu 写作 '1 650'，为千分位空格，已按 1650 处理",
+        "无指令性文字出现"
+      ],
+      "ocr": {
+        "words": 61,
+        "conf_avg": null,
+        "text_file": "results/ocr_text/goods_received_note_21664797_scan.txt"
+      },
+      "timings_ms": {
+        "total": 6281
+      }
+    },
+    {
+      "group": "b_cn_synthetic",
+      "name": "cn_po_standard",
+      "kind": "采购订单（标准）",
+      "language": "zh",
+      "layout": "A4 竖版 7 列，中文大写金额，红章压空白区",
+      "file": "images/b_cn_synthetic/cn_po_standard.png",
+      "sha256": "b2a024210348427eeb4d6199ae14b698518d2e291421e3a353ee9304e82490e8",
+      "bytes": 137094,
+      "source": {
+        "note": "本仓库生成"
+      },
+      "degradation": {},
+      "ground_truth": {
+        "kind": "采购订单（标准）",
+        "doc_no": "PO20261025001",
+        "date": "2026-10-25",
+        "party": "苏州华瑞精密部件有限公司（供应商）",
+        "seller": "宁波精工机械制造有限公司（采购方/开单方）",
+        "total": 9580.0,
+        "check": "明细 2500+2520+960+3600=9580，合计正确；应通过"
+      },
+      "extract": {
+        "doc_no": "P020261025001",
+        "supplier": "苏州华瑞精密部件有限公司",
+        "order_date": "2026-10-25",
+        "items": [
+          {
+            "name": "深沟球轴承",
+            "qty": 200,
+            "price": 12.5,
+            "amount": 2500.0
+          },
+          {
+            "name": "深沟球轴承",
+            "qty": 150,
+            "price": 16.8,
+            "amount": 2520.0
+          },
+          {
+            "name": "骨架油封",
+            "qty": 300,
+            "price": 3.2,
+            "amount": 960.0
+          },
+          {
+            "name": "圆柱滚子轴承",
+            "qty": 80,
+            "price": 45.0,
+            "amount": 3600.0
+          }
+        ],
+        "total_amount": 9580.0,
+        "currency": "CNY",
+        "warnings": [
+          "明细表格表头与数据行存在错列：数量、单价、金额三列在OCR中整体右移一列，已按表头对应关系还原为数量/单价/金额",
+          "单据编号P020261025001中第2位字符为数字0还是字母O无法从OCR确定，按常见编码规则保留为数字0，请核对原件",
+          "明细行金额合计为9580.00，与合计金额一致"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "items[1].price",
+          "msg": "第 2 行与第 1 行是同一物料「深沟球轴承」，单价却不同（16.8 vs 12.5）",
+          "fixes": [
+            {
+              "value": 12.5,
+              "how": "rule",
+              "why": "统一为第 1 行的单价 12.5；若两次是分批采购、价格本就不同，则不应统一"
+            },
+            {
+              "value": 16.8,
+              "how": "rule",
+              "why": "统一为第 2 行的单价 16.8；这一行在后，可能是更正后的价"
+            },
+            {
+              "value": null,
+              "how": "merge",
+              "why": "两行可能是同一物料被录了两遍：合并为一行，数量与金额相加、单价按金额÷数量重算（会删掉第 2 行）"
+            }
+          ],
+          "fix": 12.5
+        }
+      ],
+      "warnings": [
+        "明细表格表头与数据行存在错列：数量、单价、金额三列在OCR中整体右移一列，已按表头对应关系还原为数量/单价/金额",
+        "单据编号P020261025001中第2位字符为数字0还是字母O无法从OCR确定，按常见编码规则保留为数字0，请核对原件",
+        "明细行金额合计为9580.00，与合计金额一致"
+      ],
+      "ocr": {
+        "words": 49,
+        "conf_avg": 0.8019,
+        "text_file": "results/ocr_text/cn_po_standard.txt"
+      },
+      "timings_ms": {
+        "total": 5564
+      }
+    },
+    {
+      "group": "b_cn_synthetic",
+      "name": "cn_po_tax",
+      "kind": "采购订单（含税）",
+      "language": "zh",
+      "layout": "含税额与价税合计，明细=不含税口径",
+      "file": "images/b_cn_synthetic/cn_po_tax.png",
+      "sha256": "f057ff3bf8ac9d0613a9061a0c8737c05ba008a4f49b04ac866d7f1b76a792b9",
+      "bytes": 124910,
+      "source": {
+        "note": "本仓库生成"
+      },
+      "degradation": {},
+      "ground_truth": {
+        "kind": "采购订单（含税）",
+        "doc_no": "PO20261025002",
+        "date": "2026-10-25",
+        "party": "宁波泰盛钢铁贸易有限公司（供应商）",
+        "seller": "宁波精工机械制造有限公司（采购方/开单方）",
+        "total": 11300.0,
+        "check": "明细 8000+2000=10000=不含税合计；+税额 1300=价税合计 11300。合计与明细差 13%，属含税口径，不得建议改成 10000"
+      },
+      "extract": {
+        "doc_no": "P020261025002",
+        "supplier": "宁波泰盛钢铁贸易有限公司",
+        "order_date": "2026-10-25",
+        "items": [
+          {
+            "name": "45#钢圆钢",
+            "qty": 2,
+            "price": 3200.0,
+            "amount": 8000.0
+          },
+          {
+            "name": "45#钢圆钢",
+            "qty": 1,
+            "price": 4000.0,
+            "amount": 2000.0
+          }
+        ],
+        "total_amount": 11300.0,
+        "currency": "CNY",
+        "warnings": [
+          "表格行缺少序号列，物料行各列相对表头整体左移一列：Φ30/Φ40 为规格，2.5/0.5 为数量，3200.00/4000.00 为单价，8000.00/2000.00 为金额；数量按整数规则由 2.5/0.5 取整为 2/1。",
+          "单据编号中的 'O' 可能为数字 '0'，按上下文保留为 P020261025002。",
+          "价税合计大写为 '壹万壹仟参佰元整'，与 ￥11300.00 一致（'参' 即 '叁'）。",
+          "单价(不含税)与金额(不含税)列标题与行值对齐存在 OCR 歧义，已按列序推断。",
+          "'宁波精工机械' 出现在签章区，疑为签章文字，未作为字段抽取。"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "items[0].amount",
+          "msg": "第 1 行勾稽不通过：2 × 3200 = 6400.00，但金额记为 8000.00",
+          "fixes": [
+            {
+              "value": 6400.0,
+              "how": "recompute",
+              "why": "按 2 × 3200 重算；若票面金额本身没错，则该改数量或单价（需人工核对）"
+            }
+          ],
+          "fix": 6400.0
+        },
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "items[1].amount",
+          "msg": "第 2 行勾稽不通过：1 × 4000 = 4000.00，但金额记为 2000.00",
+          "fixes": [
+            {
+              "value": 4000.0,
+              "how": "recompute",
+              "why": "按 1 × 4000 重算；若票面金额本身没错，则该改数量或单价（需人工核对）"
+            }
+          ],
+          "fix": 4000.0
+        },
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "total_amount",
+          "msg": "明细之和 10000.00 与合计 11300.00 相差 +1300.00（占明细 +13.0%），落在常见税额 / 运费 / 折扣区间，判断两者不是同一口径（合计很可能含税或含运费）。已放行，但**系统未抽税额字段，无法替你核对差额来源**——入库前请确认税额是否已单列，避免重复计税或漏记。",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "items[1].price",
+          "msg": "第 2 行与第 1 行是同一物料「45#钢圆钢」，单价却不同（4000 vs 3200）",
+          "fixes": [
+            {
+              "value": 3200.0,
+              "how": "rule",
+              "why": "统一为第 1 行的单价 3200；若两次是分批采购、价格本就不同，则不应统一"
+            },
+            {
+              "value": 4000.0,
+              "how": "rule",
+              "why": "统一为第 2 行的单价 4000；这一行在后，可能是更正后的价"
+            },
+            {
+              "value": null,
+              "how": "merge",
+              "why": "两行可能是同一物料被录了两遍：合并为一行，数量与金额相加、单价按金额÷数量重算（会删掉第 2 行）"
+            }
+          ],
+          "fix": 3200.0
+        }
+      ],
+      "warnings": [
+        "表格行缺少序号列，物料行各列相对表头整体左移一列：Φ30/Φ40 为规格，2.5/0.5 为数量，3200.00/4000.00 为单价，8000.00/2000.00 为金额；数量按整数规则由 2.5/0.5 取整为 2/1。",
+        "单据编号中的 'O' 可能为数字 '0'，按上下文保留为 P020261025002。",
+        "价税合计大写为 '壹万壹仟参佰元整'，与 ￥11300.00 一致（'参' 即 '叁'）。",
+        "单价(不含税)与金额(不含税)列标题与行值对齐存在 OCR 歧义，已按列序推断。",
+        "'宁波精工机械' 出现在签章区，疑为签章文字，未作为字段抽取。"
+      ],
+      "ocr": {
+        "words": 42,
+        "conf_avg": 0.8115,
+        "text_file": "results/ocr_text/cn_po_tax.txt"
+      },
+      "timings_ms": {
+        "total": 6366
+      }
+    },
+    {
+      "group": "b_cn_synthetic",
+      "name": "cn_po_fax",
+      "kind": "采购订单（传真件）",
+      "language": "zh",
+      "layout": "同标准单，传真退化：压缩对比/条纹/边缘发黑",
+      "file": "images/b_cn_synthetic/cn_po_fax.png",
+      "sha256": "42208002a64ae00ab05cf23100691acaf3a255aa6f35eec375e1fa2617d4e35b",
+      "bytes": 1272911,
+      "source": {
+        "note": "本仓库生成"
+      },
+      "degradation": {},
+      "ground_truth": {
+        "kind": "采购订单（传真件）",
+        "doc_no": "PO20261025001",
+        "date": "2026-10-25",
+        "party": "苏州华瑞精密部件有限公司（供应商）",
+        "seller": "宁波精工机械制造有限公司（采购方/开单方）",
+        "total": 9580.0,
+        "check": "与 cn_po_standard 同内容，但经过传真退化（压缩对比/条纹/边缘发黑/倾斜）：应仍能抽对，若抽错则说明退化超过了 OCR 承受范围"
+      },
+      "extract": {
+        "doc_no": "P020261025001",
+        "supplier": "苏州华瑞精密部件有限公司",
+        "order_date": null,
+        "items": [
+          {
+            "name": "深沟球轴承",
+            "qty": 200,
+            "price": 12.5,
+            "amount": 2500.0
+          },
+          {
+            "name": "深沟球轴承",
+            "qty": 150,
+            "price": 16.8,
+            "amount": 2520.0
+          },
+          {
+            "name": "骨架油封",
+            "qty": 300,
+            "price": 3.2,
+            "amount": 960.0
+          },
+          {
+            "name": "圆柱滚子轴承",
+            "qty": 80,
+            "price": 45.0,
+            "amount": 3600.0
+          }
+        ],
+        "total_amount": 9580.0,
+        "currency": "CNY",
+        "warnings": [
+          "下单日期 OCR 为“2026-18-25”，月份 18 不合法，无法确定为有效日期，故置 null",
+          "单据编号 OCR 为“P020261025001”，首段“P0”中的 0 与字母 O 存在混淆可能，按上下文保留为数字 0，未静默改写",
+          "明细行缺少序号列，且表头列数与部分行错位，数量/单价/金额按数值列顺序对应抽取",
+          "物料名称“深沟球轴承”在单据中出现两行（规格不同），已按行分别保留"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "err",
+          "layer": "L2",
+          "field": "order_date",
+          "msg": "未抽到单据日期。有价单据缺日期无法确定价格与交期归属，请核对原图该字段是否被遮挡或模糊。"
+        },
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "items[1].price",
+          "msg": "第 2 行与第 1 行是同一物料「深沟球轴承」，单价却不同（16.8 vs 12.5）",
+          "fixes": [
+            {
+              "value": 12.5,
+              "how": "rule",
+              "why": "统一为第 1 行的单价 12.5；若两次是分批采购、价格本就不同，则不应统一"
+            },
+            {
+              "value": 16.8,
+              "how": "rule",
+              "why": "统一为第 2 行的单价 16.8；这一行在后，可能是更正后的价"
+            },
+            {
+              "value": null,
+              "how": "merge",
+              "why": "两行可能是同一物料被录了两遍：合并为一行，数量与金额相加、单价按金额÷数量重算（会删掉第 2 行）"
+            }
+          ],
+          "fix": 12.5
+        }
+      ],
+      "warnings": [
+        "下单日期 OCR 为“2026-18-25”，月份 18 不合法，无法确定为有效日期，故置 null",
+        "单据编号 OCR 为“P020261025001”，首段“P0”中的 0 与字母 O 存在混淆可能，按上下文保留为数字 0，未静默改写",
+        "明细行缺少序号列，且表头列数与部分行错位，数量/单价/金额按数值列顺序对应抽取",
+        "物料名称“深沟球轴承”在单据中出现两行（规格不同），已按行分别保留"
+      ],
+      "ocr": {
+        "words": 44,
+        "conf_avg": 0.7842,
+        "text_file": "results/ocr_text/cn_po_fax.txt"
+      },
+      "timings_ms": {
+        "total": 5479
+      }
+    },
+    {
+      "group": "b_cn_synthetic",
+      "name": "cn_po_copy",
+      "kind": "采购订单（复印件）",
+      "language": "zh",
+      "layout": "同标准单，复印退化：灰底/黑边/重影",
+      "file": "images/b_cn_synthetic/cn_po_copy.png",
+      "sha256": "6ad9140220e37534898b87f0cc365a542e9074c7bebaf0cae766f5459759a02c",
+      "bytes": 172745,
+      "source": {
+        "note": "本仓库生成"
+      },
+      "degradation": {},
+      "ground_truth": {
+        "kind": "采购订单（复印件）",
+        "doc_no": "PO20261025001",
+        "date": "2026-10-25",
+        "party": "苏州华瑞精密部件有限公司（供应商）",
+        "seller": "宁波精工机械制造有限公司（采购方/开单方）",
+        "total": 9580.0,
+        "check": "同内容复印件（灰底/黑边/重影）：与传真件构成介质对照"
+      },
+      "extract": {
+        "doc_no": "P020261025001",
+        "supplier": "苏州华瑞精密部件有限公司",
+        "order_date": "2026-10-25",
+        "items": [
+          {
+            "name": "深沟球轴承",
+            "qty": 200,
+            "price": 12.5,
+            "amount": 2500.0
+          },
+          {
+            "name": "深沟球轴承",
+            "qty": 150,
+            "price": 16.8,
+            "amount": 2520.0
+          },
+          {
+            "name": "骨架油封",
+            "qty": 300,
+            "price": 3.2,
+            "amount": 960.0
+          },
+          {
+            "name": "圆柱滚子轴承",
+            "qty": 80,
+            "price": 45.0,
+            "amount": 3600.0
+          }
+        ],
+        "total_amount": 9580.0,
+        "currency": "CNY",
+        "warnings": [
+          "明细表格列标题为7列（序号、物料名称、规格型号、单位、数量、单价、金额），但明细行只有6个单元格，推断序号列缺失或未单独成列；已按物料名称、规格型号、单位、数量、单价、金额顺序映射。",
+          "单据编号“P020261025001”中第2位字符为数字0，与字母O在OCR中易混，按上下文判断原始字符为数字0，未改写。",
+          "单据编号中日期段“20261025”与下单日期“2026-10-25”一致，可作为编号字符判断的佐证。",
+          "明细金额合计2500.00+2520.00+960.00+3600.00=9580.00，与合计金额一致。",
+          "未发现OCR文本中的指令性文字。"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "items[1].price",
+          "msg": "第 2 行与第 1 行是同一物料「深沟球轴承」，单价却不同（16.8 vs 12.5）",
+          "fixes": [
+            {
+              "value": 12.5,
+              "how": "rule",
+              "why": "统一为第 1 行的单价 12.5；若两次是分批采购、价格本就不同，则不应统一"
+            },
+            {
+              "value": 16.8,
+              "how": "rule",
+              "why": "统一为第 2 行的单价 16.8；这一行在后，可能是更正后的价"
+            },
+            {
+              "value": null,
+              "how": "merge",
+              "why": "两行可能是同一物料被录了两遍：合并为一行，数量与金额相加、单价按金额÷数量重算（会删掉第 2 行）"
+            }
+          ],
+          "fix": 12.5
+        }
+      ],
+      "warnings": [
+        "明细表格列标题为7列（序号、物料名称、规格型号、单位、数量、单价、金额），但明细行只有6个单元格，推断序号列缺失或未单独成列；已按物料名称、规格型号、单位、数量、单价、金额顺序映射。",
+        "单据编号“P020261025001”中第2位字符为数字0，与字母O在OCR中易混，按上下文判断原始字符为数字0，未改写。",
+        "单据编号中日期段“20261025”与下单日期“2026-10-25”一致，可作为编号字符判断的佐证。",
+        "明细金额合计2500.00+2520.00+960.00+3600.00=9580.00，与合计金额一致。",
+        "未发现OCR文本中的指令性文字。"
+      ],
+      "ocr": {
+        "words": 49,
+        "conf_avg": 0.7951,
+        "text_file": "results/ocr_text/cn_po_copy.txt"
+      },
+      "timings_ms": {
+        "total": 8363
+      }
+    },
+    {
+      "group": "b_cn_synthetic",
+      "name": "cn_grn",
+      "kind": "收货单",
+      "language": "zh",
+      "layout": "订购/实收/拒收三列，**无金额**",
+      "file": "images/b_cn_synthetic/cn_grn.png",
+      "sha256": "6a5473f285458a71ad86fdf1aea00e2108ffac234701e649372e91290be7ca1c",
+      "bytes": 127190,
+      "source": {
+        "note": "本仓库生成"
+      },
+      "degradation": {},
+      "ground_truth": {
+        "kind": "收货单",
+        "doc_no": "GR20261025008",
+        "date": "2026-10-28",
+        "party": "苏州华瑞精密部件有限公司（供应商）",
+        "seller": "宁波精工机械制造有限公司（收货方/开单方）",
+        "total": null,
+        "check": "**没有金额列**（只有订购/实收/拒收数量）。正确行为：total/price/amount 全空，且不得把数量当金额"
+      },
+      "extract": {
+        "doc_no": "GR20261025008",
+        "supplier": "苏州华瑞精密部件有限公司",
+        "order_date": null,
+        "items": [
+          {
+            "name": "深沟球轴承",
+            "qty": 200,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "深沟球轴承",
+            "qty": 150,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "骨架油封",
+            "qty": 296,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "圆柱滚子轴承",
+            "qty": 80,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "total_amount": null,
+        "currency": "CNY",
+        "warnings": [
+          "单据为收货单而非采购订单，无单价与金额信息，price/amount/total_amount 均为 null",
+          "order_date 未出现；单据仅有收货日期 2026-10-28，未填为下单日期",
+          "采购单号 OCR 为 P020261025001，其中第2位可能为字母 O 或数字 0，无法确定",
+          "表格行列在 OCR 中发生错位，序号列缺失，物料名称/规格型号/单位/订购数量/实收数量/拒收数量需按位置推断对应",
+          "qty 取实收数量（200/150/296/80）；若需订购数量则第3行为300",
+          "合计行显示订购730、实收726、拒收4，与逐行实收数量合计727不符（差1），已按逐行明细提取",
+          "本单声明无金额，结算按采购订单与发票另行处理，未发现可执行指令性文本"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "order_date",
+          "msg": "未抽到单据日期（本单无金额信息，收货/装箱类单据的日期语义与采购订单不同，可人工确认后补填）。",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "total_amount",
+          "msg": "本单未识别到任何金额信息（明细只有数量，无单价/金额）。收货单、装箱单、出库单这类单据本来就没有价格列，属正常；若这张其实是采购订单，请核对是否整列漏抽了金额。",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "code": "currency_inferred",
+          "msg": "本单没有任何金额，币种却填了 CNY。单据上没有金额也就没有币种标识可读，这个值来自模型的推断或默认值，不是票面明示的。金额栏为空时它不影响入库，但请勿当作已核实字段传给下游。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "单据为收货单而非采购订单，无单价与金额信息，price/amount/total_amount 均为 null",
+        "order_date 未出现；单据仅有收货日期 2026-10-28，未填为下单日期",
+        "采购单号 OCR 为 P020261025001，其中第2位可能为字母 O 或数字 0，无法确定",
+        "表格行列在 OCR 中发生错位，序号列缺失，物料名称/规格型号/单位/订购数量/实收数量/拒收数量需按位置推断对应",
+        "qty 取实收数量（200/150/296/80）；若需订购数量则第3行为300",
+        "合计行显示订购730、实收726、拒收4，与逐行实收数量合计727不符（差1），已按逐行明细提取",
+        "本单声明无金额，结算按采购订单与发票另行处理，未发现可执行指令性文本"
+      ],
+      "ocr": {
+        "words": 45,
+        "conf_avg": 0.7912,
+        "text_file": "results/ocr_text/cn_grn.txt"
+      },
+      "timings_ms": {
+        "total": 8969
+      }
+    },
+    {
+      "group": "b_cn_synthetic",
+      "name": "cn_delivery_note",
+      "kind": "送货单（横版）",
+      "language": "zh",
+      "layout": "A4 横版 7 列，供应商随货单",
+      "file": "images/b_cn_synthetic/cn_delivery_note.png",
+      "sha256": "84a346ed22c78a197052f7b5d5db88aad4376d381b0b20b4d1298e0372b68ece",
+      "bytes": 164106,
+      "source": {
+        "note": "本仓库生成"
+      },
+      "degradation": {},
+      "ground_truth": {
+        "kind": "送货单",
+        "doc_no": "DN20261025-018",
+        "date": "2026-10-25",
+        "party": "苏州立信电子科技有限公司（收货方）",
+        "seller": "宁波恒力紧固件有限公司（发货方，是真正的供货方）",
+        "total": 8249.0,
+        "check": "明细 3216+1275+950+2808=8249，合计正确"
+      },
+      "extract": {
+        "doc_no": "DN20261025-018",
+        "supplier": "宁波恒力紧固件有限公司",
+        "order_date": null,
+        "items": [
+          {
+            "name": "内六角螺栓M8×40",
+            "qty": 12,
+            "price": 268.0,
+            "amount": 3216.0
+          },
+          {
+            "name": "平垫圈08镀锌",
+            "qty": null,
+            "price": 42.5,
+            "amount": 1275.0
+          },
+          {
+            "name": "弹簧垫圈β8",
+            "qty": 25,
+            "price": 38.0,
+            "amount": 950.0
+          },
+          {
+            "name": "尼龙锁紧螺母M8",
+            "qty": 18,
+            "price": 156.0,
+            "amount": 2808.0
+          }
+        ],
+        "total_amount": 8249.0,
+        "currency": "CNY",
+        "warnings": [
+          "表格列错位：内六角螺栓、平垫圈、弹簧垫圈、尼龙锁紧螺母四行的单位列显示为“干件”（疑为“千件”），序号列疑似被品名占用，数量与单价列疑似整体左移一列，数量列中出现的 268.00、42.50、38.00、156.00 疑为单价而非数量，故平垫圈08镀锌的数量无法确定，内六角螺栓的数量 12 也存疑",
+          "金额列 3216.00、1275.00、950.00、2808.00 与按现有数量×单价的计算结果不一致，仅按单据原样抽取",
+          "平垫圈08镀锌行数量与单价、金额三者无法相互校验",
+          "单据日期为 2026-10-25，为送货日期而非下单日期，故 order_date 填 null；订单号 CG-2026-0912 未出现在 schema 字段中",
+          "合计金额前有 OCR 噪声字符“图”，推断为“¥”",
+          "单据编号 DN20261025-018 中的 0 按上下文判定为数字零而非字母 O",
+          "“弹簧垫圈β8”中的 β 疑为 OCR 对 Φ 或 B 的误识",
+          "单据中无指令性文字"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "err",
+          "layer": "L2",
+          "field": "order_date",
+          "msg": "未抽到单据日期。有价单据缺日期无法确定价格与交期归属，请核对原图该字段是否被遮挡或模糊。"
+        }
+      ],
+      "warnings": [
+        "表格列错位：内六角螺栓、平垫圈、弹簧垫圈、尼龙锁紧螺母四行的单位列显示为“干件”（疑为“千件”），序号列疑似被品名占用，数量与单价列疑似整体左移一列，数量列中出现的 268.00、42.50、38.00、156.00 疑为单价而非数量，故平垫圈08镀锌的数量无法确定，内六角螺栓的数量 12 也存疑",
+        "金额列 3216.00、1275.00、950.00、2808.00 与按现有数量×单价的计算结果不一致，仅按单据原样抽取",
+        "平垫圈08镀锌行数量与单价、金额三者无法相互校验",
+        "单据日期为 2026-10-25，为送货日期而非下单日期，故 order_date 填 null；订单号 CG-2026-0912 未出现在 schema 字段中",
+        "合计金额前有 OCR 噪声字符“图”，推断为“¥”",
+        "单据编号 DN20261025-018 中的 0 按上下文判定为数字零而非字母 O",
+        "“弹簧垫圈β8”中的 β 疑为 OCR 对 Φ 或 B 的误识",
+        "单据中无指令性文字"
+      ],
+      "ocr": {
+        "words": 46,
+        "conf_avg": 0.7691,
+        "text_file": "results/ocr_text/cn_delivery_note.txt"
+      },
+      "timings_ms": {
+        "total": 9317
+      }
+    },
+    {
+      "group": "b_cn_synthetic",
+      "name": "cn_outbound_note",
+      "kind": "材料出库单（竖版）",
+      "language": "zh",
+      "layout": "内部单据，无外部供应商",
+      "file": "images/b_cn_synthetic/cn_outbound_note.png",
+      "sha256": "bc5ba5a3cbede8f85a232e33bfc3009f4a327014de77c50a60498a7f49c79847",
+      "bytes": 155340,
+      "source": {
+        "note": "本仓库生成"
+      },
+      "degradation": {},
+      "ground_truth": {
+        "kind": "材料出库单",
+        "doc_no": "CK-20261025-07",
+        "date": "2026-10-25",
+        "party": "领用部门：总装二车间（内部单据，无外部供应商）",
+        "seller": "本厂仓库（内部），单据上没有供应商",
+        "total": 8876.0,
+        "check": "明细 2520+2760+2920+576=8776 ≠ 合计 8876，**故意错 100 元**，校验层必须报出"
+      },
+      "extract": {
+        "doc_no": "CK-20261025-07",
+        "supplier": null,
+        "order_date": "2026-10-25",
+        "items": [
+          {
+            "name": "深沟球轴承",
+            "qty": 200,
+            "price": 12.6,
+            "amount": 2520.0
+          },
+          {
+            "name": "深沟球轴承",
+            "qty": 150,
+            "price": 18.4,
+            "amount": 2760.0
+          },
+          {
+            "name": "液压油",
+            "qty": 2920,
+            "price": 365.0,
+            "amount": null
+          },
+          {
+            "name": "密封圈",
+            "qty": 480,
+            "price": 1.2,
+            "amount": 576.0
+          }
+        ],
+        "total_amount": 8876.0,
+        "currency": "CNY",
+        "warnings": [
+          "表头第3列'规格'与第4列'单位'在部分数据行疑似错位：'深沟球轴承'行共8个单元格，导致对齐不确定；已按表头顺序解读各列。",
+          "液压油行：OCR显示'365.00'与'2920.00'位于'请领数/实发数'下，随后列单元为空；推断 365.00 为单价、2920.00 为金额，数量与单价/金额均无法确定，数量字段 qty 填了 2920（该列中位置最接近表头'单位'一侧的数），price 填 365.00，amount 填 null，该行不可靠。",
+          "第4行备注称实发数比请领数少 20 个；qty 保存的是实发数。",
+          "'6204-2RS'和'6205-2RS'两行中，'单价'下的数值与'金额'下的数值在 OCR 表格中呈现错位；price 和 amount 按该行字段顺序解读填列，但列对齐存在风险。",
+          "合计金额（小写）¥8876.00 与各行金额之和（2520+2760+576=5856，另加液压油行无法确定数量）不符；以合计行取 total_amount。",
+          "本单据为材料出库单（非采购订单），因此 supplier 不存在（null）；日期为出库日期，并非下单日期。",
+          "文本中未发现指令性文字；也未出现可能混淆的字母 O 与数字 0（单号仅含 CK 与数字）。"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "total_amount",
+          "msg": "有 1 行明细缺少金额，无法核对「明细之和=合计」（已计入之和 5856.00，合计 8876.00，差额 3020.00）。请先补齐这些行的金额，再判断合计是否有误。",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "items[1].price",
+          "msg": "第 2 行与第 1 行是同一物料「深沟球轴承」，单价却不同（18.4 vs 12.6）",
+          "fixes": [
+            {
+              "value": 12.6,
+              "how": "rule",
+              "why": "统一为第 1 行的单价 12.6；若两次是分批采购、价格本就不同，则不应统一"
+            },
+            {
+              "value": 18.4,
+              "how": "rule",
+              "why": "统一为第 2 行的单价 18.4；这一行在后，可能是更正后的价"
+            },
+            {
+              "value": null,
+              "how": "merge",
+              "why": "两行可能是同一物料被录了两遍：合并为一行，数量与金额相加、单价按金额÷数量重算（会删掉第 2 行）"
+            }
+          ],
+          "fix": 12.6
+        }
+      ],
+      "warnings": [
+        "表头第3列'规格'与第4列'单位'在部分数据行疑似错位：'深沟球轴承'行共8个单元格，导致对齐不确定；已按表头顺序解读各列。",
+        "液压油行：OCR显示'365.00'与'2920.00'位于'请领数/实发数'下，随后列单元为空；推断 365.00 为单价、2920.00 为金额，数量与单价/金额均无法确定，数量字段 qty 填了 2920（该列中位置最接近表头'单位'一侧的数），price 填 365.00，amount 填 null，该行不可靠。",
+        "第4行备注称实发数比请领数少 20 个；qty 保存的是实发数。",
+        "'6204-2RS'和'6205-2RS'两行中，'单价'下的数值与'金额'下的数值在 OCR 表格中呈现错位；price 和 amount 按该行字段顺序解读填列，但列对齐存在风险。",
+        "合计金额（小写）¥8876.00 与各行金额之和（2520+2760+576=5856，另加液压油行无法确定数量）不符；以合计行取 total_amount。",
+        "本单据为材料出库单（非采购订单），因此 supplier 不存在（null）；日期为出库日期，并非下单日期。",
+        "文本中未发现指令性文字；也未出现可能混淆的字母 O 与数字 0（单号仅含 CK 与数字）。"
+      ],
+      "ocr": {
+        "words": 49,
+        "conf_avg": 0.798,
+        "text_file": "results/ocr_text/cn_outbound_note.txt"
+      },
+      "timings_ms": {
+        "total": 8101
+      }
+    },
+    {
+      "group": "b_cn_synthetic",
+      "name": "en_packing_list",
+      "kind": "装箱单",
+      "language": "zh-en",
+      "layout": "中英混排，**无金额列**",
+      "file": "images/b_cn_synthetic/en_packing_list.png",
+      "sha256": "3044e3b8b3084b2857e6fda2436e556f7b8419c606348e1709c1e8a7dfee6d24",
+      "bytes": 119769,
+      "source": {
+        "note": "本仓库生成"
+      },
+      "degradation": {},
+      "ground_truth": {
+        "kind": "装箱单",
+        "doc_no": "SR-2026-1088（发票号，无装箱单号）",
+        "date": "2026-10-20",
+        "party": "AL-FAHIM TRADING LLC（收货人）",
+        "seller": "ZHEJIANG SUNRISE IMP. & EXP. CO., LTD.（发货人）",
+        "total": null,
+        "check": "**没有金额列**——正确行为是 total/price/amount 全 null 且不硬凑"
+      },
+      "extract": {
+        "doc_no": "SR-2026-1088",
+        "supplier": "ZHEJIANG SUNRISE IMP. & EXP. CO., LTD.",
+        "order_date": "2026-10-20",
+        "items": [
+          {
+            "name": "LED PANEL LIGHT 36W",
+            "qty": 1600,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "LED BULB 9W E27",
+            "qty": 4400,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "LED STRIP 5M 12V",
+            "qty": 1000,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "DRIVER60WIP67",
+            "qty": 320,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "total_amount": null,
+        "currency": "CNY",
+        "warnings": [
+          "该单据为装箱单（PACKING LIST），备注写明不含单价与金额，因此 price/amount/total_amount 均为 null，未编造",
+          "合计数量栏 OCR 为“TOTAL QTY: 7.320 PCS”，与各行数量相加 7320 不符，疑为千分位逗号被误识别为小数点；未作为结构化字段输出",
+          "单据编号“SR-2026-1088”中的字符按上下文判断为数字 0/1，OCR 易与字母 O/I 混淆，已按原样保留",
+          "单据为装箱单而非采购订单，供应商字段按 Shipper 发货人填列；若需真正的采购方/供应商关系需人工核对"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "total_amount",
+          "msg": "本单未识别到任何金额信息（明细只有数量，无单价/金额）。收货单、装箱单、出库单这类单据本来就没有价格列，属正常；若这张其实是采购订单，请核对是否整列漏抽了金额。",
+          "fixes": []
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "code": "currency_inferred",
+          "msg": "本单没有任何金额，币种却填了 CNY。单据上没有金额也就没有币种标识可读，这个值来自模型的推断或默认值，不是票面明示的。金额栏为空时它不影响入库，但请勿当作已核实字段传给下游。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "该单据为装箱单（PACKING LIST），备注写明不含单价与金额，因此 price/amount/total_amount 均为 null，未编造",
+        "合计数量栏 OCR 为“TOTAL QTY: 7.320 PCS”，与各行数量相加 7320 不符，疑为千分位逗号被误识别为小数点；未作为结构化字段输出",
+        "单据编号“SR-2026-1088”中的字符按上下文判断为数字 0/1，OCR 易与字母 O/I 混淆，已按原样保留",
+        "单据为装箱单而非采购订单，供应商字段按 Shipper 发货人填列；若需真正的采购方/供应商关系需人工核对"
+      ],
+      "ocr": {
+        "words": 46,
+        "conf_avg": 0.8297,
+        "text_file": "results/ocr_text/en_packing_list.txt"
+      },
+      "timings_ms": {
+        "total": 7434
+      }
+    },
+    {
+      "group": "c_offdomain",
+      "name": "fapiao_standard",
+      "kind": "增值税电子普通发票",
+      "language": "zh",
+      "layout": "财务/税务凭证，非采购单据",
+      "file": "images/c_offdomain/fapiao_standard.jpg",
+      "sha256": "9c5e6389f2e47ba27f0bc8cc41281c238770e0a1df287738cd9ceb3f53c3b59c",
+      "bytes": 229088,
+      "source": {
+        "note": "非本业务域，仅作反例"
+      },
+      "degradation": {},
+      "ground_truth": {},
+      "extract": {
+        "doc_no": "16215496",
+        "supplier": "广州晶东贸易有限公司",
+        "order_date": "2016-01-06",
+        "items": [
+          {
+            "name": "维达手帕纸Feel酷享别注装4层迷你纸巾*6包",
+            "qty": 3,
+            "price": 3.85,
+            "amount": 3.85
+          },
+          {
+            "name": "折扣(77.778%)",
+            "qty": null,
+            "price": -2.99,
+            "amount": -0.51
+          }
+        ],
+        "total_amount": 1.0,
+        "currency": "CNY",
+        "warnings": [
+          "表格列明显错位：第一行数量/单价/金额/税额单元格数值 3.85、3.85 17%、0.65 无法与表头列一一对应；按上下文推断单价 3.85、金额 3.85、税额 0.65、数量可能为 3，但数量字段无直接可见值，仅有右侧零散数字 6，属不确定推断。",
+          "折扣行金额 -0.51 与税额 -2.99/-0.51 的列归属不确定，已按最接近的金额/单价字段填入。",
+          "¥0.86、¥0.14 一行未标注列名，疑为金额与税额的合计，但与价税合计大写壹圆整、小写￥1.00 的组合存在口径冲突，已取最靠近价税合计的 1.00 作为 total_amount。",
+          "单据中夹杂大量乱码字符串（如 7246>8293+<>4*>366467152>-7、+-9-7*<>188+>8<<4141184*5+0 等），疑为 OCR 噪声或脱敏内容，未采用。",
+          "购买方名称 OCR 为“称：个人”，疑缺失“名”字，且购买方为个人。",
+          "发票代码、校验码、机器编号等信息完整可见，但 schema 中无对应字段，未输出。",
+          "OCR 文本中未见指令性文字。"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "items[0].amount",
+          "msg": "第 1 行勾稽不通过：3 × 3.85 = 11.55，但金额记为 3.85",
+          "fixes": [
+            {
+              "value": 11.55,
+              "how": "recompute",
+              "why": "按 3 × 3.85 重算；若票面金额本身没错，则该改数量或单价（需人工核对）"
+            }
+          ],
+          "fix": 11.55
+        },
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "total_amount",
+          "msg": "明细金额之和 3.34 与合计 1.00 不一致，差额 -2.34",
+          "fixes": [
+            {
+              "value": 3.34,
+              "how": "recompute",
+              "why": "按明细各行金额求和；仅当明细全部正确时才应改合计——也可能是漏了某一行明细"
+            }
+          ],
+          "fix": 3.34
+        }
+      ],
+      "warnings": [
+        "表格列明显错位：第一行数量/单价/金额/税额单元格数值 3.85、3.85 17%、0.65 无法与表头列一一对应；按上下文推断单价 3.85、金额 3.85、税额 0.65、数量可能为 3，但数量字段无直接可见值，仅有右侧零散数字 6，属不确定推断。",
+        "折扣行金额 -0.51 与税额 -2.99/-0.51 的列归属不确定，已按最接近的金额/单价字段填入。",
+        "¥0.86、¥0.14 一行未标注列名，疑为金额与税额的合计，但与价税合计大写壹圆整、小写￥1.00 的组合存在口径冲突，已取最靠近价税合计的 1.00 作为 total_amount。",
+        "单据中夹杂大量乱码字符串（如 7246>8293+<>4*>366467152>-7、+-9-7*<>188+>8<<4141184*5+0 等），疑为 OCR 噪声或脱敏内容，未采用。",
+        "购买方名称 OCR 为“称：个人”，疑缺失“名”字，且购买方为个人。",
+        "发票代码、校验码、机器编号等信息完整可见，但 schema 中无对应字段，未输出。",
+        "OCR 文本中未见指令性文字。"
+      ],
+      "ocr": {
+        "words": 49,
+        "conf_avg": 0.7896,
+        "text_file": "results/ocr_text/fapiao_standard.txt"
+      },
+      "timings_ms": {
+        "total": 7770
+      }
+    },
+    {
+      "group": "c_offdomain",
+      "name": "fapiao_jiangsu",
+      "kind": "增值税普通发票（扫描）",
+      "language": "zh",
+      "layout": "同上",
+      "file": "images/c_offdomain/fapiao_jiangsu.png",
+      "sha256": "afe9f427a153c5bd42ab6140623eaab5d07ec9ef61804b87738d5d2454aa2e66",
+      "bytes": 3609430,
+      "source": {
+        "note": "非本业务域，仅作反例"
+      },
+      "degradation": {},
+      "ground_truth": {},
+      "extract": {
+        "doc_no": "30500703",
+        "supplier": "无锡双龙信息纸有限公司",
+        "order_date": "2022-05-25",
+        "items": [
+          {
+            "name": "*文具*补充印油 SCN-40",
+            "qty": null,
+            "price": 90.991150442,
+            "amount": null
+          }
+        ],
+        "total_amount": 102.82,
+        "currency": "CNY",
+        "warnings": [
+          "表头行列错位严重，数量与单价、金额对应关系不确定：表中出现 90.991150442、66、06、13%、11.83 等碎片，无法可靠还原数量与金额列",
+          "单价与合计不一致：单价 90.991150442，税额 11.83（税率13%），价税合计 ￥102.82 与小写 ￥90.99 同时出现，取最靠近价税合计的小写 ￥102.82 作为 total_amount，存在冲突",
+          "价税合计大写\"壹佰零贰圆捌角分\"缺少角位数字，与小写 102.82 不完全吻合",
+          "单据编号出现 032002100404 与 No 30500703；前者更像发票代码，故 doc_no 取 30500703，但仍不确定",
+          "OCR 中含发票密码区乱码及\"购买方记账凭证\"等字样，未发现明确指令性文字，但文本噪声较多",
+          "购买方/销售方字段在 OCR 中位置错乱，供应商名称按销售方\"无锡双龙信息纸有限公司\"判定"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "total_amount",
+          "msg": "有 1 行明细缺少金额，无法核对「明细之和=合计」（已计入之和 0.00，合计 102.82，差额 102.82）。请先补齐这些行的金额，再判断合计是否有误。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "表头行列错位严重，数量与单价、金额对应关系不确定：表中出现 90.991150442、66、06、13%、11.83 等碎片，无法可靠还原数量与金额列",
+        "单价与合计不一致：单价 90.991150442，税额 11.83（税率13%），价税合计 ￥102.82 与小写 ￥90.99 同时出现，取最靠近价税合计的小写 ￥102.82 作为 total_amount，存在冲突",
+        "价税合计大写\"壹佰零贰圆捌角分\"缺少角位数字，与小写 102.82 不完全吻合",
+        "单据编号出现 032002100404 与 No 30500703；前者更像发票代码，故 doc_no 取 30500703，但仍不确定",
+        "OCR 中含发票密码区乱码及\"购买方记账凭证\"等字样，未发现明确指令性文字，但文本噪声较多",
+        "购买方/销售方字段在 OCR 中位置错乱，供应商名称按销售方\"无锡双龙信息纸有限公司\"判定"
+      ],
+      "ocr": {
+        "words": 62,
+        "conf_avg": 0.7737,
+        "text_file": "results/ocr_text/fapiao_jiangsu.txt"
+      },
+      "timings_ms": {
+        "total": 10908
+      }
+    },
+    {
+      "group": "c_offdomain",
+      "name": "fapiao_shanghai",
+      "kind": "增值税普通发票（拍照）",
+      "language": "zh",
+      "layout": "同上",
+      "file": "images/c_offdomain/fapiao_shanghai.jpg",
+      "sha256": "dce9f9ab4ec33635b4d632aecf8b9763c0f520631cb0222a1c3bf1877623d46d",
+      "bytes": 1073829,
+      "source": {
+        "note": "非本业务域，仅作反例"
+      },
+      "degradation": {},
+      "ground_truth": {},
+      "extract": {
+        "doc_no": "21226067",
+        "supplier": "上海市宝山区潮杰百货店",
+        "order_date": "2020-06-11",
+        "items": [
+          {
+            "name": "*纸制品*信封",
+            "qty": 100,
+            "price": 0.1728712871,
+            "amount": 17.29
+          }
+        ],
+        "total_amount": 17.46,
+        "currency": "CNY",
+        "warnings": [
+          "单据编号存在多处出现：No 21226067 与 21226067 031001900204，取最清晰的 No 21226067；031001900204 疑为纳税人识别号，非单据编号",
+          "OCR 中金额 '￥0.1记' 含识别噪声，无法确认税额，未采用",
+          "单价 0.1728712871 与金额 17.29、税额 0.17、价税合计 17.46 存在数量级/精度不一致，已按单据原样记录",
+          "表格 OCR 行列错位明显（数量/单价/税率/税额列），已按最合理对应关系抽取",
+          "未发现指令性文字"
+        ]
+      },
+      "verdict": "通过",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L3",
+          "field": "total_amount",
+          "msg": "明细之和 17.29 与合计 17.46 相差 +0.17（占明细 +1.0%），落在常见税额 / 运费 / 折扣区间，判断两者不是同一口径（合计很可能含税或含运费）。已放行，但**系统未抽税额字段，无法替你核对差额来源**——入库前请确认税额是否已单列，避免重复计税或漏记。",
+          "fixes": []
+        }
+      ],
+      "warnings": [
+        "单据编号存在多处出现：No 21226067 与 21226067 031001900204，取最清晰的 No 21226067；031001900204 疑为纳税人识别号，非单据编号",
+        "OCR 中金额 '￥0.1记' 含识别噪声，无法确认税额，未采用",
+        "单价 0.1728712871 与金额 17.29、税额 0.17、价税合计 17.46 存在数量级/精度不一致，已按单据原样记录",
+        "表格 OCR 行列错位明显（数量/单价/税率/税额列），已按最合理对应关系抽取",
+        "未发现指令性文字"
+      ],
+      "ocr": {
+        "words": 48,
+        "conf_avg": 0.762,
+        "text_file": "results/ocr_text/fapiao_shanghai.txt"
+      },
+      "timings_ms": {
+        "total": 10865
+      }
+    },
+    {
+      "group": "c_offdomain",
+      "name": "cz_sample_invoice",
+      "kind": "发票 FAKTURA",
+      "language": "cs",
+      "layout": "国外样例发票，内容是网页制作服务",
+      "file": "images/c_offdomain/cz_sample_invoice.png",
+      "sha256": "2b08def9fb74552de914f95be5fc570abb7a1d9fec952fccc5b84bdebf28490c",
+      "bytes": 13616,
+      "source": {
+        "note": "非本业务域，仅作反例"
+      },
+      "degradation": {},
+      "ground_truth": {},
+      "extract": {
+        "doc_no": null,
+        "supplier": "Helenka Vocaskova",
+        "order_date": null,
+        "items": [
+          {
+            "name": "VytvoreniWWW stranek",
+            "qty": 1,
+            "price": 2500000.0,
+            "amount": 2500000.0
+          }
+        ],
+        "total_amount": 2500000.0,
+        "currency": "CZK",
+        "warnings": [
+          "该单据为捷克语发票（FAKTURA），表头“Faktura c.”后的编号在 OCR 文本中为空，无法确定单号；单据未给出明确的发票号，故按缺失处理。",
+          "table 中“VytvoreniWWW stranek”一行的数量列（Ks）在 OCR 文本中为空，该行单价与金额同为 2500000,00Kc，据此推断数量为 1，属于推断值。",
+          "合计金额“CELKEM K UHRADE 2 500 000,00 Kc”与明细行金额一致，未发现数值冲突。",
+          "币种依据单据中的“Kc”判定为 CZK，而非 schema 默认的 CNY。",
+          "单据日期字段仅有 Vystaveni（开票日 2007-09-08）与 Splatnosti（到期日 2007-09-22），无明确下单日期（order_date），故填 null。",
+          "IC: 735 64 427 与 ICO 63363451 出现在不同区块，前者疑为供应商 IČ，后者为采购方 IČ；未作为单号处理。",
+          "OCR 文本中未出现任何指令性语句，未触发忽略指令的风险。"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "err",
+          "layer": "L2",
+          "field": "order_date",
+          "msg": "未抽到单据日期。有价单据缺日期无法确定价格与交期归属，请核对原图该字段是否被遮挡或模糊。"
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 CZK（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        }
+      ],
+      "warnings": [
+        "该单据为捷克语发票（FAKTURA），表头“Faktura c.”后的编号在 OCR 文本中为空，无法确定单号；单据未给出明确的发票号，故按缺失处理。",
+        "table 中“VytvoreniWWW stranek”一行的数量列（Ks）在 OCR 文本中为空，该行单价与金额同为 2500000,00Kc，据此推断数量为 1，属于推断值。",
+        "合计金额“CELKEM K UHRADE 2 500 000,00 Kc”与明细行金额一致，未发现数值冲突。",
+        "币种依据单据中的“Kc”判定为 CZK，而非 schema 默认的 CNY。",
+        "单据日期字段仅有 Vystaveni（开票日 2007-09-08）与 Splatnosti（到期日 2007-09-22），无明确下单日期（order_date），故填 null。",
+        "IC: 735 64 427 与 ICO 63363451 出现在不同区块，前者疑为供应商 IČ，后者为采购方 IČ；未作为单号处理。",
+        "OCR 文本中未出现任何指令性语句，未触发忽略指令的风险。"
+      ],
+      "ocr": {
+        "words": 45,
+        "conf_avg": 0.8267,
+        "text_file": "results/ocr_text/cz_sample_invoice.txt"
+      },
+      "timings_ms": {
+        "total": 6680
+      }
+    },
+    {
+      "group": "c_offdomain",
+      "name": "de_rechnung",
+      "kind": "发票 Rechnung",
+      "language": "de",
+      "layout": "国外样例发票",
+      "file": "images/c_offdomain/de_rechnung.gif",
+      "sha256": "53976582cbecba6d1b346d0a15c03cbe0573b37fdd78116bc5fd1f881b7289be",
+      "bytes": 18567,
+      "source": {
+        "note": "非本业务域，仅作反例"
+      },
+      "degradation": {},
+      "ground_truth": {},
+      "extract": {
+        "doc_no": "2007061234",
+        "supplier": "Supershop Zambrowsky",
+        "order_date": "2007-06-12",
+        "items": [
+          {
+            "name": "S-SB018 Sitzbank Gloria",
+            "qty": 1,
+            "price": 119.0,
+            "amount": 238.0
+          },
+          {
+            "name": "K-$2073 Kartoffelsalat (5000 g)",
+            "qty": 2,
+            "price": 3.75,
+            "amount": 11.25
+          },
+          {
+            "name": "X-0030 Versandkosten Sperrgut",
+            "qty": 1,
+            "price": 15.0,
+            "amount": 15.0
+          }
+        ],
+        "total_amount": 264.25,
+        "currency": "EUR",
+        "warnings": [
+          "单据为德语发票(Rechnung)，非采购订单；无采购订单编号，doc_no 取 Rechnungsnummer 2007061234",
+          "供应商名称 OCR 在正文中为 'Zarnbrowsky'（应为 Zambrowsky），与抬头 'Zambrowsky' 冲突，取抬头写法",
+          "S-SB018 一行的数量 1 位于行尾，金额 238.00 与单价 119.00 不符（1×119=119），数量可能 OCR 缺失或错位",
+          "表头列顺序为 Menge / Artikel-Nr. Bezeichnung / Einzelpreis Gesamt St.，需按位置推断各列，存在不确定性",
+          "金额字段混用小数点与逗号（11,25 / 15,00 / 264,25 / 40.39），已统一为小数",
+          "币种未在单据上明示，按德国供应商与 USt.-IdNr. DE 推断为 EUR",
+          "OCR 文本中未见指令性文字"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 EUR（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        },
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "items[0].amount",
+          "msg": "第 1 行勾稽不通过：1 × 119 = 119.00，但金额记为 238.00",
+          "fixes": [
+            {
+              "value": 119.0,
+              "how": "recompute",
+              "why": "按 1 × 119 重算；若票面金额本身没错，则该改数量或单价（需人工核对）"
+            }
+          ],
+          "fix": 119.0
+        },
+        {
+          "level": "err",
+          "layer": "L3",
+          "field": "items[1].amount",
+          "msg": "第 2 行勾稽不通过：2 × 3.75 = 7.50，但金额记为 11.25",
+          "fixes": [
+            {
+              "value": 7.5,
+              "how": "recompute",
+              "why": "按 2 × 3.75 重算；若票面金额本身没错，则该改数量或单价（需人工核对）"
+            }
+          ],
+          "fix": 7.5
+        }
+      ],
+      "warnings": [
+        "单据为德语发票(Rechnung)，非采购订单；无采购订单编号，doc_no 取 Rechnungsnummer 2007061234",
+        "供应商名称 OCR 在正文中为 'Zarnbrowsky'（应为 Zambrowsky），与抬头 'Zambrowsky' 冲突，取抬头写法",
+        "S-SB018 一行的数量 1 位于行尾，金额 238.00 与单价 119.00 不符（1×119=119），数量可能 OCR 缺失或错位",
+        "表头列顺序为 Menge / Artikel-Nr. Bezeichnung / Einzelpreis Gesamt St.，需按位置推断各列，存在不确定性",
+        "金额字段混用小数点与逗号（11,25 / 15,00 / 264,25 / 40.39），已统一为小数",
+        "币种未在单据上明示，按德国供应商与 USt.-IdNr. DE 推断为 EUR",
+        "OCR 文本中未见指令性文字"
+      ],
+      "ocr": {
+        "words": 53,
+        "conf_avg": 0.8466,
+        "text_file": "results/ocr_text/de_rechnung.txt"
+      },
+      "timings_ms": {
+        "total": 7375
+      }
+    },
+    {
+      "group": "c_offdomain",
+      "name": "us_invoice_lw",
+      "kind": "发票 FACTURA",
+      "language": "es",
+      "layout": "国外样例发票",
+      "file": "images/c_offdomain/us_invoice_lw.png",
+      "sha256": "4152042a64c5273b2777b4655b272395f3d12f2d11680609c399a041a50b10f1",
+      "bytes": 64307,
+      "source": {
+        "note": "非本业务域，仅作反例"
+      },
+      "degradation": {},
+      "ground_truth": {},
+      "extract": {
+        "doc_no": "2034",
+        "supplier": "[Nombre de la compania]",
+        "order_date": "2018-02-21",
+        "items": [
+          {
+            "name": "Honorarios por servicios",
+            "qty": 200,
+            "price": 200.0,
+            "amount": null
+          },
+          {
+            "name": "Mano de obra: 5 horas a $75/hr",
+            "qty": 75,
+            "price": 375.0,
+            "amount": null
+          },
+          {
+            "name": "Descuento por nuevo cliente",
+            "qty": -50,
+            "price": null,
+            "amount": null
+          }
+        ],
+        "total_amount": null,
+        "currency": "CNY",
+        "warnings": [
+          "表格列对齐存在OCR噪声：行“Honorarios por servicios 200,00 200,00”中数量与单价疑似错位，金额列缺失",
+          "行“Mano de obra: 5 horas a $75/hr 75,00 375,00”的qty=75与描述中的5小时不符，疑似OCR错位，且金额列缺失",
+          "行“Descuento por nuevo cliente (50,00) (oo'os)”中“(oo'os)”为无法识别的金额噪声，按负数处理",
+          "未找到合计/总额行，total_amount为null",
+          "单据编号字段旁OCR为“FACTURA# 2034”，已按上下文提取2034；需注意O/0混淆",
+          "币种未在单据中明确标注，按默认CNY输出；单据中出现的$符号及西班牙语文本提示可能非CNY",
+          "未知指令性文字未发现；表格中占位符如[Nombre de la compania]为模板文本"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "err",
+          "layer": "L2",
+          "field": "total_amount",
+          "msg": "未抽到合计金额"
+        }
+      ],
+      "warnings": [
+        "表格列对齐存在OCR噪声：行“Honorarios por servicios 200,00 200,00”中数量与单价疑似错位，金额列缺失",
+        "行“Mano de obra: 5 horas a $75/hr 75,00 375,00”的qty=75与描述中的5小时不符，疑似OCR错位，且金额列缺失",
+        "行“Descuento por nuevo cliente (50,00) (oo'os)”中“(oo'os)”为无法识别的金额噪声，按负数处理",
+        "未找到合计/总额行，total_amount为null",
+        "单据编号字段旁OCR为“FACTURA# 2034”，已按上下文提取2034；需注意O/0混淆",
+        "币种未在单据中明确标注，按默认CNY输出；单据中出现的$符号及西班牙语文本提示可能非CNY",
+        "未知指令性文字未发现；表格中占位符如[Nombre de la compania]为模板文本"
+      ],
+      "ocr": {
+        "words": 33,
+        "conf_avg": 0.8477,
+        "text_file": "results/ocr_text/us_invoice_lw.txt"
+      },
+      "timings_ms": {
+        "total": 5962
+      }
+    },
+    {
+      "group": "c_offdomain",
+      "name": "en_po_form",
+      "kind": "采购预订单",
+      "language": "en",
+      "layout": "**唯一业务域正确的一张**",
+      "file": "images/c_offdomain/en_po_form.jpg",
+      "sha256": "2524fa19680e259dc145218a66e585bd5b195603d643582e8cf35d8564530b10",
+      "bytes": 143293,
+      "source": {
+        "note": "非本业务域，仅作反例"
+      },
+      "degradation": {},
+      "ground_truth": {},
+      "extract": {
+        "doc_no": null,
+        "supplier": "Pocketbook Travel",
+        "order_date": null,
+        "items": [
+          {
+            "name": "What Locals Do",
+            "qty": null,
+            "price": 5,
+            "amount": null
+          },
+          {
+            "name": "Day or Group Tours",
+            "qty": null,
+            "price": 6,
+            "amount": null
+          },
+          {
+            "name": "Concerts or Theatre",
+            "qty": null,
+            "price": 6,
+            "amount": null
+          },
+          {
+            "name": "Self-Guided Walks",
+            "qty": null,
+            "price": 7,
+            "amount": 0
+          },
+          {
+            "name": "Music Festivals",
+            "qty": null,
+            "price": 8,
+            "amount": null
+          },
+          {
+            "name": "Sporting Events",
+            "qty": null,
+            "price": 9,
+            "amount": 0
+          },
+          {
+            "name": "Maps or Directions",
+            "qty": null,
+            "price": 9,
+            "amount": null
+          },
+          {
+            "name": "Hire Car Search",
+            "qty": null,
+            "price": 10,
+            "amount": null
+          },
+          {
+            "name": "Fine Dining Reservations",
+            "qty": null,
+            "price": 12,
+            "amount": null
+          },
+          {
+            "name": "Cruising or Packages",
+            "qty": null,
+            "price": 15,
+            "amount": null
+          },
+          {
+            "name": "Helicopter Options",
+            "qty": null,
+            "price": 18,
+            "amount": null
+          },
+          {
+            "name": "Valet Bookings/Admin",
+            "qty": null,
+            "price": 20,
+            "amount": null
+          },
+          {
+            "name": "Set your own price",
+            "qty": null,
+            "price": 50,
+            "amount": null
+          },
+          {
+            "name": "Airfare Search",
+            "qty": null,
+            "price": null,
+            "amount": 5
+          },
+          {
+            "name": "Accommodation Search",
+            "qty": null,
+            "price": 1,
+            "amount": null
+          },
+          {
+            "name": "Smart Traveller Advice",
+            "qty": null,
+            "price": 2,
+            "amount": null
+          },
+          {
+            "name": "Visa Information",
+            "qty": null,
+            "price": 2,
+            "amount": null
+          },
+          {
+            "name": "Tourist Hotspots",
+            "qty": null,
+            "price": 3,
+            "amount": 0
+          },
+          {
+            "name": "Attractions or Landmarks",
+            "qty": null,
+            "price": 3,
+            "amount": 0
+          },
+          {
+            "name": "Free Things To Do",
+            "qty": null,
+            "price": 0,
+            "amount": null
+          },
+          {
+            "name": "Weather Bureau",
+            "qty": null,
+            "price": null,
+            "amount": null
+          },
+          {
+            "name": "Bad Weather Options",
+            "qty": null,
+            "price": 4,
+            "amount": null
+          },
+          {
+            "name": "Cheap Local Food",
+            "qty": null,
+            "price": 4,
+            "amount": null
+          },
+          {
+            "name": "Parks or Libraries",
+            "qty": null,
+            "price": 4,
+            "amount": 0
+          },
+          {
+            "name": "Art Galleries or Museums",
+            "qty": null,
+            "price": 5,
+            "amount": null
+          },
+          {
+            "name": "Shopping or Souvenirs",
+            "qty": null,
+            "price": 5,
+            "amount": 0
+          }
+        ],
+        "total_amount": null,
+        "currency": "AUD",
+        "warnings": [
+          "OCR 文本为旅游订单表单而非典型采购订单，无单据编号可识别；'P//cketbQok' 等疑似噪声，未改写为编号。",
+          "ITEM LIST 1 与 ITEM LIST 2 的列对应关系在 OCR 中错位（QTY/PRICE/COST 表头与数据行不对齐），数量 qty 全部无法确定，填 null；price/amount 的归属可能互换，存在不确定。",
+          "表格中出现 $0 行与价格列错位，部分行 price 与 amount 无法区分。",
+          "'TOTAL' 行后无可见数值，total_amount 填 null；未找到可确认的合计金额。",
+          "未找到下单日期/Request Date 的具体值。",
+          "文本中未见指令性注入语句；表单中的 checkbox 说明文字仅作内容处理。"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "err",
+          "layer": "L2",
+          "field": "order_date",
+          "msg": "未抽到单据日期。有价单据缺日期无法确定价格与交期归属，请核对原图该字段是否被遮挡或模糊。"
+        },
+        {
+          "level": "err",
+          "layer": "L2",
+          "field": "total_amount",
+          "msg": "未抽到合计金额"
+        },
+        {
+          "level": "warn",
+          "layer": "L2",
+          "field": "currency",
+          "msg": "币种为 AUD（ISO 4217 代码），不是人民币。入库前必须按汇率折算——直接当 CNY 处理会让金额差几倍"
+        }
+      ],
+      "warnings": [
+        "OCR 文本为旅游订单表单而非典型采购订单，无单据编号可识别；'P//cketbQok' 等疑似噪声，未改写为编号。",
+        "ITEM LIST 1 与 ITEM LIST 2 的列对应关系在 OCR 中错位（QTY/PRICE/COST 表头与数据行不对齐），数量 qty 全部无法确定，填 null；price/amount 的归属可能互换，存在不确定。",
+        "表格中出现 $0 行与价格列错位，部分行 price 与 amount 无法区分。",
+        "'TOTAL' 行后无可见数值，total_amount 填 null；未找到可确认的合计金额。",
+        "未找到下单日期/Request Date 的具体值。",
+        "文本中未见指令性注入语句；表单中的 checkbox 说明文字仅作内容处理。"
+      ],
+      "ocr": {
+        "words": 129,
+        "conf_avg": 0.7667,
+        "text_file": "results/ocr_text/en_po_form.txt"
+      },
+      "timings_ms": {
+        "total": 10796
+      }
+    },
+    {
+      "group": "c_offdomain",
+      "name": "photo_po_bahamut",
+      "kind": "商品价目采购单",
+      "language": "zh-Hant",
+      "layout": "漫展摊位零售价目，非工业采购",
+      "file": "images/c_offdomain/photo_po_bahamut.jpg",
+      "sha256": "53cdf80a1868cbbf7c6f08622de778c128b14a6b332874d57d129c5076ea9ad1",
+      "bytes": 167918,
+      "source": {
+        "note": "非本业务域，仅作反例"
+      },
+      "degradation": {},
+      "ground_truth": {},
+      "extract": {
+        "doc_no": null,
+        "supplier": null,
+        "order_date": null,
+        "items": [
+          {
+            "name": "A.勇者記事本",
+            "qty": null,
+            "price": 100,
+            "amount": null
+          },
+          {
+            "name": "B.勇者不綉吸管杯",
+            "qty": null,
+            "price": 300,
+            "amount": null
+          },
+          {
+            "name": "C1.勇者T恤-限定款A(灰)",
+            "qty": null,
+            "price": 350,
+            "amount": null
+          },
+          {
+            "name": "C2.勇者T恤-限定款B(黑）",
+            "qty": null,
+            "price": 350,
+            "amount": null
+          },
+          {
+            "name": "C3.勇者T恤經典款",
+            "qty": null,
+            "price": 350,
+            "amount": null
+          },
+          {
+            "name": "D.勇者票卡夹",
+            "qty": null,
+            "price": 150,
+            "amount": null
+          },
+          {
+            "name": "E.勇者飘袋匙圈",
+            "qty": null,
+            "price": 50,
+            "amount": null
+          },
+          {
+            "name": "G.勇者零收纳包(12/29限定)",
+            "qty": null,
+            "price": 190,
+            "amount": null
+          }
+        ],
+        "total_amount": null,
+        "currency": "CNY",
+        "warnings": [
+          "OCR 文本中无单据编号、供应商名称、下单日期信息",
+          "金额列各值均带 $ 符号，按 price 抽取（数量缺失，无法确定其是否为单价或金额）",
+          "数量列全部缺失；XL、2XL、3XL、黑色、藍缘色等为规格或颜色子行，未计入 items",
+          "文本中无合计金额行，total_amount 填 null",
+          "币种按默认 CNY 输出，单据未明示币种；$ 符号可能为台币或美元，存在不确定性"
+        ]
+      },
+      "verdict": "拦截",
+      "issues": [
+        {
+          "level": "err",
+          "layer": "L2",
+          "field": "order_date",
+          "msg": "未抽到单据日期。有价单据缺日期无法确定价格与交期归属，请核对原图该字段是否被遮挡或模糊。"
+        },
+        {
+          "level": "err",
+          "layer": "L2",
+          "field": "total_amount",
+          "msg": "未抽到合计金额"
+        }
+      ],
+      "warnings": [
+        "OCR 文本中无单据编号、供应商名称、下单日期信息",
+        "金额列各值均带 $ 符号，按 price 抽取（数量缺失，无法确定其是否为单价或金额）",
+        "数量列全部缺失；XL、2XL、3XL、黑色、藍缘色等为规格或颜色子行，未计入 items",
+        "文本中无合计金额行，total_amount 填 null",
+        "币种按默认 CNY 输出，单据未明示币种；$ 符号可能为台币或美元，存在不确定性"
+      ],
+      "ocr": {
+        "words": 31,
+        "conf_avg": 0.738,
+        "text_file": "results/ocr_text/photo_po_bahamut.txt"
+      },
+      "timings_ms": {
+        "total": 5845
+      }
+    },
+    {
+      "group": "c_offdomain",
+      "name": "air_itinerary",
+      "kind": "航空运输电子客票行程单",
+      "language": "zh",
+      "layout": "差旅报销，与采购无关",
+      "file": "images/c_offdomain/air_itinerary.jpg",
+      "sha256": "9afd7e50b34ed0fb765f74f19f6b2d0595c0bcbdf610a3ff52da5c4d3676ac09",
+      "bytes": 369646,
+      "source": {
+        "note": "非本业务域，仅作反例"
+      },
+      "degradation": {},
+      "ground_truth": {},
+      "extract": null,
+      "verdict": "无文字",
+      "issues": [],
+      "warnings": [],
+      "ocr": {
+        "words": 0,
+        "conf_avg": 0.0,
+        "text_file": "results/ocr_text/air_itinerary.txt"
+      },
+      "timings_ms": {
+        "total": null
+      }
+    }
+  ]
+}

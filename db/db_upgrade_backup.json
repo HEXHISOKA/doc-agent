@@ -1,0 +1,19 @@
+{
+  "taken_at": "2026-10-25T20:00:00+08:00",
+  "purpose": "hash_ver 升级前的数据完整性清单。升级后逐行比对 (id, seq, record_hash)，三者全同即证明一行数据都没动。",
+  "table": "doc_parses",
+  "row_count": 10,
+  "rows": [
+    {"id": 4,  "seq": 1,  "record_hash": "f61af89d8e2cab27ee26532221a0415c439270d8d85114355ad3985d780b6434", "validate_ok": false, "review_json": null},
+    {"id": 5,  "seq": 2,  "record_hash": "9c9116d8c5e73700c65b5965e1fe21e69bc13bbd23c009e148861d0478c3de8a", "validate_ok": true,  "review_json": null},
+    {"id": 7,  "seq": 3,  "record_hash": "9fd9c3b46e7fbfde1f5ec880ec96b9798e82e82f406114a2fb016cf823f4e39e", "validate_ok": false, "review_json": null},
+    {"id": 8,  "seq": 4,  "record_hash": "bb52d6d481eb4fdb5099717595dbd601593bce9dc2bb3f7f1f382bbb59478e25", "validate_ok": false, "review_json": null},
+    {"id": 9,  "seq": 5,  "record_hash": "b1fccbb90eac7f3838ced95c1ec0752bedbc374d3d69380210ad9d0d33c6aa25", "validate_ok": false, "review_json": null},
+    {"id": 10, "seq": 6,  "record_hash": "8ffe5aa6d0d7f8d9cc03ac8df4f733b646caae941bbbf835b153e29a9cf59239", "validate_ok": true,  "review_json": "applied"},
+    {"id": 11, "seq": 7,  "record_hash": "fb08951ca23167e060fa92889bbfc689e920b96aa634b9c36ed06bb67da418b4", "validate_ok": true,  "review_json": null},
+    {"id": 12, "seq": 8,  "record_hash": "fa4deaebf299dd7f141acbb1d4a9ab377f20c5350acab73b0b27ffab4ff64690", "validate_ok": true,  "review_json": "applied"},
+    {"id": 13, "seq": 9,  "record_hash": "128d354394293ffde479376e7a04b601cd32bbe4029e391cff6e7250fb333738", "validate_ok": true,  "review_json": "applied"},
+    {"id": 14, "seq": 10, "record_hash": "348110744b1f036781c44659ef7698b8d299f10771f247bcbf181fffff6f8dd8", "validate_ok": true,  "review_json": "applied"}
+  ],
+  "note": "id 跳号（缺 1/2/3/6）在本次备份前就已存在，seq 连续 1..10，链完整。"
+}

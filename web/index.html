@@ -1,0 +1,1820 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>单据录入 · 采购订单自动结构化</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#6b6b6b;--faint:#9a9a94;--line:#e3e3dd;--bg:#fafaf8;--card:#fff;--accent:#1d5f8a;
+--ok:#2f7a4f;--okbg:#eef7f1;--warn:#8a5a00;--warnbg:#fdf4e3;--bad:#a32d2d;--badbg:#fcebeb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:26px 20px 64px}
+h1{font-size:20px;font-weight:600;margin:0 0 6px}
+h2{font-size:13px;font-weight:600;color:var(--muted);margin:0 0 10px;letter-spacing:.04em}
+.sub{color:var(--muted);font-size:13px;margin-bottom:20px}
+.chip{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;border:1px solid var(--line);background:#fff;color:var(--muted);margin-left:6px;vertical-align:1px}
+.chip.ok{color:var(--ok);border-color:#bfe0cc;background:var(--okbg)}
+.chip.bad{color:var(--bad);border-color:#f0c2c2;background:var(--badbg)}
+.chip.warn{color:var(--warn);border-color:#ecd9b0;background:var(--warnbg)}
+.drop{border:1.5px dashed #c9c9c2;border-radius:12px;padding:30px;text-align:center;background:var(--card);cursor:pointer;transition:border-color .15s,background .15s}
+.drop.hot{border-color:var(--accent);background:#f4f8fb}
+.drop b{color:var(--accent)}
+/* 指标区：面向使用者只留一句人话（完成没完成、等了多久、有没有被印章挡到）。
+   百分比、毫秒、行数这些是给开发和审核看的，收进「技术详情」折叠——
+   放在主行会让人以为需要自己判断这些数字是否正常。 */
+.mhead{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.mhead b{font-size:15px;font-weight:600;color:var(--ink)}
+.mdet{margin-top:2px}
+.mdet>summary{cursor:pointer;font-size:12px;color:var(--faint);list-style:none;
+  display:inline-flex;align-items:center;gap:5px;padding:2px 0}
+.mdet>summary::-webkit-details-marker{display:none}
+.mdet>summary::before{content:"▸";font-size:9px;transition:transform .15s}
+.mdet[open]>summary::before{transform:rotate(90deg)}
+button{padding:8px 18px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-size:14px;cursor:pointer;font-family:inherit}
+button.ghost{background:#fff;color:var(--accent);border:1px solid #c7dbe8}
+button:disabled{opacity:.45;cursor:default}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:18px}
+@media(max-width:900px){.two{grid-template-columns:1fr}}
+pre{margin:0;font:12px/1.65 ui-monospace,Consolas,"Courier New",monospace;white-space:pre-wrap;word-break:break-all;max-height:56vh;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:12px;white-space:nowrap}
+td.n{text-align:right;font-variant-numeric:tabular-nums;font-family:ui-monospace,Consolas,monospace}
+.kv{display:grid;grid-template-columns:78px minmax(0,1fr);gap:4px 10px;font-size:13px;margin-bottom:12px}
+.kv span:nth-child(odd){color:var(--muted)}
+.issue{padding:5px 10px;border-radius:7px;font-size:12.5px;margin-bottom:6px;border:1px solid}
+.issue.err{background:var(--badbg);border-color:#f0c2c2;color:#7d2020}
+.issue.warn{background:var(--warnbg);border-color:#ecd9b0;color:var(--warn)}
+.issue.ok{background:var(--okbg);border-color:#bfe0cc;color:var(--ok)}
+/* info = 已按规则自动处理的事项（如编号按本厂格式归一）。不是疑点，不占用
+   红/黄的注意力预算——它和 ok 的区别是"系统动了手，留了记录，供你过目"。 */
+.issue.info{background:#eef4fb;border-color:#c3d7ef;color:#33517a}
+/* 复核结论小标签：接在疑点末尾，说明"这条被看一眼了、结果是什么"。
+   用中性底色而不是绿/红——它是过程记录，不是新的告警。 */
+.vtag{display:inline-block;font-size:11.5px;padding:0 6px;border-radius:5px;
+  background:rgba(0,0,0,.055);color:inherit;opacity:.85;margin-left:2px}
+/* 「核对详情」折叠里的明细行：每个字段一行，值 + 覆盖率 + 原文最接近的写法 */
+.gdet{margin:6px 0 0;font-size:12px;line-height:1.75;opacity:.8}
+.gdet div{padding:1px 0}
+.hl{background:#fff3c4;padding:1px 4px;border-radius:4px;font-weight:500}
+.inject{border:1px solid #e6b0b0;background:#fdf2f2;border-radius:10px;padding:12px 14px;margin-top:14px;font-size:13px;color:#7d2020}
+.inject ul{margin:8px 0 0;padding-left:18px}
+.inject li{margin-bottom:7px;line-height:1.5}
+.inject .tag{display:inline-block;padding:0 6px;border-radius:4px;font-size:11px;margin-right:5px;vertical-align:1px}
+.inject .tag.high{background:#7d2020;color:#fff}
+.inject .tag.mid{background:#a8721f;color:#fff}
+.inject .tag.via{background:#fff;color:#7d2020;border:1px solid #e6b0b0}
+.inject .ctx{color:#9a6a6a;font-size:11.5px;margin-top:2px;word-break:break-all}
+.inject .outcome{margin-top:10px;padding-top:9px;border-top:1px dashed #e6b0b0;color:#5d3030;line-height:1.6}
+/* 内容风险用蓝系，和注入的红系分开：两者性质不同，混在一个颜色里会让人
+   以为"又是注入"，反而降低对数字问题的注意。 */
+.risk{border:1px solid #b9cbe2;background:#f4f8fd;border-radius:10px;padding:12px 14px;margin-top:14px;font-size:13px;color:#274a70}
+.risk ul{margin:8px 0 0;padding-left:18px}
+.risk li{margin-bottom:7px;line-height:1.5}
+.risk .tag{display:inline-block;padding:0 6px;border-radius:4px;font-size:11px;margin-right:5px;vertical-align:1px}
+.risk .tag.high{background:#274a70;color:#fff}
+.risk .tag.mid{background:#6d8cb0;color:#fff}
+.risk .ctx{color:#5f7c9e;font-size:11.5px;margin-top:2px;word-break:break-all}
+.risk .outcome{margin-top:10px;padding-top:9px;border-top:1px dashed #b9cbe2;color:#3a5b80;line-height:1.6}
+.evalbox{margin-top:22px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:0 14px}
+.evalbox summary{cursor:pointer;padding:12px 0;font-size:13px;color:var(--muted);font-weight:500}
+.evalbox[open]{padding-bottom:14px}
+.evalbox[open] summary{border-bottom:1px solid var(--line);margin-bottom:12px}
+.evalnote{color:var(--faint);font-size:12px;margin:0 0 10px}
+.err{color:var(--bad);background:var(--badbg);border:1px solid #f0c2c2;border-radius:8px;padding:10px 12px;font-size:13px;margin-top:14px;display:none}
+.hide{display:none}
+/* 复核卡片：用琥珀色，与红色（错误）、蓝色（风险提示）区分——它不是错误，
+   是"照片与文字对不上，需要人看一眼" */
+.review{margin-top:14px;border:1px solid #e6d3a0;background:#fffdf6;border-radius:12px;padding:13px 15px}
+.review h3{margin:0 0 3px;font-size:13.5px;color:#7a5a12;font-weight:600}
+.review .why{color:#8b7540;font-size:12px;margin-bottom:9px;line-height:1.6}
+.rv{padding:9px 0;border-top:1px dashed #ecdcae;font-size:13px;line-height:1.75}
+.rv:first-of-type{border-top:0;padding-top:2px}
+.rv .k{color:#6b5a2c;font-weight:500;margin-right:6px}
+.rv .was{color:#8a8a80}
+.rv .now{color:#1a1a1a;font-weight:500;background:#fdf3d6;padding:1px 5px;border-radius:4px}
+.rv .cause{color:#8b7540;font-size:12px}
+.rv .no{color:#9a9a94;font-size:12.5px}
+.review .acts{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;align-items:center}
+.review .acts button{padding:6px 14px;font-size:13px}
+/* 每条疑点的"方向选择"。
+   为什么用单选项而不是"采纳/忽略"两个按钮：一个疑点常常有两条以上的自洽解释
+   （金额错可能是数量错、单价错，也可能是合计写错），二选一会把中间情况逼成错的。 */
+.review .rvh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin-bottom:3px}
+.review .rvh .cur{color:#8a8a80;font-size:12.5px}
+.review .opt{display:flex;gap:7px;align-items:flex-start;flex-wrap:wrap;padding:5px 8px;
+  border:1px solid transparent;border-radius:8px;cursor:pointer;font-size:12.5px;line-height:1.6}
+.review .opt:hover{background:#fff8e6}
+.review .opt.sel{background:#fdf3d6;border-color:#e6d3a0}
+.review .opt input[type=radio]{margin:3px 0 0;flex:none;accent-color:#b8862b}
+.review .opt .way{flex:none;color:#6b5a2c}
+.review .opt .val{font-weight:600;color:#1a1a1a;word-break:break-all}
+.review .opt .why{flex:1 1 100%;color:#8b7540;font-size:11.5px;line-height:1.55}
+.review .opt .man{flex:1 1 140px;min-width:120px;padding:3px 7px;border:1px solid #d8c793;
+  border-radius:6px;font-family:ui-monospace,Consolas,monospace;font-size:12.5px;background:#fff}
+.review .conf{font-size:10.5px;padding:0 5px;border-radius:4px;vertical-align:1px;flex:none}
+.review .conf.hi{background:#cfe3d4;color:#2f6b42}
+.review .conf.mid{background:#efe0b8;color:#7a5a12}
+.review .conf.lo{background:#ecdcae;color:#8b7540}
+/* 执行结果清单：谁改了什么、依据是什么、哪些被拦下 */
+.patches{margin-top:10px;border-top:1px dashed #e2d6b4;padding-top:8px}
+.patches .pt{display:flex;gap:9px;flex-wrap:wrap;align-items:baseline;font-size:12.5px;
+  padding:4px 0;border-bottom:1px solid #f3ecd8;line-height:1.6}
+.patches .pt:last-child{border-bottom:0}
+.patches .pt>span:nth-child(1){flex:0 0 96px;color:#8b7540}
+.patches .pt>span:nth-child(2){flex:1 1 180px;min-width:0;word-break:break-all}
+.patches .pt s{color:#a08a5c}
+.patches .pt .why{flex:1 1 100%;color:#8b7540;font-size:11.5px}
+.patches .pt.warnline>span:nth-child(2){color:#8a5b16}
+.patches .pt.warnline>span:nth-child(1){color:#a8391f}
+.empty{color:var(--faint);font-size:13px;padding:10px 0}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:14px}
+.bar div{background:var(--card);padding:8px 11px}
+.bar b{display:block;font-size:15px;font-weight:500;font-variant-numeric:tabular-nums}
+.bar span{font-size:11.5px;color:var(--faint)}
+/* 更正表格：点格子编辑；改过标橙、双击撤销 */
+td.cedit{cursor:text;min-width:96px}
+td.cedit:hover{outline:1.5px dashed var(--warn,#b7791f);outline-offset:-2px}
+td.cedit.changed{background:#fdf3e4;box-shadow:inset 0 0 0 1.5px #d98f2b}
+td.cedit.changed::after{content:"改";float:right;font-size:10px;color:#fff;background:#d98f2b;border-radius:3px;padding:0 4px;margin-left:4px}
+td.cedit.bad{background:#fdeaea;box-shadow:inset 0 0 0 1.5px #c05555}
+td.cedit input{padding:2px 4px;width:96%;font:inherit}
+td.cedit.locked{cursor:not-allowed;color:var(--faint)}
+/* 评测区：效果对比卡 + 架构演进行（给甲方一眼看懂 v1→v3） */
+.evo-h{font-size:13px;font-weight:600;margin:12px 0 4px;color:#1f5fa8}
+.effgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin:6px 0}
+.eff{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.eff .h{font-size:12.5px;color:var(--faint);display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:4px}
+.eff .delta{font-size:11px;color:#fff;background:#1f5fa8;border-radius:9px;padding:1px 7px;white-space:nowrap}
+.effrow{display:flex;align-items:center;gap:6px;margin:3px 0}
+.effrow .lab{flex:0 0 16px;font-size:11px;color:var(--faint)}
+.effrow .track{flex:1;height:12px;background:rgba(127,127,127,.12);border-radius:6px;overflow:hidden}
+.effrow .fill{height:100%;border-radius:6px}
+.effrow .fill.v1{background:#b8c2cc}
+.effrow .fill.v3{background:#1f5fa8}
+.effrow .val{flex:0 0 54px;font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
+.gen{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:7px 9px;margin:6px 0;flex-wrap:wrap}
+.gen .gb{flex:0 0 128px;font-size:12.5px;font-weight:600;padding-top:2px}
+.gen .flow{flex:1 1 300px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:12px}
+.gen .node{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:2px 7px;white-space:nowrap}
+.gen .node.ocr{background:#fdeeee;border-color:#c05050;color:#b03030}
+.gen .node.hero{background:#1f5fa8;border-color:#1f5fa8;color:#fff}
+.gen .node.ref{border-style:dashed;color:var(--faint);background:transparent}
+.gen .arr{color:var(--faint)}
+.gen .gnote{flex:1 1 100%;font-size:12px;color:#a03030;padding-left:2px}
+.gen .gref{flex:1 1 100%;font-size:11.5px;color:var(--faint);padding-left:2px}
+.gen.cur{background:#eef4fb;border-color:#1f5fa8}
+.gen.cur .gb{color:#1f5fa8}
+.gen.cur .gnote{color:#1e7a46}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>单据录入</h1>
+<div class="sub">
+  上传采购订单照片，自动生成可导入 ERP 的结构化数据 · 三层校验通过才放行 · 存疑处对照原图复核 · 全程留痕可审计
+  <span id="cloudState" class="chip">连接中…</span>
+</div>
+
+<div class="drop" id="drop">
+  <div>把采购订单图片拖到这里，或 <b>点此选择文件</b></div>
+  <div class="sub" style="margin:8px 0 0">PNG / JPG，单张不超过 12MB</div>
+</div>
+<input type="file" id="file" accept="image/*" hidden>
+
+<div class="err" id="err"></div>
+
+<div class="inject hide" id="inject"></div>
+<div class="risk hide" id="risk"></div>
+
+<div class="hide" id="metrics" style="margin-top:14px"></div>
+
+<div class="two hide" id="out">
+  <div class="panel">
+    <h2>OCR 识别文本</h2>
+    <div class="issue warn hide" id="ocrNote" style="margin-bottom:10px"></div>
+    <pre id="ocrText"></pre>
+  </div>
+  <div class="panel">
+    <h2>抽取结果与三层校验</h2>
+    <div id="extract"></div>
+  </div>
+</div>
+
+<!-- 疑点卡片放在结果下面：人要先看清抽出来的是什么，才谈得上选哪个方向。
+     放上面会让人在不知道结果的情况下先做选择。 -->
+<div class="review hide" id="review"></div>
+
+<div class="panel" style="margin-top:18px">
+  <h2 style="display:flex;justify-content:space-between;align-items:center">
+    <span>解析记录与审计链</span>
+    <span>
+      <button class="ghost" id="btnVerify" style="padding:4px 12px;font-size:12.5px">验签</button>
+      <button class="ghost" id="btnRefresh" style="padding:4px 12px;font-size:12.5px">刷新</button>
+    </span>
+  </h2>
+  <div id="chainMsg"></div>
+  <div id="history"><div class="empty">暂无记录。上传一张单据，解析结果会自动留存。</div></div>
+  <div id="corrBox" class="hide" style="margin-top:12px"></div>
+  <div id="corrList" style="margin-top:8px"></div>
+  <details style="margin-top:10px">
+    <summary style="cursor:pointer;font-size:13px;color:var(--faint)">编号格式档案（工厂级 · "只询问一次之后记住"的档案）</summary>
+    <div id="profileBox" style="margin-top:8px"></div>
+  </details>
+</div>
+
+<details class="evalbox" id="evalbox">
+  <summary>评测结果：架构变迁与优化效果（v1 → v3）· 20 张 × 2 套评测集</summary>
+  <div id="evalBody" class="empty">加载中…</div>
+</details>
+
+</div>
+
+<!-- 版本必须写死。`@dev` 是浮动标签：它今天指向 0.1.4-dev.ca27990，明天可能指向
+     别的构建，而我们的代码一个字没改——这叫不可复现构建。0.1.4 是 npm 上的
+     稳定版（jsdelivr 的 tags.latest）。升级要手动改这一行并重跑回归。 -->
+<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@0.1.4/lib/index.global.js"></script>
+<script>
+"use strict";
+const $ = (s) => document.querySelector(s);
+
+function apiUrl(p){
+  const path = location.pathname;
+  const base = path.endsWith("/") ? path : path.replace(/[^/]*$/, "");
+  return base + p;
+}
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function money(n){
+  return (n === null || n === undefined || n === "" || isNaN(n)) ? "—"
+    : Number(n).toLocaleString("zh-CN", {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+let CFG = null, cloud = null, MODEL = null;
+let lastOcr = null;          // 后端 OCR 结果
+let lastData = null;         // 最近一次抽取结果，供导出使用
+let busy = false;
+
+function setCloud(text, kind){
+  const el = $("#cloudState");
+  el.className = "chip" + (kind ? " " + kind : "");
+  el.textContent = text;
+}
+function showErr(msg){
+  const el = $("#err");
+  el.style.display = msg ? "block" : "none";
+  el.textContent = msg || "";
+}
+
+// ---------------------------------------------------------------- 初始化
+async function boot(){
+  // 1) 后端配置（publicConfig 由服务端统一下发，前端不写死域名）
+  try{
+    CFG = await (await fetch(apiUrl("api/config"), {cache:"no-store"})).json();
+    if(!CFG.ok) throw new Error("配置接口异常");
+  }catch(e){
+    setCloud("初始化失败", "bad");
+    showErr("无法读取服务配置：" + e.message);
+    return;
+  }
+
+  // 2) SDK
+  if(!window.WorkBuddyCloud){
+    setCloud("抽取功能未就绪", "warn");
+    showErr("云端抽取功能未能加载（可能是网络限制）。OCR 仍可正常使用。");
+    return;
+  }
+
+  // 3) 客户端：一次初始化，四个模块复用
+  try{
+    cloud = WorkBuddyCloud.createWorkBuddyCloud({
+      endpoint: CFG.endpoint,
+      oauthRelayBaseUrl: CFG.oauthRelayBaseUrl,
+      publishableKey: CFG.publishableKey,
+    });
+  }catch(e){
+    setCloud("初始化失败", "bad");
+    showErr("服务初始化失败：" + e.message);
+    return;
+  }
+
+  // 4) 抽取模型：由服务端固定
+  //
+  // 这里原本是"拉模型目录 → 33 个模型排成下拉框让人自选 → 把 model 传给模型
+  // 通道"。搬走了，原因不是性能：实测 glm-5v-turbo 与 hunyuan-chat 会被单据上的
+  // 文字劫持，把供应商改成图上根本不存在的公司名，而服务端校验对此毫无反应
+  // （没有任何规则会去检查一个名字）。"用哪个模型、问什么问题"的决定权，
+  // 一旦留在浏览器手里，后面补多少规则都补不回来。
+  //
+  // 2026-10-26：下拉框本身也删掉了。禁用之后它只剩一个"点不开、选不了"的空壳，
+  // 对使用者是死控件，对演示是噪音。模型名挪进「技术详情」，要看时点开就有。
+  MODEL = { id: CFG.extractModel || "服务端固定" };
+  setCloud("服务正常", "ok");
+
+  loadHistory();
+  loadEval();
+}
+
+// ---------------------------------------------------------------- 上传
+const drop = $("#drop"), fileInput = $("#file");
+drop.onclick = () => { if(!busy) fileInput.click(); };
+drop.ondragover = e => { e.preventDefault(); drop.classList.add("hot"); };
+drop.ondragleave = () => drop.classList.remove("hot");
+drop.ondrop = e => {
+  e.preventDefault(); drop.classList.remove("hot");
+  if(!busy && e.dataTransfer.files[0]) run(e.dataTransfer.files[0]);
+};
+fileInput.onchange = () => { if(fileInput.files[0]) run(fileInput.files[0]); };
+
+async function run(f){
+  if(busy) return;
+  busy = true;
+  showErr("");
+  const original = drop.innerHTML;
+  drop.innerHTML = '<div>正在识别…</div>';
+  try{
+    const b64 = await new Promise((res, rej) => {
+      const fr = new FileReader();
+      fr.onload = () => res(fr.result.split(",")[1]);
+      fr.onerror = () => rej(new Error("读取文件失败"));
+      fr.readAsDataURL(f);
+    });
+
+    const t0 = performance.now();
+    const resp = await fetch(apiUrl("api/ocr"), {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({filename: f.name, data_b64: b64}),
+    });
+    const ocr = await resp.json();
+    if(!ocr.ok) throw new Error(ocr.error || "OCR 失败");
+    lastOcr = ocr;
+    renderMetrics(ocr, Math.round(performance.now() - t0));
+    renderInject(ocr);
+    renderContentRisk(ocr);
+    $("#ocrText").textContent = ocr.markdown || ocr.text || "(无文本)";
+    $("#out").classList.remove("hide");
+
+    if(!cloud || !MODEL){
+      $("#extract").innerHTML = '<div class="issue warn">抽取服务不可用：已完成 OCR，未做字段抽取与留存。</div>';
+      return;
+    }
+
+    drop.innerHTML = '<div>正在抽取字段…</div>';
+    // 只交 doc_id：文本在服务端手里，这里交不出去也改不了
+    let data = await extractFields(ocr.doc_id);
+    lastData = data;
+    $("#review").classList.add("hide");
+    $("#review").innerHTML = "";
+
+    // 校验由服务端复算：前端这一份只负责"立刻显示"，
+    // 真正写进库的 validate_ok / issues 是服务端算出来的，改不了。
+    let pre = await postJson("api/submit", {doc_id: ocr.doc_id, extract: data, commit: false});
+    if(!pre.ok) throw new Error(pre.error || "服务端校验失败");
+    renderExtract(data, pre.issues, pre.needs_review ? "发现疑点，等待确认" : "",
+                  pre.grounding, null, pre.grounding_details);
+    amendInject(data, pre.issues);
+
+    // 有疑点 → 先把原图与文字一起交给模型核对（这一步可能不触发或失败），
+    // 再把"规则建议"与"看图结果"合起来，交给人选一个方向。
+    let rv = null;
+    if(pre.needs_review){
+      drop.innerHTML = '<div>正在核对原图…</div>';
+      rv = await reviewAgainstImage(ocr.doc_id, data, pre);
+      // 复核完立刻把结论接回疑点行：使用者在这里就能看到"这条被看过、结果是 X"，
+      // 不必等到下面选项面板里再去对字段。第一次渲染时复核还没跑，所以这一步必须重渲染。
+      renderExtract(data, pre.issues, "已核对原图", pre.grounding, rv, pre.grounding_details);
+    }
+    const proposals = buildProposals(pre.issues, rv);
+    drop.innerHTML = original;
+
+    let decision = {decision: "auto", applied: []};
+    if(proposals.length){
+      // 人选方向 → 模型执行 → 服务端核对，三步都在这一步里完成
+      drop.innerHTML = '<div>正在等待确认…</div>';
+      const d = await askFixes(proposals, rv, ocr.doc_id);
+      drop.innerHTML = original;
+      decision = d;
+      if(d.data){
+        // 模型执行过修改：以它返回的结果为准（不是前端自己赋的值）
+        data = d.data;
+        lastData = data;
+      }
+      if(d.applied.length){
+        // 值改了，勾稽关系可能变——必须重新用服务端规则校验一次
+        pre = await postJson("api/submit", {doc_id: ocr.doc_id, extract: data, commit: false});
+        if(pre.ok){
+          const note = `已按你选定的方向执行 ${d.applied.length} 处修改`
+            + (d.degraded ? "（本次未使用模型）" : "");
+          renderExtract(data, pre.issues, note, pre.grounding, rv, pre.grounding_details);
+          amendInject(data, pre.issues);
+          const box = $("#extract");
+          if(box) box.insertAdjacentHTML("beforeend", patchListHTML(d.applied, d));
+        }
+      }
+    }else if(rv && !rv.error){
+      // 复核跑了、模型说图上与抽取结果一致，没有要改的 → 自动入库。
+      // 这个结论也要落库，否则事后无法区分"没疑点"和"核过没问题"。
+      decision = {decision: "auto-confirmed", applied: []};
+    }
+
+    const review = (rv || proposals.length) ? {
+      findings: (rv && rv.findings) || [],
+      error: (rv && rv.error) || null,
+      model: (rv && rv.model) || null,
+      decision: decision.decision,
+      applied: decision.applied,
+      // 改动是谁执行的、有没有被服务端拦下、有没有算不平的地方——
+      // 这三项必须进审计记录，否则事后无法区分"模型改的"和"人改的"。
+      executor: decision.applied && decision.applied.length
+        ? (decision.degraded ? "local-fallback" : "model") : null,
+      executor_note: decision.degraded || decision.notes || null,
+      rejected: decision.rejected || [],
+      to_confirm: decision.to_confirm || [],
+      proposals: proposals.map(p => ({field: p.field, chosen: p.chosen})),
+    } : null;
+
+    drop.innerHTML = '<div>正在入库…</div>';
+    const saved = await postJson("api/submit", {
+      doc_id: ocr.doc_id,
+      extract: data,
+      commit: true,
+      model_id: MODEL ? MODEL.id : null,
+      review,
+    });
+    if(!saved.ok) throw new Error(saved.error || "入库失败");
+    const okNote = (saved.validate_ok ? "已入库" : "已入库 · 待人工复核")
+      + (saved.forced_review ? "（入库前已由服务端强制看图复核）" : "");
+    renderExtract(data, saved.issues, okNote, saved.grounding, null, saved.grounding_details);
+    loadHistory();
+  }catch(e){
+    showErr(e?.error?.message ? `${e.error.code || ""} ${e.error.message}`.trim() : e.message);
+  }finally{
+    drop.innerHTML = original;
+    busy = false;
+  }
+}
+
+function numOrNull(v){
+  if(v === null || v === undefined || v === "") return null;
+  const n = Number(String(v).replace(/[^0-9.\-]/g, ""));
+  return isNaN(n) ? null : n;
+}
+
+async function postJson(path, body){
+  const resp = await fetch(apiUrl(path), {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+  });
+  try{
+    return await resp.json();
+  }catch(e){
+    throw new Error(`服务返回异常（HTTP ${resp.status}）`);
+  }
+}
+
+// ---------------------------------------------------------------- 看图复核
+// 只核对"有疑点"的字段。复核失败不阻塞入库——这一层是增强，不是前提。
+// 失败时返回 {error}，由下面的疑点卡片如实显示"这次没看成图"，
+// 不能悄悄退化成"只有规则建议"却让人以为两种判据都用了。
+async function reviewAgainstImage(docId, data, pre){
+  try{
+    const r = await postJson("api/review", {
+      doc_id: docId,
+      extract: data,
+      targets: pre.review_targets,
+      model: MODEL ? MODEL.id : null,
+    });
+    if(!r.ok) throw new Error(r.error || "复核失败");
+    return r;
+  }catch(e){
+    return {error: e.message || String(e)};
+  }
+}
+
+function getField(data, field){
+  const m = /^items\[(\d+)\](?:\.(\w+))?$/.exec(field);
+  if(!m) return data[field];
+  const it = (data.items || [])[Number(m[1])];
+  return it ? (m[2] ? it[m[2]] : it) : undefined;
+}
+
+// 注意：这里刻意不再有 applyField()——前端不再自己往数据上写值。
+// 人选定方向后，改哪几个字段、联动怎么算，统一交给 /api/apply 里的模型执行，
+// 再由服务端逐条核对。前端自己赋值那套会把"改了一处、漏了联动"的错留在页面里，
+// 且事后查不出这处改动是谁做的。
+
+// ---------------------------------------------------------------- 疑点处置
+// 一个疑点往往不是"改还是不改"的二选一，而是**几条都自洽的解释里挑一条**：
+// 金额对不上，可能是金额写错、数量写错、单价写错，也可能只是漏了一行明细。
+// 所以这里给的是"方向"：按规则改 / 按图上改 / 手动填 / 保持原样，每条都写清它
+// 是怎么来的、凭什么敢采纳。人只需要挑，不需要自己回头翻照片一个个敲。
+
+const _LABELS = {doc_no: "单据编号", supplier: "供应商", order_date: "下单日期",
+                 total_amount: "合计金额", currency: "币种"};
+const _ITEM_KEYS = {qty: "数量", price: "单价", amount: "金额", name: "物料"};
+
+function fieldLabel(f){
+  if(_LABELS[f]) return _LABELS[f];
+  const m = /^items\[(\d+)\]\.(\w+)$/.exec(f);
+  if(m) return `明细第 ${Number(m[1]) + 1} 行的${_ITEM_KEYS[m[2]] || m[2]}`;
+  return f;
+}
+
+function showVal(field, v){
+  if(v === null || v === undefined || v === "") return "—";
+  if(field === "total_amount" || /\.(amount|price)$/.test(field)) return money(numOrNull(v));
+  return String(v);
+}
+
+function isNumField(field){
+  return field === "total_amount" || /\.(qty|price|amount)$/.test(field);
+}
+
+// 同一个值可能写成 13600 / "13600.00" / "13,600.00"，要合并成一条，否则人会以为
+// 系统给了两个不同建议。
+function valueKey(field, v){
+  if(isNumField(field)){
+    const n = numOrNull(v);
+    return n === null ? "s:" + String(v) : "n:" + n.toFixed(4);
+  }
+  return "s:" + String(v).trim();
+}
+
+function buildProposals(issues, rv){
+  const byField = new Map();
+  const get = (field) => {
+    if(!byField.has(field)){
+      byField.set(field, {
+        field, label: fieldLabel(field), current: getField(lastData, field),
+        reason: "", layer: "", cands: [], defaultIdx: -1, chosen: "kept",
+      });
+    }
+    return byField.get(field);
+  };
+
+  // ① 规则方向：由 validate.py 算出，确定性、可复现
+  (issues || []).forEach(i => {
+    const fixes = Array.isArray(i.fixes) ? i.fixes : [];
+    if(!fixes.length) return;
+    const p = get(i.field);
+    if(!p.reason) p.reason = i.msg;
+    p.layer = i.layer;
+    fixes.forEach(fx => p.cands.push({
+      // profile = 由本客户历史编号推断出的形状，不是通用规律，界面上要分开写，
+      // 否则人会以为"系统确定这就是对的"。它是统计结论，可信度低于通用规则。
+      value: fx.value,
+      src: (fx.how === "merge" ? "merge" : fx.how === "profile" ? "profile" : "rule"),
+      how: fx.how || "rule", why: fx.why || "",
+      mergeWith: (typeof fx.merge_with === "number" ? fx.merge_with : null),
+      // 合并行是不可逆的结构改动（少一行），默认不选，必须人主动点。
+      conf: (fx.how === "merge" || fx.how === "recompute" || fx.how === "profile") ? "mid" : "hi",
+    }));
+  });
+
+  // ② 看图方向：由复核模型重新读原图得到，可能为空（复核没触发或失败）
+  ((rv && rv.findings) || []).forEach(f => {
+    if(f.apply_value === null || f.apply_value === undefined) return;
+    const p = get(f.field);
+    if(!p.reason) p.reason = f.reason || "";
+    if(f.label) p.label = f.label;
+    p.cands.push({
+      value: f.apply_value, src: "image", how: "image", conf: "lo",
+      why: (f.dirty_label && f.dirty_label !== "其他" ? f.dirty_label + " · " : "")
+           + (f.reason || "按原图重新读取"),
+    });
+  });
+
+  const out = [];
+  byField.forEach(p => {
+    // 同值合并：看图与规则指向同一个值 → 双源互证，置信度提级
+    const merged = [];
+    p.cands.forEach(c => {
+      const k = valueKey(p.field, c.value);
+      const hit = merged.find(m => m.k === k);
+      if(!hit){
+        merged.push({...c, k});
+      }else if(hit.src !== c.src){
+        hit.src = "both";
+        hit.conf = "hi";
+        hit.why = `看图与规则两条独立判据一致 · ${hit.why || c.why}`;
+        if(c.src === "rule"){ hit.value = c.value; hit.how = c.how; hit.why = `看图与规则两条独立判据一致 · ${c.why}`; }
+      }
+    });
+    p.cands = merged;
+    // 默认选项：双源一致优先；其次是规则推导；**看图孤证默认不采纳**——
+    // 模型本身是这条链上的错误来源之一，它一个人的判断不足以自动改数。
+    const idx = p.cands.findIndex(c => c.src === "both");
+    p.defaultIdx = idx >= 0 ? idx : p.cands.findIndex(c => c.src === "rule");
+    out.push(p);
+  });
+  return out;
+}
+
+function askFixes(props, rv, docId){
+  return new Promise(resolve => {
+    const box = $("#review");
+    box.classList.remove("hide");
+    const SRC_TXT = {both: "看图与规则一致", image: "按图上改", rule: "按规则修正", merge: "合并重复行"};
+    const CONF_TXT = {hi: ["hi", "高"], mid: ["mid", "需复核"], lo: ["lo", "单一来源"]};
+
+    const rows = props.map((p, i) => {
+      const opts = p.cands.map((c, j) => {
+        const sel = p.defaultIdx === j;
+        const srcTxt = c.src === "both" ? SRC_TXT.both
+          : c.src === "image" ? SRC_TXT.image
+          : c.src === "merge" ? SRC_TXT.merge
+          : c.src === "profile" ? "按历史格式推断"
+          : (c.how === "recompute" ? "按同单其它数字重算" : SRC_TXT.rule);
+        const [cls, txt] = CONF_TXT[c.conf] || CONF_TXT.lo;
+        // 合并行的 value 是 null（要改哪些字段得由模型算），所以这一列显示动作而不是值
+        const shown = c.src === "merge" ? "数量与金额相加，删掉重复行" : showVal(p.field, c.value);
+        return `<label class="opt${sel ? " sel" : ""}" data-i="${i}">
+          <input type="radio" name="p${i}" value="${j}"${sel ? " checked" : ""}>
+          <span class="way">${esc(srcTxt)}</span>
+          <span class="val mono">${esc(shown)}</span>
+          <span class="conf ${cls}">${txt}</span>
+          <span class="why">${esc(c.why)}</span>
+        </label>`;
+      }).join("");
+
+      const keepSel = p.defaultIdx < 0;
+      return `<div class="rv">
+        <div class="rvh">
+          <span class="k">${esc(p.label)}</span>
+          ${p.layer ? `<span class="conf mid">${esc(p.layer)}</span>` : ""}
+          <span class="cur">当前 <span class="mono">${esc(showVal(p.field, p.current))}</span></span>
+        </div>
+        <div class="cause">${esc(p.reason || "")}</div>
+        ${opts}
+        <label class="opt${keepSel ? " sel" : ""}" data-i="${i}">
+          <input type="radio" name="p${i}" value="-1"${keepSel ? " checked" : ""}>
+          <span class="way">保持当前值</span>
+          <span class="val mono">${esc(showVal(p.field, p.current))}</span>
+          <span class="why">不改，按现在的值入库 —— 这条疑点会原样记进审计记录</span>
+        </label>
+        <label class="opt" data-i="${i}">
+          <input type="radio" name="p${i}" value="-2">
+          <span class="way">手动填写</span>
+          <input class="man" data-man="${i}" placeholder="${esc(isNumField(p.field) ? "输入数字" : "输入正确值")}">
+          <span class="why">两边给的都不对时用这个，填了就以你填的为准</span>
+        </label>
+      </div>`;
+    }).join("");
+
+    const hi = props.filter(p => p.defaultIdx >= 0).length;
+    // 复核失败要如实说：否则人以为"看图与规则都看过了"，实际只有规则那一路。
+    const rvNote = (rv && rv.error)
+      ? `<div class="issue warn" style="margin:0 0 10px">原图核对这次没做成（${esc(rv.error)}），
+           下面只有规则推出来的方向。要按照片逐字核对，请重新上传这张单据。</div>`
+      : "";
+    box.innerHTML = `
+      <h3>有 ${props.length} 处需要你定一下</h3>
+      <div class="why">每条都列了可选的方向，并写明它是怎么推出来的。已预选 ${hi} 条较确定的，
+        逐条核对后点下面的按钮才会写库；改完会自动重新校验一遍勾稽关系。</div>
+      ${rvNote}
+      ${rows}
+      <div class="acts">
+        <button id="rvApply">应用所选并入库</button>
+        <button class="ghost" id="rvKeep">全部保持原值入库</button>
+      </div>
+      <div style="margin-top:10px">
+        <button class="ghost" id="rvTable" style="padding:4px 12px;font-size:12.5px">修改其他字段（表格模式）</button>
+        <span class="why" style="font-size:12px;color:var(--faint)">疑点之外的字段也能改：点开整单表格，点哪个格子改哪个。改动仍过服务端校验与勾稽复算。</span>
+      </div>
+      <div id="tblEdit" class="hide" style="margin-top:10px"></div>`;
+
+    // 单选样式跟随点击
+    box.querySelectorAll(".opt").forEach(el => {
+      el.addEventListener("click", () => {
+        box.querySelectorAll(`.opt[data-i="${el.dataset.i}"]`)
+           .forEach(o => o.classList.remove("sel"));
+        el.classList.add("sel");
+      });
+    });
+    // 点了手动输入框自动选中它那一项
+    box.querySelectorAll(".man").forEach(inp => {
+      inp.addEventListener("focus", () => {
+        const el = inp.closest(".opt");
+        el.querySelector("input[type=radio]").checked = true;
+        box.querySelectorAll(`.opt[data-i="${el.dataset.i}"]`)
+           .forEach(o => o.classList.remove("sel"));
+        el.classList.add("sel");
+      });
+    });
+    // 卡片在结果下方，页面可能已经滚过去了；主动带过来，否则人会以为"没让我确认"
+    try{ box.scrollIntoView({behavior: "smooth", block: "center"}); }catch(e){}
+
+    const finish = (payload) => {
+      box.classList.add("hide");
+      box.innerHTML = "";
+      resolve(payload);
+    };
+
+    $("#rvKeep").onclick = () => {
+      props.forEach(p => { p.chosen = "kept"; });
+      finish({decision: "kept", applied: [], data: null});
+    };
+
+    // ---- 一键改：人只选方向，改哪几个字段、联动怎么算，交给模型执行。
+    // 执行结果不是"模型说了算"——每一条改动都要过服务端的 verify_patches，
+    // 被拦下的会原样列出来，算不平的会标成"待确认"，都不会静默通过。
+    $("#rvApply").onclick = async () => {
+      const decisions = [];
+      for(let i = 0; i < props.length; i++){
+        const p = props[i];
+        const sel = box.querySelector(`input[name="p${i}"]:checked`);
+        const j = sel ? Number(sel.value) : -1;
+        if(j === -1){ p.chosen = "kept"; continue; }
+        if(j === -2){
+          const man = box.querySelector(`.man[data-man="${i}"]`);
+          const val = (man && man.value || "").trim();
+          if(!val){ p.chosen = "kept"; continue; }
+          if(isNumField(p.field) && numOrNull(val) === null){
+            alert(`「${p.label}」要填数字，「${val}」不是。`);
+            return;
+          }
+          p.chosen = "manual";
+          decisions.push({field: p.field, choice: "manual", value: val, text: "人工填写"});
+          continue;
+        }
+        const c = p.cands[j];
+        if(c.src === "merge"){
+          // 合并行没有"一个值"可给，得让模型算出数量/金额/单价并删行
+          p.chosen = "merge";
+          decisions.push({field: p.field, choice: "merge", value: null,
+                          merge_with: c.mergeWith, text: "合并同一物料的两行"});
+          continue;
+        }
+        p.chosen = c.src;
+        decisions.push({field: p.field, choice: c.src, value: c.value, text: (c.why || "").slice(0, 160)});
+      }
+      if(!decisions.length){
+        if(!confirm("没有选中任何修改，等于保持原值入库。继续？")) return;
+        finish({decision: "kept", applied: [], data: null});
+        return;
+      }
+
+      const btn = $("#rvApply"), keepBtn = $("#rvKeep");
+      const oldTxt = btn.textContent;
+      btn.disabled = true; keepBtn.disabled = true;
+      btn.textContent = "正在执行修改…";
+      let res;
+      try{
+        res = await postJson("api/apply", {
+          doc_id: docId, extract: lastData, decisions, model: MODEL ? MODEL.id : null,
+        });
+      }catch(e){
+        res = {ok: false, error: e.message || String(e)};
+      }
+      btn.disabled = false; keepBtn.disabled = false;
+      btn.textContent = oldTxt;
+
+      if(!res.ok){
+        // 执行失败不等于数据被改过：这一步不写库，失败时原数据完好
+        box.insertAdjacentHTML("afterbegin",
+          `<div class="issue warn" style="margin:0 0 10px">修改没执行成功：${esc(res.error || "未知错误")}。
+            数据没有变动，可以重试，也可以直接保持原值入库。</div>`);
+        return;
+      }
+      const applied = res.patches || [];
+      const needEye = (res.rejected || []).length || (res.to_confirm || []).length || res.degraded;
+      const done = () => finish({
+        decision: applied.length ? "applied" : "kept",
+        applied, data: res.extract,
+        notes: res.notes || "", degraded: res.degraded || null,
+        rejected: res.rejected || [], to_confirm: res.to_confirm || [],
+      });
+      if(!needEye){ done(); return; }
+
+      // 有被拦下的 / 算不平的 / 模型没参与 —— 这三种情况必须停下来让人看见，
+      // 不能"虽然有点问题但先入库再说"。
+      box.innerHTML = `
+        <h3>已执行 ${applied.length} 处修改，有 ${((res.rejected||[]).length + (res.to_confirm||[]).length)} 处需要你看一眼</h3>
+        ${patchListHTML(applied, res)}
+        <div class="acts">
+          <button id="rvCommit">确认入库</button>
+          <button class="ghost" id="rvUndo">撤销，保持原值</button>
+        </div>`;
+      $("#rvCommit").onclick = done;
+      $("#rvUndo").onclick = () => finish({decision: "kept", applied: [], data: null});
+    };
+
+    // ---- 表格模式：疑点之外的字段也要能改。整单渲染成可编辑表格，
+    // 点哪个格子改哪个；提交时只发真正变过的字段（人工值 = 终值），
+    // 走 direct 模式：不进模型，服务端同一道闸门核对 + 勾稽复算。
+    // 上方疑点卡片里已选的方向也会一并带上，不会因为走表格而丢掉。
+    $("#rvTable").onclick = () => {
+      const box2 = $("#tblEdit");
+      if(!box2.classList.contains("hide")){ box2.classList.add("hide"); return; }
+      const d = lastData || {};
+      const items = Array.isArray(d.items) ? d.items : [];
+      const fld = (key, label, num) => `
+        <label style="display:flex;flex-direction:column;gap:2px;font-size:12px;min-width:130px">
+          <span style="color:var(--faint)">${esc(label)}</span>
+          <input data-f="${key}"${num ? ' data-num="1"' : ""} value="${esc(d[key])}" style="padding:4px 6px">
+        </label>`;
+      box2.innerHTML = `
+        <div class="why" style="margin-bottom:6px">点哪个格子改哪个；留空 = 清掉该值。只有真的改过的字段会被提交，
+          人工值按终值执行（不进模型），服务端仍核对类型与勾稽。改明细的<b>数量或单价</b>会自动算出
+          <b>金额</b>（浅黄底），你仍可手改覆盖。</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          ${fld("doc_no", "单据编号")}${fld("supplier", "供应商")}${fld("order_date", "下单日期")}
+          ${fld("currency", "币种")}${fld("total_amount", "合计金额", true)}
+        </div>
+        <table style="margin-top:8px">
+          <thead><tr><th>#</th><th>物料</th><th style="width:90px">数量</th><th style="width:100px">单价</th><th style="width:110px">金额</th></tr></thead>
+          <tbody>${items.map((it, i) => `
+            <tr>
+              <td class="mono">${i + 1}</td>
+              <td><input data-f="items[${i}].name" value="${esc(it.name)}" style="padding:4px 6px;width:95%"></td>
+              <td><input data-f="items[${i}].qty" data-num="1" value="${esc(it.qty)}" style="padding:4px 6px"></td>
+              <td><input data-f="items[${i}].price" data-num="1" value="${esc(it.price)}" style="padding:4px 6px"></td>
+              <td><input data-f="items[${i}].amount" data-num="1" value="${esc(it.amount)}" style="padding:4px 6px"></td>
+            </tr>`).join("")}
+          </tbody>
+        </table>
+        <div class="acts" style="margin-top:8px">
+          <button id="tblApply" style="padding:5px 14px">应用表格修改</button>
+          <button class="ghost" id="tblCollapse" style="padding:5px 12px">收起</button>
+        </div>
+        <div id="tblMsg" style="margin-top:8px"></div>`;
+      box2.classList.remove("hide");
+      // 明细「数量/单价」改动后自动算金额并预填：勾稽恒等式（数量×单价=金额）
+      // 本来就是审核时要确认的重点，让人手算既慢又容易错。预填后金额仍是普通输入框，
+      // 人可以直接改成别的值（一旦手改，data-manual 置位，后续不再被算法覆盖）。
+      box2.querySelectorAll('input[data-f^="items["]').forEach(inp => {
+        const m = /^items\[(\d+)\]\.(qty|price)$/.exec(inp.dataset.f);
+        if(!m) return;
+        const i = Number(m[1]);
+        const qtyInp = box2.querySelector(`input[data-f="items[${i}].qty"]`);
+        const priceInp = box2.querySelector(`input[data-f="items[${i}].price"]`);
+        const amtInp = box2.querySelector(`input[data-f="items[${i}].amount"]`);
+        if(!qtyInp || !priceInp || !amtInp) return;
+        const sync = () => {
+          if(amtInp.dataset.manual === "1") return;
+          const q = numOrNull(qtyInp.value), p = numOrNull(priceInp.value);
+          if(q === null || p === null) return;
+          const sum = String(Math.round(q * p * 100) / 100);
+          if(sum !== amtInp.value.trim()){
+            amtInp.value = sum;
+            amtInp.dataset.auto = "1";
+            amtInp.style.background = "#fdf3e4";
+            amtInp.title = `由数量×单价自动算出（${q}×${p}）——可直接改成别的值`;
+          }
+        };
+        qtyInp.addEventListener("input", sync);
+        priceInp.addEventListener("input", sync);
+        amtInp.addEventListener("input", () => {
+          amtInp.dataset.manual = "1";
+          amtInp.style.background = "";
+          amtInp.title = "人工填写（不再被自动计算覆盖）";
+        });
+      });
+      $("#tblCollapse").onclick = () => box2.classList.add("hide");
+      $("#tblApply").onclick = async () => {
+        // ① 上方疑点卡片已选的方向一并收集（与 rvApply 同一规则），走表格不丢它们
+        const decisions = [];
+        for(let i = 0; i < props.length; i++){
+          const sel = box.querySelector(`input[name="p${i}"]:checked`);
+          const j = sel ? Number(sel.value) : -1;
+          if(j === -1) continue;
+          if(j === -2){
+            const man = box.querySelector(`.man[data-man="${i}"]`);
+            const val = (man && man.value || "").trim();
+            if(!val) continue;
+            if(isNumField(props[i].field) && numOrNull(val) === null){
+              alert(`「${props[i].label}」要填数字，「${val}」不是。`);
+              return;
+            }
+            decisions.push({field: props[i].field, choice: "manual", value: val, text: "人工填写"});
+            continue;
+          }
+          const c = props[i].cands[j];
+          if(c.src === "merge"){
+            decisions.push({field: props[i].field, choice: "merge", value: null,
+                            merge_with: c.mergeWith, text: "合并同一物料的两行"});
+            continue;
+          }
+          decisions.push({field: props[i].field, choice: c.src, value: c.value, text: (c.why || "").slice(0, 160)});
+        }
+        // ② 表格里真正变过的字段（与 lastData 逐格对比）
+        const orig = lastData || {};
+        let badField = null;
+        box2.querySelectorAll("input[data-f]").forEach(inp => {
+          const f = inp.dataset.f, v = inp.value.trim();
+          const isNum = !!inp.dataset.num;
+          const m = /^items\[(\d+)\]\.(\w+)$/.exec(f);
+          const ov = m ? ((orig.items || [])[Number(m[1])] || {})[m[2]] : orig[f];
+          const oldStr = (ov === null || ov === undefined) ? "" : String(ov);
+          if(oldStr === v) return;
+          if(badField) return;
+          let out = v;
+          if(isNum && v !== ""){
+            const nv = numOrNull(v);
+            if(nv === null){ badField = f; return; }
+            out = nv;
+          }
+          decisions.push({field: f, choice: "manual", value: out, text: "人工表格修改"});
+        });
+        if(badField){
+          $("#tblMsg").innerHTML = `<div class="issue err" style="margin:0">「${esc(fieldLabel(badField))}」需要填数字</div>`;
+          return;
+        }
+        if(!decisions.length){
+          $("#tblMsg").innerHTML = '<div class="issue warn" style="margin:0">没有改动任何字段。要只按上方疑点的选择执行，请用「应用所选并入库」。</div>';
+          return;
+        }
+        const btn = $("#tblApply");
+        btn.disabled = true; btn.textContent = "正在执行修改…";
+        // 有 merge 时必须走模型（判断两行是否同一物料）；纯人工改动走 direct，不烧调用
+        const hasMerge = decisions.some(x => x.choice === "merge");
+        const body = {doc_id: docId, extract: lastData, decisions, model: MODEL ? MODEL.id : null};
+        if(!hasMerge) body.mode = "direct";
+        const res = await postJson("api/apply", body).catch(e => ({ok:false, error:e.message || String(e)}));
+        btn.disabled = false; btn.textContent = "应用表格修改";
+        if(!res.ok){
+          box2.insertAdjacentHTML("afterbegin",
+            `<div class="issue warn" style="margin:0 0 10px">修改没执行成功：${esc(res.error || "未知错误")}。数据没有变动，可以重试。</div>`);
+          return;
+        }
+        const applied = res.patches || [];
+        const needEye = (res.rejected || []).length || (res.to_confirm || []).length || res.degraded;
+        const done = () => finish({
+          decision: applied.length ? "applied" : "kept",
+          applied, data: res.extract,
+          notes: res.notes || "", degraded: res.degraded || null,
+          rejected: res.rejected || [], to_confirm: res.to_confirm || [],
+        });
+        if(!needEye){ done(); return; }
+        // 被拦下的 / 算不平的 / 有降级说明——停下来让人看见，不静默通过
+        box2.innerHTML = `
+          <h3>已执行 ${applied.length} 处修改，有 ${((res.rejected||[]).length + (res.to_confirm||[]).length)} 处需要你看一眼</h3>
+          ${res.degraded ? `<div class="issue warn" style="margin:0 0 10px">${esc(res.degraded)}</div>` : ""}
+          ${patchListHTML(applied, res)}
+          <div class="acts">
+            <button id="tblCommit">确认入库</button>
+            <button class="ghost" id="tblUndo">撤销，保持原值</button>
+          </div>`;
+        $("#tblCommit").onclick = done;
+        $("#tblUndo").onclick = () => finish({decision: "kept", applied: [], data: null});
+      };
+    };
+  });
+}
+
+// 改动清单：谁改了什么、依据是什么、哪些被服务端拦下了。
+// 这个清单会同时出现在"待确认"卡片和入库后的结果区，保证人看到的与实际写入的一致。
+function patchListHTML(patches, res){
+  const r = res || {};
+  const rows = (patches || []).map(p => {
+    if(p.op === "merge_items"){
+      return `<div class="pt"><span>合并明细</span>
+        <span>第 ${p.keep + 1} 行 ← 第 ${p.drop + 1} 行</span>
+        <span class="why">${esc(p.why || "两行是同一物料，合并为一行，数量与金额相加")}</span></div>`;
+    }
+    return `<div class="pt"><span>${esc(fieldLabel(p.field))}</span>
+      <span><s>${esc(showVal(p.field, p.from))}</s> → <b>${esc(showVal(p.field, p.to))}</b></span>
+      <span class="why">${esc(p.why || "")}</span></div>`;
+  }).join("");
+  const rej = (r.rejected || []).map(x =>
+    `<div class="pt warnline"><span>已拦下</span><span>${esc(x.why)}</span></div>`).join("");
+  const tc = (r.to_confirm || []).map(x =>
+    `<div class="pt warnline"><span>待确认</span><span>${esc(x.why)}</span></div>`).join("");
+  const dg = r.degraded
+    ? `<div class="issue warn" style="margin:8px 0 0">${esc(r.degraded)}</div>` : "";
+  if(!rows && !rej && !tc && !dg) return "";
+  return `<div class="patches">${rows}${rej}${tc}</div>${dg}`;
+}
+
+function renderMetrics(ocr, totalMs){
+  $("#metrics").classList.remove("hide");
+  const pre = ocr.preprocess || {};
+  const dropped = ocr.dropped || [];
+  const secs = (totalMs / 1000).toFixed(1);
+
+  // 主行只说三件对使用者有用的事：成了没有、等了多久、有没有被印章挡到。
+  // 第三件要说，是因为它能解释"为什么某几个字可能不对"；
+  // 而"红色像素占 0.54%"只对调参的人有意义，放到「技术详情」里。
+  const head = [
+    "<b>识别完成</b>",
+    `用时 ${secs} 秒`,
+    pre.applied ? "已处理印章遮挡" : "",
+  ].filter(Boolean).join(" · ");
+
+  const cells = [
+    ["端到端", totalMs + " ms"],
+    ["去红章", pre.applied ? `已抑制 ${(pre.red_ratio * 100).toFixed(2)}%` : "未检出"],
+    ["OCR", ocr.ocr_ms + " ms"],
+    ["版面", ocr.layout_ms + " ms"],
+    ["词数", ocr.words],
+    ["倾斜", (ocr.skew_deg ?? 0) + "°"],
+    ["行数", ocr.lines],
+    ["滤噪", dropped.length ? `${dropped.length} 词` : "0"],
+    ["抽取模型", MODEL ? MODEL.id : "—"],
+  ].map(([k, v]) => `<div><b>${esc(v)}</b><span>${esc(k)}</span></div>`).join("");
+
+  // head 里除 <b> 外都是本函数自己产生的常量与数字（秒数是 toFixed 结果），
+  // 不含用户输入，所以这里不需要 esc —— 唯一的外部值（模型名）在 cells 里已单独转义。
+  $("#metrics").innerHTML = `
+    <div class="mhead">${head}</div>
+    <details class="mdet">
+      <summary>技术详情</summary>
+      <div class="bar">${cells}</div>
+    </details>`;
+
+  if(pre.applied || dropped.length){
+    const lines = [];
+    if(pre.applied) lines.push("这张单上有印章压住了文字，识别前已做处理；被完全盖住的内容会缺，需要对照原件补。");
+    if(dropped.length) lines.push(`另有 ${dropped.length} 处异常字符已剔除。`);
+    $("#ocrNote").innerHTML = lines.map(t => `<div>${esc(t)}</div>`).join("");
+    $("#ocrNote").classList.remove("hide");
+  }else{
+    $("#ocrNote").classList.add("hide");
+  }
+}
+
+// ---------------------------------------------------------------- 注入检测
+// 叙事要点：这一层是"可观测性"，真正拦住攻击的是 prompt 约束 + 三层校验。
+// 所以告警必须给出对照——"命中了注入"且"金额没被改"两条同时成立，才算完整证据。
+function renderInject(ocr){
+  const el = $("#inject");
+  const g = ocr.injection || {};
+  if(!g.hit){ el.classList.add("hide"); el.innerHTML = ""; return; }
+  const hits = g.hits || [];
+  const list = hits.map(h => `
+    <li>
+      <span class="tag ${h.level === "high" ? "high" : "mid"}">${h.level === "high" ? "高危" : "可疑"}</span>
+      <span class="tag via">${h.via === "cooccur" ? "共现判定" : "句式匹配"}</span>
+      <b>${esc(h.category)}</b>：${esc(h.desc)}
+      <div class="ctx mono">命中「${esc(h.matched)}」</div>
+      <div class="ctx mono">…${esc(h.context)}…</div>
+    </li>`).join("");
+  const hasCooccur = hits.some(h => h.via === "cooccur");
+  el.innerHTML = `
+    <div><b>⚠ 单据中含指令性文本，已作为数据处理，未执行</b></div>
+    <ul>${list}</ul>
+    ${hasCooccur
+      ? `<div class="ctx" style="margin-top:6px">标注「共现判定」的条目，是在文本被切分后按词对距离补充判定的。</div>`
+      : ""}
+    <div class="outcome" id="injectOutcome">正在抽取，稍后核对指令是否被采纳…</div>`;
+  el.classList.remove("hide");
+}
+
+// ---------------------------------------------------------------- 内容风险
+// 和注入检测并列，但问的是完全不同的问题：
+//   注入问「有人在指挥模型吗」—— 这条链路的攻击面很窄；
+//   这一层问「单据上的数字本身可信吗」—— 这才是真实高频的坑。
+// 判据全部取自 OCR 原文，不经过模型，所以模型抽成什么样都不影响它报警。
+// 注意它查的不是"形近字符"：实测 OCR 会把 1OO.OO 静默读成 100.00，
+// 文本层连字母痕迹都没有，这类风险只能靠回看原图，不能靠正则。
+function renderContentRisk(ocr){
+  const el = $("#risk");
+  const r = ocr.content_risk || {};
+  const hits = [...(r.numeric || []), ...(r.shadow || []), ...(r.currency || [])];
+  if(!hits.length){ el.classList.add("hide"); el.innerHTML = ""; return; }
+  el.innerHTML = `
+    <div><b>⚠ 单据内容风险：${hits.length} 项待确认（不依赖模型判断）</b></div>
+    <ul>${hits.map(h => `
+      <li>
+        <span class="tag ${h.level === "high" ? "high" : "mid"}">${h.level === "high" ? "高危" : "可疑"}</span>
+        <b>${esc(h.kind)}</b>：${esc(h.desc)}
+        ${h.context ? `<div class="ctx mono">上下文 …${esc(h.context)}…</div>` : ""}
+      </li>`).join("")}</ul>
+    <div class="outcome">
+      仅提示，不阻断。<b>勾稽</b>校验字段之间是否自洽（数量 × 单价 = 金额），本项校验<b>单个数字的写法</b>本身；
+      三处同时出错时勾稽仍会通过，本项仍会提示。
+    </div>`;
+  el.classList.remove("hide");
+}
+
+function amendInject(data, issues){
+  const el = $("#injectOutcome");
+  if(!el) return;
+  const bad = issues.filter(i => i.level === "err").length;
+  const total = numOrNull(data && data.total_amount);
+  el.innerHTML = bad === 0
+    ? `<b>抽取结果核对：</b>合计金额 <span class="hl">${money(total)}</span>，三层校验全部通过 —— 指令文本未被采纳。`
+    : `<b>抽取结果核对：</b>合计金额 ${money(total)}，校验有 ${bad} 项错误，需人工复核。`;
+}
+
+// ---------------------------------------------------------------- 导出
+// 工厂真正的痛点不是"看不懂单据"，是"数据进不了 ERP"。
+// 列名对齐常见采购订单导入模板，导出即可用于导入。
+function exportCsv(){
+  const d = lastData;
+  if(!d){ showErr("还没有抽取结果可导出"); return; }
+  const head = ["单据编号","供应商","下单日期","物料名称","数量","单价","金额","合计金额","币种"];
+  const items = Array.isArray(d.items) ? d.items : [];
+  const rows = items.length
+    ? items.map(it => [d.doc_no, d.supplier, d.order_date, it.name, it.qty, it.price, it.amount, d.total_amount, d.currency || "CNY"])
+    : [[d.doc_no, d.supplier, d.order_date, "", "", "", "", d.total_amount, d.currency || "CNY"]];
+  const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const csv = [head, ...rows].map(r => r.map(q).join(",")).join("\r\n");
+  // BOM 不能省：不加的话用 Excel 打开中文全是乱码
+  const blob = new Blob(["\ufeff" + csv], {type: "text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "单据_" + String(d.doc_no || "unknown").replace(/[^\w\-]/g, "_") + ".csv";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+// ---------------------------------------------------------------- 评测
+// 数字全部来自后端 /api/eval，页面里不手抄常量。
+async function loadEval(){
+  const el = $("#evalBody");
+  const pct = v => (v == null ? "—" : (v * 100).toFixed(1) + "%");
+  try{
+    const r = await fetch(apiUrl("api/eval"));
+    const d = await r.json();
+    if(!d.available){
+      el.innerHTML = `<div class="empty">评测数据不可用：${esc(d.error || "")}</div>`;
+      return;
+    }
+    const s = d.summary || {};
+    const tags = Object.keys(s);
+    if(!tags.length){ el.innerHTML = '<div class="empty">评测报告为空</div>'; return; }
+    const row = (label, fn) =>
+      `<tr><td>${label}</td>${tags.map(t => `<td>${fn(s[t])}</td>`).join("")}</tr>`;
+    // A = 上线版本（本页面正在服务的那条）；B/C 是评测脚本里的消融对照，
+    // 只为回答"去掉某道防线会怎样"，不落库、无审计链——列名必须让人一眼
+    // 分清"产品"和"探针"，否则会把消融结果当成可交付方案去比。
+    const name = t => t === "A" ? "A：上线版本（直读→校验→复核→落库）"
+                    : t === "B" ? "B：消融对照（去掉复核兜底）"
+                    : "C：同构复算（脚本侧直读）";
+    const fb = d.fallback || {};
+    const nTotal = s[tags[0]] ? (s[tags[0]].n_total ?? d.n) : d.n;
+    const dim = t => `<span style="opacity:.55">${t}</span>`;
+
+    // ---- ① 优化效果对比：v1（迁移前基线，历史事实取自 eval/report_live_pre_migration.json
+    // 与报告终版章节）→ v3（现行，数字取本次 /api/eval 实测，不手抄）。
+    const a = s.A || {};
+    const v1 = {full: 60, cell: 95.6, wrong: 2, p50: 3718};
+    const v3 = {
+      full: (a.full_correct_rate_total ?? 0) * 100,
+      cell: (a.row_cell_acc ?? 0) * 100,
+      wrong: (a.quad || {}).pass_wrong ?? 0,
+      p50: a.latency_ms_p50 ?? 0,
+    };
+    const effCard = (label, d1, d3, max, delta, fmt) => `
+      <div class="eff">
+        <div class="h"><span>${label}</span><span class="delta">${delta}</span></div>
+        ${[["v1", d1, "v1"], ["v3", d3, "v3"]].map(([lab, v, cls]) => `
+          <div class="effrow"><span class="lab">${lab}</span>
+            <div class="track"><div class="fill ${cls}" style="width:${Math.max(0, Math.min(100, v / max * 100))}%"></div></div>
+            <span class="val">${fmt(v)}</span></div>`).join("")}
+      </div>`;
+    const effGrid = `
+      <div class="evo-h">① 优化效果 —— 原版 OCR 串联 → 现行直读 + 防线后挂</div>
+      <div class="effgrid">
+        ${effCard("全字段正确率", v1.full, v3.full, 100, `+${(v3.full - v1.full).toFixed(0)}pp`, v => v.toFixed(1) + "%")}
+        ${effCard("明细单元格", v1.cell, v3.cell, 100, `+${(v3.cell - v1.cell).toFixed(1)}pp`, v => v.toFixed(1) + "%")}
+        ${effCard("误放行（错数据入库）", v1.wrong, v3.wrong, 2, `${v1.wrong} → ${v3.wrong}`, v => v + " 张")}
+        ${effCard("抽取延迟 p50", v1.p50, v3.p50, v1.p50, `-${Math.round((1 - v3.p50 / v1.p50) * 100)}%`, v => Math.round(v) + "ms")}
+      </div>`;
+
+    // ---- ② 架构演进：四代流程条。OCR 红框 = 问题源，蓝框 = 现行直读，虚线 = 校验参照。
+    const gens = [
+      ["v0 纯 OCR",
+       [["拍照图片", "n"], ["OCR 识别", "ocr"], ["人工录入", "n"]],
+       "死因：OCR 有损识别，错字直接入库", ""],
+      ["v1 OCR 串联",
+       [["拍照图片", "n"], ["OCR", "ocr"], ["LLM 读文本抽取", "n"], ["三层校验", "n"], ["入库", "n"]],
+       "死因：明细 95.6%（OCR 丢列错位）；「编号 100%」被对照实验证实为先验猜对", ""],
+      ["v2 直读+校验",
+       [["拍照图片", "n"], ["视觉模型直读", "hero"], ["三层校验", "n"], ["入库", "n"]],
+       "死因：出处层没有参照物，误放行防不住", ""],
+      ["v3 直读+防线后挂（现行 · 已上线）",
+       [["拍照图片", "n"], ["视觉模型直读", "hero"], ["三层校验+编号归一", "n"],
+        ["疑点看图复核", "n"], ["人工确认→入库", "n"]],
+       "效果：全字段 100%、误放行 0（两套评测集实测）",
+       "OCR 文本（本地零 token）→ 出处层参照 + 复核第二证据源"],
+    ];
+    const genHTML = gens.map(([badge, nodes, gnote, gref]) => `
+      <div class="gen${badge.startsWith("v3") ? " cur" : ""}">
+        <div class="gb">${badge}</div>
+        <div class="flow">${nodes.map((n, i) =>
+          `${i ? '<span class="arr">→</span>' : ""}<span class="node ${n[1]}">${n[0]}</span>`).join("")}</div>
+        <div class="gnote">${gnote}</div>
+        ${gref ? `<div class="gref">└ ${gref}</div>` : ""}
+      </div>`).join("");
+
+    // ---- ③ 能力矩阵：三列准确率并列时，真正区分"产品"与"探针"的是这张表。
+    const yes = '✓', no = '—';
+    const matrix = `
+      <table>
+        <thead><tr><th>能力（产品维度）</th><th>A 上线版本</th><th>B 消融</th><th>C 同构复算</th></tr></thead>
+        <tbody>
+          <tr><td>图片直读抽取（OCR 不进抽取路径）</td><td>${yes}</td><td>${yes}</td><td>${yes}</td></tr>
+          <tr><td>L2 业务规则 + L3 勾稽（数量×单价=金额、明细之和=合计）</td><td>${yes}</td><td>${yes}</td><td>${yes}</td></tr>
+          <tr><td>L4 出处层（每个值回原文找参照）</td><td>${yes}</td><td>${yes}</td><td>${yes}</td></tr>
+          <tr><td>编号归一 + 历史档案先验</td><td>${yes}</td><td>${yes}</td><td>${yes}</td></tr>
+          <tr><td>存疑看图复核（带 OCR 作第二证据源）</td><td>${yes}</td><td>${no}</td><td>${yes}</td></tr>
+          <tr><td>落库 + 主链哈希（触发器计算，表级仅允许 INSERT）</td><td>${yes}</td><td>${dim("— 评测不落库")}</td><td>${dim("— 评测不落库")}</td></tr>
+          <tr><td>追加式更正 + 独立哈希链（表头与明细逐格可改）</td><td>${yes}</td><td>${no}</td><td>${no}</td></tr>
+          <tr><td>导出可导入 ERP 的 CSV</td><td>${yes}</td><td>${no}</td><td>${no}</td></tr>
+        </tbody>
+      </table>`;
+
+    // ---- ④ 难例集（退化字体）实测：由 /api/eval 的 hard 字段下发，页面不手抄数字
+    const hardBlock = (() => {
+      const hard = d.hard;
+      if(!hard || !hard.summary) return "";
+      const rowsOf = [["A：上线版本", hard.summary.A || {}], ["B：消融对照", hard.summary.B || {}],
+                      ["C：同构复算", hard.summary.C || {}]];
+      return `
+      <div class="evalnote" style="margin-top:10px">
+        <b>难例集：${esc(hard.label || "退化字体")}</b>（${hard.n} 张，${esc(hard.generated_at || "—")}）——
+        O 与 0 在图上不可区分（真值不在像素里），最能检验防线值不值得留。
+        <table style="margin-top:6px">
+          <thead><tr><th>链路</th><th>全字段正确</th><th>误放行</th><th>保守转人工</th>
+            <th>编号字面严格</th><th>编号归一口径</th></tr></thead>
+          <tbody>${rowsOf.map(([lab, x]) => `
+            <tr><td>${lab}</td>
+              <td><b>${pct(x.full_correct_rate_total)}</b></td>
+              <td>${x.quad ? x.quad.pass_wrong : "—"}</td>
+              <td>${(x.n_total ?? hard.n) - (x.quad ? x.quad.pass_correct : 0)}</td>
+              <td>${pct(x.doc_no_strict_rate)}</td>
+              <td>${pct(x.doc_no_norm_rate)}</td></tr>`).join("")}
+          </tbody>
+        </table>
+        编号归一由 <span class="mono">/api/submit</span> 统一承担，三条链路都吃到 ⇒ 准确率必然并列；
+        差别在 A 把每次归一记为审计事件、每次拦截留下原因、入库后还能逐格更正。
+      </div>`;
+    })();
+
+    el.innerHTML = `
+      <div class="evalnote">
+        抽取模型 ${esc(d.model || "—")} · ${d.n} 张 × 2 套评测集 · ${esc(d.generated_at || "—")}。
+        数字全部线上实测、可重跑；v1 基线为迁移前存档（同批图、同真值、同模型通道）。
+      </div>
+      ${effGrid}
+      <div class="evo-h">② 架构变迁 —— OCR 从「数据的来源」退到「校验的证据」</div>
+      ${genHTML}
+      <div class="evalnote" style="margin-top:8px;border-left:3px solid #d98f2b;padding-left:9px">
+        <b>为什么上线 A，而不是"看着更干净"的 B？</b>
+        三列准确率并列 ⇒ 抽取层已不是瓶颈；B/C 是评测探针，<b>不落库、无审计链、无更正</b>，不是可交付形态。
+        B 的全放行也不是能力——它没有第二判据。A 多拦的几张每张都写明原因，人约 10 秒确认，换来<b>误放行 0</b>。
+      </div>
+      <details style="margin-top:10px">
+        <summary style="cursor:pointer;font-size:12.5px;color:var(--faint)">展开：链路定位 · 能力矩阵 · 完整指标（A=上线版本，B/C=消融对照，可重跑）</summary>
+        <div style="margin-top:6px">
+          <div class="evalnote" style="margin:0 0 8px">
+            <b>A = 上线版本</b>：本页面正在服务的链路（直读 → 三层校验 → 归一 → 存疑复核 → 落库哈希链 → 逐格更正 → 导出 ERP）。<br>
+            <b>B/C = 消融探针</b>：同模型、不同开关的评测路径，只回答"去掉复核会怎样"，不落库、无审计、无更正。
+          </div>
+          ${matrix}
+          <table style="margin-top:10px">
+            <thead><tr><th>指标</th>${tags.map(t => `<th>${esc(name(t))}</th>`).join("")}</tr></thead>
+            <tbody>
+              ${row("<b>全字段正确率</b>" + dim("（关键字段 + 明细每格）"),
+                    x => `<b>${pct(x.full_correct_rate_total)}</b>` + dim(`（${x.full_correct_count ?? "—"} / ${x.n_total ?? x.n}）`))}
+              ${row("误放行" + dim("（错数据被自动放行，最危险）"),
+                    x => `<span style="color:#7d2020">${x.quad.pass_wrong} / ${x.n_total ?? x.n}</span>`)}
+              ${row("正确拦截 / 误拦截", x => `${x.quad.fail_wrong} / ${x.quad.fail_correct}`)}
+              ${row("自动放行" + dim("（零人工）"), x => `${x.quad.pass_correct} / ${x.n_total ?? x.n}`)}
+              ${row("保守转人工" + dim("（数据已全对，人看一眼即入库）"),
+                    x => `${(x.n_total ?? x.n) - x.quad.pass_correct} / ${x.n_total ?? x.n}`)}
+              ${row("单据编号准确率" + dim("（O/0 视为同一字符）"), x => pct(x.doc_no_norm_rate))}
+              ${row(dim("　其中字面严格（区分 O 与 0）"), x => dim(pct(x.doc_no_strict_rate)))}
+              ${row("供应商准确率", x => pct((x.key_field_acc || {}).supplier))}
+              ${row("下单日期准确率", x => pct((x.key_field_acc || {}).order_date))}
+              ${row("合计金额准确率", x => pct((x.key_field_acc || {}).total_amount))}
+              ${row("明细单元格准确率", x => pct(x.row_cell_acc))}
+              ${row("4 个关键字段全对率", x => pct(x.key_all_ok_rate))}
+              ${row("模型侧延迟 p50 / max" + dim("（口径见下）"), x => `${x.latency_ms_p50 ?? "—"} / ${x.latency_ms_max ?? "—"} ms`)}
+              ${row("端到端 p50 / max" + dim("（含 OCR 上传）"),
+                    x => x.e2e_ms_p50 ? `${x.e2e_ms_p50} / ${x.e2e_ms_max} ms` : dim("—"))}
+              ${row("模型 token" + dim("（提示 / 生成）"),
+                    x => x.tokens ? `${x.tokens.prompt_tokens} / ${x.tokens.completion_tokens}` : "—")}
+            </tbody>
+          </table>
+          <div class="evalnote" style="margin-top:6px">
+            <b>延迟口径</b>：A = 服务端模型耗时；B/C = 脚本端到端（含公网往返），<b>两者不可直接比</b>。
+            上方「优化效果」的 v1→v3（3718→${Math.round(v3.p50)}ms）同为 A 口径，可比。
+          </div>
+          ${fb.triggered ? `
+          <div class="evalnote" style="margin-top:8px">
+            <b>复核（独立统计只挂在 C）</b>：触发 ${fb.triggered}/${nTotal} 张，给出可采纳值 ${fb.changed_fields} 次，
+            判对 <b>${fb.changed_right}</b> / 判错 ${fb.changed_wrong}。A 的复核在
+            <span class="mono">/api/submit</span> 内强制跑，已计入 A 的成本。
+          </div>` : ""}
+          ${hardBlock}
+          <div class="evalnote" style="margin-top:8px">
+            口径：每套 ${d.n} 张、单次运行（±1 张 = ±5 点），多次取中位数。同一链路跨次会波动 1~3 张
+            （A 两次分别放行 16 / 19），<b>拦截数不作优劣判据；唯一稳定为 0 的是误放行</b>。
+          </div>
+        </div>
+      </details>
+      ${d.note ? `<div class="evalnote" style="margin-top:8px">${esc(d.note)}</div>` : ""}`;
+  }catch(e){
+    el.innerHTML = `<div class="empty">读取评测数据失败：${esc(e.message)}</div>`;
+  }
+}
+
+// ---------------------------------------------------------------- 抽取
+// 抽取在服务端跑，这里只交一个 doc_id。
+//
+// 从前这里是"浏览器直连云模型"：SYSTEM_PROMPT 写在本文件、model 由下拉框决定、
+// OCR 文本裸拼进 prompt。三层后果叠在一起——
+//   ① 提示词等于公开，且 `<DOC>` 无转义，图上印一行就能闭合数据区（实测确实通，
+//      33 个模型里有 2 个被这样改掉了供应商名）；
+//   ② 浏览器能发出任意 messages，模型通道因此成了一个可被免费调用的公开接口；
+//   ③ 最要紧的是，服务端只收到一个 JSON，**没有办法知道它是模型读图得到的，
+//      还是人手工敲的**。一份算术自洽的伪造数据会被判为 validate_ok=true 并入库。
+// 把"问什么、用哪个模型"收回服务端之后，③ 才成立：extract 只可能由服务端
+// 自己 OCR 出的文本、自己选的模型算出来。
+async function extractFields(docId){
+  const r = await postJson("api/extract", {doc_id: docId});
+  if(!r.ok) throw new Error(r.error || "抽取失败");
+  // 服务端实际用了哪个模型，以它返回的为准：写入记录时 model_id 要如实反映
+  if(r.model) MODEL = { id: r.model };
+  return r.extract;
+}
+
+// ---------------------------------------------------------------- 三层校验
+// 校验只有一份实现，在服务端（src/validate.py）。前端不再重复实现规则：
+// 两套规则一定会漂移，而漂移之后页面说"通过"、库里存"不通过"是最难解释的故障。
+// 页面显示的是 /api/submit 返回的 issues。
+
+
+// 出处校验（L4）的显示分两半，各管一件事：
+//
+//   ① **哪个字段不对** —— 由服务端按字段报成 L4 issue，一个字段一行
+//      （"单据编号与原文差 1 个字，需核对原图"），和其它规则的疑点排在一起。
+//   ② **核对到什么程度** —— 折在「核对详情」里：每个值对上多少、原文最接近的写法。
+//
+// 2026-10-26 之前这里还有一条汇总行："出处校验：3/5 个文本值在原文找到出处，
+// 2 个只差一两个字（需看图确认）"。删掉的原因：它和下面的具体行说的是同一件事，
+// 而且"3/5""文本值"对使用者没有意义——他要知道的是"我该看哪一行"，不是统计。
+// 唯一必须留在显眼位置的是"没跑成"：否则"没验"会被读成"验过没问题"。
+function groundingNote(g, details){
+  if(!g) return "";
+
+  if(!g.ran){
+    return `<div class="issue warn"><span class="mono" style="opacity:.7">原文</span>
+      没能核对原文（原图已失效），本次不检查这些值是否来自这张图。</div>`;
+  }
+  if(!g.checked) return "";
+
+  const rows = (details || [])
+    .filter(d => d && typeof d.coverage === "number")
+    .map(d => {
+      const ok = d.coverage >= 0.98;
+      const near = ok ? "" : (d.nearest ? `，原文最接近「${d.nearest}」` : "，原文没有相近写法");
+      return `<div><span class="mono">${esc(d.label || d.field)}</span>
+        <span style="opacity:.85">${esc(d.value || "")}</span>
+        <span style="opacity:.6">· 对上 ${Math.round(d.coverage * 100)}%${esc(near)}</span></div>`;
+    }).join("");
+  if(!rows) return "";
+
+  return `<details class="mdet" style="margin-top:8px">
+    <summary>核对详情（${g.grounded}/${g.checked} 个值与原文完全一致）</summary>
+    <div class="gdet">${rows}</div></details>`;
+}
+
+// 复核结论：人只需要知道"这个疑点有没有被看过、看的结果是什么"，
+// 不需要读模型的推理过程。所以这里压缩成短语，接在疑点后面。
+function findingOf(rv, field){
+  if(!rv || rv.error) return null;
+  return (rv.findings || []).find(f => f.field === field) || null;
+}
+
+function verdictText(f, current){
+  if(!f) return "";
+  if(f.verdict === "match") return "看图一致";
+  if(f.verdict === "unreadable") return "图上看不清";
+  if(f.apply_value){
+    // 值已经按复核结果改过了：此时再显示"看图读到 X"会让人以为还没改，
+    // 所以比一下当前值，一致就说"一致"。
+    const same = String(f.apply_value).trim() === String(current ?? "").trim();
+    return same ? "看图一致" : `看图读到「${f.apply_value}」`;
+  }
+  // 形近字符差异不给采纳建议（见 review.sanitize_findings 的仲裁规则），
+  // 这种情况只能说"不一致"，由人在选项里决定。
+  return "看图不一致，需你判断";
+}
+
+function renderExtract(d, issues, note, grounding, rv, gDetails){
+  const bad = issues.filter(i => i.level === "err").length;
+  const warn = issues.filter(i => i.level === "warn").length;
+  const head = bad === 0
+    ? `<div class="issue ok" style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+         <span>校验通过 · ${esc(note || "可自动入库")}${warn ? `（${warn} 条提示）` : ""}</span>
+         <button class="ghost" style="padding:2px 10px;font-size:12px;flex:none" onclick="exportCsv()">导出 CSV</button>
+       </div>`
+    : `<div class="issue err" style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+         <span>校验未通过 · ${bad} 项错误待人工复核${note ? ` · ${esc(note)}` : ""}</span>
+         <button class="ghost" style="padding:2px 10px;font-size:12px;flex:none" onclick="exportCsv()">导出 CSV</button>
+       </div>`;
+
+  const rows = (Array.isArray(d.items) ? d.items : []).map((it, i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td>${esc(it.name || "—")}</td>
+      <td class="n">${it.qty ?? "—"}</td>
+      <td class="n">${money(numOrNull(it.price))}</td>
+      <td class="n">${money(numOrNull(it.amount))}</td>
+    </tr>`).join("");
+
+  $("#extract").innerHTML = `
+    ${head}
+    <div class="kv" style="margin-top:12px">
+      <span>单据编号</span><span class="mono">${esc(d.doc_no ?? "—")}</span>
+      <span>供应商</span><span>${esc(d.supplier ?? "—")}</span>
+      <span>下单日期</span><span>${esc(d.order_date ?? "—")}</span>
+      <span>合计金额</span><span><b>${money(numOrNull(d.total_amount))}</b> ${esc(d.currency || "CNY")}</span>
+    </div>
+    <table>
+      <thead><tr><th>#</th><th>物料</th><th class="n">数量</th><th class="n">单价</th><th class="n">金额</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="5" class="empty">无明细</td></tr>'}</tbody>
+    </table>
+    <div style="margin-top:12px">${issues.map(i => {
+      const vt = verdictText(findingOf(rv, i.field), getField(d, i.field));
+      return `
+      <div class="issue ${i.level === "err" ? "err" : i.level === "warn" ? "warn" : i.level === "info" ? "info" : "ok"}">
+        <span class="mono" style="opacity:.7">${esc(i.layer)}</span> ${esc(i.msg)}
+        ${vt ? ` <span class="vtag">${esc(vt)}</span>` : ""}
+        ${i.fix && i.fix !== null ? ` <span style="opacity:.8">→ 建议 <span class="mono">${esc(i.fix)}</span></span>` : ""}
+      </div>`;
+    }).join("")}
+    </div>
+    ${groundingNote(grounding, gDetails)}`;
+  $("#out").classList.remove("hide");
+}
+
+// ---------------------------------------------------------------- 云端历史与验签
+async function loadHistory(){
+  if(!cloud) return;
+  const box = $("#history");
+  // 读有效版本视图：每列自动取"最新更正后"的值。原值与更正历史
+  // 点「已更正」或「更正」可以逐条看——审计对账看原表，业务看这里。
+  const {data, error} = await cloud.database
+    .from("v_doc_parses_effective")
+    .select("id,seq,filename,doc_no,supplier,order_date,total_amount,item_count,validate_ok,record_hash,created_at,correction_count")
+    .order("id", {ascending:false})
+    .limit(20);
+
+  window._histRows = Array.isArray(data) ? data : [];
+  if(error){
+    box.innerHTML = `<div class="issue err">读取失败：${esc(error.message || error.code)}</div>`;
+    return;
+  }
+  if(!data || data.length === 0){
+    box.innerHTML = '<div class="empty">暂无记录。上传一张单据，解析结果会自动留存。</div>';
+    return;
+  }
+  box.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>序号</th><th>文件</th><th>单据编号</th><th>供应商</th>
+        <th class="n">金额</th><th>校验</th><th>链 hash</th><th>操作</th>
+      </tr></thead>
+      <tbody>${data.map(r => `
+        <tr>
+          <td class="mono">${r.seq}</td>
+          <td>${esc(r.filename || "—")}</td>
+          <td class="mono">${esc(r.doc_no || "—")}</td>
+          <td>${esc(r.supplier || "—")}</td>
+          <td class="n">${money(numOrNull(r.total_amount))}</td>
+          <td>${r.validate_ok ? '<span class="chip ok">通过</span>' : '<span class="chip bad">待复核</span>'}
+              ${r.correction_count > 0 ? `<a href="javascript:void(0)" data-see="${r.id}" style="font-size:12px;color:var(--warn,#b7791f)">已更正${r.correction_count}</a>` : ""}</td>
+          <td class="mono" style="color:var(--faint)">${esc((r.record_hash || "").slice(0, 12))}…</td>
+          <td><button class="ghost" data-correct="${r.id}" style="padding:2px 8px;font-size:12px">更正</button></td>
+        </tr>`).join("")}
+      </tbody>
+    </table>`;
+}
+
+$("#btnRefresh").onclick = () => { loadHistory(); $("#chainMsg").innerHTML = ""; loadProfile(); };
+
+// ---------------------------------------------------------------- 更正（红字冲销）
+// 原记录是 append-only 哈希链，物理不可改；纠错 = 追加一条更正记录（独立哈希链）。
+// 业务显示走有效版本视图，审计对账看原表 + 更正全量——两条链各自完整。
+
+async function fetchJson(url){
+  const res = await fetch(url, {headers: {Accept: "application/json"}});
+  return res.json();
+}
+
+function openCorrForm(id, row){
+  // 表格模式更正：整单铺开成表格，点哪个格子改哪个（与入库前表格编辑同一心智）。
+  // 改过的格子标橙、双击撤销；一次提交只落真正变过的字段，每个字段一条更正
+  // 记录（各自进哈希链），共用同一条更正原因。old/new 由服务端核对，界面值只作预填。
+  const box = $("#corrBox");
+  box.classList.remove("hide");
+  box.innerHTML = `
+    <div class="issue warn" style="margin:0 0 8px">对记录 <b>#${id}</b> 追加更正：原记录一字不动，
+      改过的字段各自进<b>独立哈希链</b>（谁改的、改了什么、为什么、何时，全部留痕可验）。</div>
+    <div id="corrTbl">正在读取记录明细…</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px">
+      <input id="corrReason" placeholder="更正原因（必填，进审计链）" style="padding:5px 8px;width:230px">
+      <input id="corrBy" placeholder="更正人（选填）" style="padding:5px 8px;width:110px">
+      <button id="corrCommit" style="padding:5px 14px">提交更正</button>
+      <button class="ghost" id="corrCancel" style="padding:5px 12px">取消</button>
+    </div>
+    <div id="corrMsg" style="margin-top:8px"></div>`;
+  $("#corrCancel").onclick = () => { box.classList.add("hide"); box.innerHTML = ""; };
+  renderCorrTable(id, row);
+  $("#corrCommit").onclick = async () => {
+    const reason = ($("#corrReason").value || "").trim();
+    if(!reason){ $("#corrMsg").innerHTML = '<div class="issue err" style="margin:0">更正原因必填——没有原因的更正不该存在</div>'; return; }
+    // 只收「改过的格子」（data-cur 存在即视为改过），与原值逐格核对在服务端再做一遍
+    const changes = [];
+    let bad = null;
+    document.querySelectorAll("#corrTbl td.cedit").forEach(td => {
+      if(bad || td.dataset.cur === undefined) return;
+      const f = td.dataset.cf, v = td.dataset.cur;
+      if(td.dataset.num && v !== ""){
+        const nv = numOrNull(v);
+        if(nv === null){ bad = f; return; }
+        changes.push({field: f, new_value: String(nv)});
+      } else {
+        changes.push({field: f, new_value: v});
+      }
+    });
+    if(bad){ $("#corrMsg").innerHTML = `<div class="issue err" style="margin:0">「${esc(fieldLabel(bad))}」需要填数字</div>`; return; }
+    if(!changes.length){ $("#corrMsg").innerHTML = '<div class="issue warn" style="margin:0">没有改动任何格子——点表格里要改的格子才会被提交。</div>'; return; }
+    const btn = $("#corrCommit"); btn.disabled = true;
+    const res = await postJson("api/correct", {
+      corrects_id: id, changes, reason,
+      corrected_by: ($("#corrBy").value || "").trim(),
+    }).catch(e => ({ok:false, error:e.message || String(e)}));
+    btn.disabled = false;
+    if(!res.ok){
+      const done = (res.corrections || []).length;
+      $("#corrMsg").innerHTML = `<div class="issue err" style="margin:0">更正被拒绝：${esc(res.error || "未知错误")}${done ? `（其中 ${done} 条已落链，见下方更正历史）` : ""}</div>`;
+      if(done){ loadHistory(); loadCorrections(id); }
+      return;
+    }
+    const list = res.corrections || [];
+    $("#corrMsg").innerHTML = `<div class="issue ok" style="margin:0">
+      已追加 ${list.length} 条更正（原记录未动，主链 hash 不变）：<br>
+      ${list.map(c => `<span class="mono" style="font-size:12px">#${esc(String(c.seq ?? "—"))} ${esc(fieldLabel(c.field))}：${esc(String(c.old_value ?? ""))} → ${esc(String(c.new_value ?? ""))} · ${esc(String(c.record_hash || "").slice(0, 12))}…</span>`).join("<br>")}
+    </div>`;
+    loadHistory();
+    loadCorrections(id);
+  };
+}
+
+async function renderCorrTable(id, row){
+  // 表头四字段 + 明细行全部可编辑（更正白名单：表头 4 个 + items[i].name/qty/price/amount）。
+  // 明细显示值 = extract_json 原值叠加已有更正（原表不动，有效值在链上）。
+  const host = $("#corrTbl");
+  let items = null;
+  try{
+    const {data, error} = await cloud.database.from("v_doc_parses_effective")
+      .select("extract_json").eq("id", id).single();
+    if(!error && data && data.extract_json){
+      const ex = typeof data.extract_json === "string"
+        ? JSON.parse(data.extract_json) : data.extract_json;
+      if(Array.isArray(ex.items)) items = ex.items.map(it => ({...it}));
+    }
+  }catch(e){ /* 明细取不到就只铺表头，不影响更正 */ }
+  // 叠加该记录已有的明细更正：显示与提交都基于"当前有效值"，
+  // 否则同一格改第二次时界面上看到的还是原值，和服务端 old_value 对不上。
+  if(Array.isArray(items)){
+    try{
+      const hist = await fetchJson(`api/corrections?corrects_id=${id}`);
+      for(const c of (hist.corrections || [])){
+        const m = /^items\[(\d+)\]\.(name|qty|price|amount)$/.exec(c.field || "");
+        if(m && items[Number(m[1])]) items[Number(m[1])][m[2]] = c.new_value;
+      }
+    }catch(e){ /* 取不到历史就按原值显示，服务端仍会核对 */ }
+  }
+  const head = [
+    ["doc_no", "单据编号", 0], ["supplier", "供应商", 0],
+    ["order_date", "下单日期", 0], ["total_amount", "合计金额", 1],
+  ];
+  const cell = ([k, label, num]) => {
+    const oldV = (row[k] === null || row[k] === undefined) ? "" : String(row[k]);
+    return `<td class="cedit" data-cf="${k}"${num ? ' data-num="1"' : ""} data-old="${esc(oldV)}" title="点击修改；改过之后双击可撤销">${esc(oldV) || '<span style="color:var(--faint)">（空）</span>'}</td>`;
+  };
+  const icell = (it, i, key, num) => {
+    const oldV = (it[key] === null || it[key] === undefined) ? "" : String(it[key]);
+    return `<td class="cedit" data-cf="items[${i}].${key}"${num ? ' data-num="1"' : ""} data-old="${esc(oldV)}" title="点击修改；改过之后双击可撤销">${esc(oldV) || '<span style="color:var(--faint)">（空）</span>'}</td>`;
+  };
+  host.innerHTML = `
+    <div class="why" style="margin-bottom:6px">表格模式：点哪个格子改哪个（Enter 或点别处确认，
+      Esc 放弃）；<b>标橙的格子才会被提交</b>，双击标橙格子撤销回原值。<br>
+      明细里改<b>数量或单价</b>会自动算出<b>金额</b>并预填（标橙待确认，可再手改；手改金额后不再被覆盖）。</div>
+    <table><thead><tr>${head.map(h => `<th${h[2] ? ' class="n"' : ""}>${h[1]}</th>`).join("")}</tr></thead>
+      <tbody><tr>${head.map(cell).join("")}</tr></tbody></table>
+    ${Array.isArray(items) && items.length ? `
+    <table style="margin-top:8px"><thead><tr><th>#</th><th>物料</th>
+      <th style="width:90px">数量</th><th style="width:100px">单价</th><th style="width:110px">金额</th></tr></thead>
+      <tbody>${items.map((it, i) => `
+        <tr><td class="mono" style="color:var(--faint)">${i + 1}</td>
+          ${icell(it, i, "name", 0)}
+          ${icell(it, i, "qty", 1)}
+          ${icell(it, i, "price", 1)}
+          ${icell(it, i, "amount", 1)}</tr>`).join("")}
+      </tbody></table>
+    <div class="why" style="margin-top:4px;font-size:12px;color:var(--faint)">
+      明细每格同样可改：每格一条更正记录、各自进哈希链；改过的明细在更正历史里显示为
+      「明细第 N 行的…」。</div>` : ""}
+  `;
+  host.querySelectorAll("td.cedit").forEach(td => {
+    // 明细的「数量/单价」改动后自动算金额并预填：勾稽恒等式本来就是人最想确认的一步，
+    // 让人手算既慢又容易错。预填只是"草稿"，提交前仍在表格里看得见、可改、可双击撤销；
+    // 金额格若已被人手改过（data-manual），自动算法绝不覆盖人的判断。
+    const syncAmount = (i, force) => {
+      const q = host.querySelector(`td.cedit[data-cf="items[${i}].qty"]`);
+      const p = host.querySelector(`td.cedit[data-cf="items[${i}].price"]`);
+      const a = host.querySelector(`td.cedit[data-cf="items[${i}].amount"]`);
+      if(!q || !p || !a || (a.dataset.manual && !force)) return;
+      const qv = numOrNull(q.dataset.cur ?? q.dataset.old);
+      const pv = numOrNull(p.dataset.cur ?? p.dataset.old);
+      if(qv === null || pv === null) return;
+      const sum = String(Math.round(qv * pv * 100) / 100);
+      const cur = a.dataset.cur ?? a.dataset.old;
+      if(sum !== cur){
+        a.dataset.cur = sum;
+        a.dataset.auto = "1";
+        a.textContent = sum;
+        a.classList.add("changed");
+        a.title = `由 数量×单价 自动算出（${qv}×${pv}）——点一下可改成别的值，双击撤销`;
+      } else if(a.dataset.auto){
+        delete a.dataset.cur; delete a.dataset.auto;
+        a.classList.remove("changed");
+        a.textContent = a.dataset.old;
+        a.title = "点击修改；改过之后双击可撤销";
+      }
+    };
+    td.addEventListener("click", () => {
+      if(td.querySelector("input")) return;
+      const inp = document.createElement("input");
+      inp.value = td.dataset.cur ?? td.dataset.old;
+      td.textContent = "";
+      td.appendChild(inp);
+      inp.focus(); inp.select();
+      let closed = false;                    // Esc 移除 input 后还会再触发一次 blur，幂等
+      const commit = (cancel) => {
+        if(closed) return;
+        closed = true;
+        const v = inp.value.trim();
+        if(cancel || v === td.dataset.old){
+          delete td.dataset.cur;
+        } else if(td.dataset.num && v !== "" && numOrNull(v) === null){
+          td.dataset.cur = v;           // 非法数字：标红，提交时会被拦
+        } else {
+          td.dataset.cur = v;
+        }
+        td.textContent = (td.dataset.cur ?? td.dataset.old) || "";
+        td.classList.toggle("changed", td.dataset.cur !== undefined);
+        const m = /^items\[(\d+)\]\.(qty|price|amount)$/.exec(td.dataset.cf);
+        if(m){
+          const i = Number(m[1]);
+          if(m[2] === "amount"){
+            // 人手动定了金额：记为人工值，后续改数量/单价不再覆盖它
+            td.dataset.manual = "1";
+            delete td.dataset.auto;
+          } else {
+            syncAmount(i);
+          }
+        }
+      };
+      inp.addEventListener("keydown", ev => {
+        if(ev.key === "Enter"){ ev.preventDefault(); inp.blur(); }
+        if(ev.key === "Escape"){ ev.preventDefault(); commit(true); }
+      });
+      inp.addEventListener("blur", () => commit(false));
+    });
+    td.addEventListener("dblclick", () => {
+      if(td.dataset.cur !== undefined && !td.querySelector("input")){
+        delete td.dataset.cur;
+        td.classList.remove("changed");
+        td.textContent = td.dataset.old;
+        td.title = "点击修改；改过之后双击可撤销";
+        const m = /^items\[(\d+)\]\.(qty|price|amount)$/.exec(td.dataset.cf);
+        if(m){
+          const i = Number(m[1]);
+          if(m[2] === "amount"){
+            delete td.dataset.manual; delete td.dataset.auto;
+          } else {
+            syncAmount(i, true);       // 撤销数量/单价后，金额也回到"重新算"的状态
+          }
+        }
+      }
+    });
+  });
+}
+
+async function loadCorrections(id){
+  const box = $("#corrList");
+  const res = await fetchJson(`api/corrections?corrects_id=${id}`).catch(e => ({ok:false, error:String(e)}));
+  if(!res.ok){ box.innerHTML = `<div class="issue warn">更正历史读取失败：${esc(res.error || "")}</div>`; return; }
+  if(!res.corrections || !res.corrections.length){
+    box.innerHTML = `<div class="empty">记录 #${id} 暂无更正。</div>`;
+    return;
+  }
+  box.innerHTML = `
+    <div class="why" style="margin-bottom:6px">记录 #${id} 的全部更正（原值保留、追加式、链上可验）：</div>
+    <table><thead><tr><th>#</th><th>字段</th><th>原值</th><th>改为</th><th>原因</th><th>更正人</th><th>时间</th><th>hash</th></tr></thead>
+    <tbody>${res.corrections.map(c => `
+      <tr>
+        <td class="mono">${c.seq}</td>
+        <td>${esc(fieldLabel(c.field))}</td>
+        <td class="mono">${esc(String(c.old_value ?? "—"))}</td>
+        <td class="mono" style="color:var(--warn,#b7791f)">${esc(String(c.new_value))}</td>
+        <td>${esc(c.reason || "—")}</td>
+        <td>${esc(c.corrected_by || "—")}</td>
+        <td style="font-size:12px;color:var(--faint)">${esc(String(c.created_at || "").slice(0, 19).replace("T", " "))}</td>
+        <td class="mono" style="color:var(--faint)">${esc((c.record_hash || "").slice(0, 12))}…</td>
+      </tr>`).join("")}
+    </tbody></table>`;
+}
+
+// 记录表内两个动作：点「更正」开出表单；点「已更正N」看更正历史
+$("#history").addEventListener("click", (ev) => {
+  const cbtn = ev.target.closest("[data-correct]");
+  if(cbtn){
+    const rid = Number(cbtn.dataset.correct);
+    openCorrForm(rid, (window._histRows || []).find(x => x.id === rid) || {});
+    return;
+  }
+  const see = ev.target.closest("[data-see]");
+  if(see){ loadCorrections(Number(see.dataset.see)); }
+});
+
+// ---------------------------------------------------------------- 编号格式档案
+async function loadProfile(){
+  const box = $("#profileBox");
+  const res = await fetchJson("api/profile").catch(e => ({ok:false, error:String(e)}));
+  if(!res.ok){ box.innerHTML = `<div class="issue warn">档案读取失败：${esc(res.error || "")}</div>`; return; }
+  const SRC_TXT = {config: "环境变量配置", profiles: "档案（实施方样例 + 人工确认沉淀）", history: "库内历史推断", empty: "暂无"};
+  const chips = (res.examples || []).map(x => `<span class="chip ok" style="font-family:var(--mono)">${esc(x)}</span>`).join(" ")
+    || '<span style="color:var(--faint)">暂无样例（前几次人工确认入库的编号会自动沉淀到这里）</span>';
+  box.innerHTML = `
+    <div class="why" style="margin-bottom:6px">证据来源：<b>${esc(SRC_TXT[res.source] || res.source)}</b>
+      ${res.confirmed_by ? ` · 最近认定：${esc(res.confirmed_by)} @ ${esc(String(res.confirmed_at || "").slice(0, 19).replace("T", " "))}` : ""}</div>
+    <div class="why" style="margin-bottom:6px">画像：${esc(res.describe || "—")}</div>
+    <div style="margin-bottom:8px">${chips}</div>
+    <details>
+      <summary style="cursor:pointer;font-size:12.5px;color:var(--faint)">实施方直接设定标准编号样例（最高优先级，覆盖现有档案）</summary>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px">
+        <input id="pfExamples" placeholder="多个编号用逗号分隔，如 PO20260101001,PO20260102002" style="padding:5px 8px;width:340px">
+        <input id="pfBy" placeholder="认定人（选填）" style="padding:5px 8px;width:110px">
+        <button id="pfSave" style="padding:5px 14px">保存样例</button>
+      </div>
+      <div id="pfMsg" style="margin-top:8px"></div>
+    </details>`;
+  $("#pfSave").onclick = async () => {
+    const msg = $("#pfMsg");
+    const raw = ($("#pfExamples").value || "").split(/[,，;；\s]+/).map(x => x.trim()).filter(Boolean);
+    if(!raw.length){ msg.innerHTML = '<div class="issue err" style="margin:0">请至少填一个编号样例</div>'; return; }
+    const btn = $("#pfSave"); btn.disabled = true;
+    const out = await postJson("api/profile/examples", {examples: raw, by: ($("#pfBy").value || "").trim()})
+      .catch(e => ({ok:false, error:e.message || String(e)}));
+    btn.disabled = false;
+    if(!out.ok){ msg.innerHTML = `<div class="issue err" style="margin:0">保存失败：${esc(out.error || "")}</div>`; return; }
+    msg.innerHTML = '<div class="issue ok" style="margin:0">已保存，下一次校验立即生效。</div>';
+    loadProfile();
+  };
+}
+
+loadProfile();
+
+$("#btnVerify").onclick = async () => {
+  if(!cloud) return;
+  const box = $("#chainMsg");
+  box.innerHTML = '<div class="issue warn">正在逐条重算哈希链…</div>';
+  // 验签放在数据库函数里执行：链的生成与校验共用同一套 payload 规则，
+  // 避免前端重写一遍算法导致必然对不上（那也是常见的"假阳性验签"）
+  const {data, error} = await cloud.database.rpc("verify_chain");
+  if(error){
+    box.innerHTML = `<div class="issue err">验签调用失败：${esc(error.message || error.code)}</div>`;
+    return;
+  }
+  const r = Array.isArray(data) ? data[0] : data;
+  if(!r){
+    box.innerHTML = '<div class="issue warn">验签未返回结果（可能还没有任何记录）</div>';
+    return;
+  }
+  const mainMsg = r.is_ok
+    ? `<div class="issue ok">主链完整 · 共 ${r.total_rows} 条记录，逐条重算一致，未发现篡改或删除</div>`
+    : `<div class="issue err">主链已断裂 · 断在第 ${r.total_rows} 条检查处（记录 id=${esc(r.broken_id)}）<br>${esc(r.message)}</div>`;
+  // 更正链独立验签：corrections 有自己的 seq/hash 序列，与主链互不干扰。
+  const c = await cloud.database.rpc("verify_corrections_chain").catch(() => null);
+  const cr = c && (Array.isArray(c.data) ? c.data[0] : c.data);
+  const corrMsg = !cr
+    ? ""
+    : (cr.is_ok
+        ? `<div class="issue ok">更正链完整 · 共 ${cr.total_rows} 条更正，逐条重算一致</div>`
+        : `<div class="issue err">更正链已断裂 · ${esc(cr.message)}</div>`);
+  box.innerHTML = mainMsg + corrMsg;
+};
+
+boot();
+</script>
+</body>
+</html>

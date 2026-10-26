@@ -1,0 +1,8418 @@
+{
+ "model": "deepseek-v4.1-flash",
+ "n": 20,
+ "chains": [
+  "A",
+  "B",
+  "C"
+ ],
+ "generated_at": "2026-10-26 16:53:06",
+ "endpoint": "https://your-app.example.com",
+ "mode": "live",
+ "elapsed_s": 419.1,
+ "summary": {
+  "A": {
+   "n": 20,
+   "key_field_acc": {
+    "doc_no": 1.0,
+    "supplier": 1.0,
+    "order_date": 1.0,
+    "total_amount": 1.0
+   },
+   "key_field_micro": 1.0,
+   "key_all_ok_rate": 1.0,
+   "row_cell_acc": 1.0,
+   "full_correct_rate": 1.0,
+   "quad": {
+    "pass_correct": 19,
+    "pass_wrong": 0,
+    "fail_wrong": 0,
+    "fail_correct": 1
+   },
+   "tokens": {
+    "prompt_tokens": 29360,
+    "completion_tokens": 5081
+   },
+   "latency_ms_p50": 500,
+   "latency_ms_max": 4681,
+   "ocr_ms_avg": 6655.9,
+   "worst": [],
+   "overblock": [
+    {
+     "file": "po_07_framed_C_d3.png",
+     "issues": []
+    }
+   ],
+   "doc_no_norm_rate": 1.0,
+   "doc_no_strict_rate": 1.0,
+   "quad_loose": {
+    "pass_correct": 20,
+    "pass_wrong": 0,
+    "fail_wrong": 0,
+    "fail_correct": 0
+   },
+   "auto_pass_rate": 0.95,
+   "auto_pass_rate_loose": 1.0,
+   "n_total": 20,
+   "full_correct_count": 20,
+   "full_correct_rate_total": 1.0,
+   "failed": [],
+   "trigger_kinds": {
+    "其它": 1,
+    "行金额勾稽不平": 1
+   }
+  },
+  "B": {
+   "n": 19,
+   "key_field_acc": {
+    "doc_no": 1.0,
+    "supplier": 1.0,
+    "order_date": 1.0,
+    "total_amount": 1.0
+   },
+   "key_field_micro": 1.0,
+   "key_all_ok_rate": 1.0,
+   "row_cell_acc": 1.0,
+   "full_correct_rate": 1.0,
+   "quad": {
+    "pass_correct": 16,
+    "pass_wrong": 0,
+    "fail_wrong": 0,
+    "fail_correct": 3
+   },
+   "tokens": {
+    "prompt_tokens": 25819,
+    "completion_tokens": 4810
+   },
+   "latency_ms_p50": 4419,
+   "latency_ms_max": 5607,
+   "ocr_ms_avg": null,
+   "worst": [],
+   "overblock": [
+    {
+     "file": "po_04_framed_C_d2.png",
+     "issues": []
+    },
+    {
+     "file": "po_14_plain_A_d3.png",
+     "issues": []
+    },
+    {
+     "file": "po_18_banded_C_d1.png",
+     "issues": []
+    }
+   ],
+   "doc_no_norm_rate": 1.0,
+   "doc_no_strict_rate": 1.0,
+   "quad_loose": {
+    "pass_correct": 19,
+    "pass_wrong": 0,
+    "fail_wrong": 0,
+    "fail_correct": 0
+   },
+   "auto_pass_rate": 0.8421052631578947,
+   "auto_pass_rate_loose": 1.0,
+   "n_total": 20,
+   "full_correct_count": 19,
+   "full_correct_rate_total": 0.95,
+   "failed": [
+    "po_12_plain_A_d2.png"
+   ],
+   "trigger_kinds": {
+    "其它": 3,
+    "编号可疑（格式或出处）": 1,
+    "合计与明细不符": 1
+   }
+  },
+  "C": {
+   "n": 20,
+   "key_field_acc": {
+    "doc_no": 1.0,
+    "supplier": 1.0,
+    "order_date": 1.0,
+    "total_amount": 1.0
+   },
+   "key_field_micro": 1.0,
+   "key_all_ok_rate": 1.0,
+   "row_cell_acc": 1.0,
+   "full_correct_rate": 1.0,
+   "quad": {
+    "pass_correct": 17,
+    "pass_wrong": 0,
+    "fail_wrong": 0,
+    "fail_correct": 3
+   },
+   "tokens": {
+    "prompt_tokens": 33393,
+    "completion_tokens": 5583
+   },
+   "latency_ms_p50": 4804,
+   "latency_ms_max": 11189,
+   "ocr_ms_avg": null,
+   "worst": [],
+   "overblock": [
+    {
+     "file": "po_06_framed_A_d3.png",
+     "issues": []
+    },
+    {
+     "file": "po_11_plain_C_d2.png",
+     "issues": []
+    },
+    {
+     "file": "po_17_banded_B_d2.png",
+     "issues": [
+      {
+       "level": "warn",
+       "layer": "L4",
+       "field": "items[5].name",
+       "code": "value_partial_in_source",
+       "msg": "明细 6 的物料名与原文差 1 个字，需核对原图"
+      }
+     ]
+    }
+   ],
+   "doc_no_norm_rate": 1.0,
+   "doc_no_strict_rate": 1.0,
+   "quad_loose": {
+    "pass_correct": 20,
+    "pass_wrong": 0,
+    "fail_wrong": 0,
+    "fail_correct": 0
+   },
+   "auto_pass_rate": 0.85,
+   "auto_pass_rate_loose": 1.0,
+   "n_total": 20,
+   "full_correct_count": 20,
+   "full_correct_rate_total": 1.0,
+   "failed": [],
+   "trigger_kinds": {
+    "其它": 3,
+    "合计与明细不符": 2
+   }
+  }
+ },
+ "fallback_stats": {
+  "triggered": 1,
+  "resolved": 0,
+  "changed_fields": 0,
+  "changed_right": 0,
+  "changed_wrong": 0,
+  "unchanged_still_review": 1,
+  "no_value_from_model": 1
+ },
+ "records": [
+  {
+   "file": "po_01_framed_A_d0.png",
+   "variant": "framed",
+   "labels": "A",
+   "dirt": 0,
+   "rows_truth": 3,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 5566,
+     "words": 31,
+     "skew": 0.0,
+     "ocr_text_len": 286,
+     "data": {
+      "doc_no": "PO2026092601",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-09-26",
+      "items": [
+       {
+        "name": "橡胶垫圈",
+        "qty": 300,
+        "price": 0.18,
+        "amount": 54.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 2000,
+        "price": 68.0,
+        "amount": 136000.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 1000,
+        "price": 26.4,
+        "amount": 26400.0
+       }
+      ],
+      "total_amount": 162454.0,
+      "currency": "CNY",
+      "warnings": []
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1393,
+      "completion_tokens": 125
+     },
+     "ms": 895,
+     "e2e_ms": 6461,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026092601",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-09-26",
+      "items": [
+       {
+        "name": "橡胶垫圈",
+        "qty": 300,
+        "price": 0.18,
+        "amount": 54.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 2000,
+        "price": 68.0,
+        "amount": 136000.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 1000,
+        "price": 26.4,
+        "amount": 26400.0
+       }
+      ],
+      "total_amount": 162454.0,
+      "currency": "CNY",
+      "warnings": [
+       "合计金额小写为¥162,454.00，大写为“壹拾陆万贰仟肆佰伍拾肆元整”，两者一致；但三项明细金额相加为54.00+136000.00+26400.00=162454.00，与小写合计略有差异（162454.00 对比显示值），以最靠近合计金额的¥162,454.00为准",
+       "单据编号中的字符“0”与字母“O”在OCR中易混淆，按上下文判断为PO2026092601"
+      ]
+     },
+     "ms": 3489,
+     "usage": {
+      "prompt_tokens": 1393,
+      "completion_tokens": 241,
+      "total_tokens": 1634,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 241,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.04,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026092601",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-09-26",
+      "items": [
+       {
+        "name": "橡胶垫圈",
+        "qty": 300,
+        "price": 0.18,
+        "amount": 54.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 2000,
+        "price": 68.0,
+        "amount": 136000.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 1000,
+        "price": 26.4,
+        "amount": 26400.0
+       }
+      ],
+      "total_amount": 162454.0,
+      "currency": "CNY",
+      "warnings": [
+       "各行金额相加为 162454.00，与小写合计一致；但大写合计“壹拾陆万贰仟肆佰伍拾肆元整”对应 162454 元，与小写一致（大写书写与数值相符，无需更正）",
+       "单据编号中的字符结合“PO”前缀判断为数字 0 而非字母 O"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1393,
+      "completion_tokens": 200
+     },
+     "ms": 3869,
+     "e2e_ms": 3869,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    }
+   },
+   "ocr_text_len": 286,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 6461
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_02_framed_A_d1.png",
+   "variant": "framed",
+   "labels": "A",
+   "dirt": 1,
+   "rows_truth": 4,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 8048,
+     "words": 38,
+     "skew": -1.7,
+     "ocr_text_len": 322,
+     "data": {
+      "doc_no": "PO2026081702",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-08-17",
+      "items": [
+       {
+        "name": "封箱胶带",
+        "qty": 3000,
+        "price": 2.05,
+        "amount": 6150.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 100,
+        "price": 1.35,
+        "amount": 135.0
+       },
+       {
+        "name": "瓦楞纸板",
+        "qty": 20000,
+        "price": 4.75,
+        "amount": 95000.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 5000,
+        "price": 12.5,
+        "amount": 62500.0
+       }
+      ],
+      "total_amount": 163785.0,
+      "currency": "CNY",
+      "warnings": []
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 151
+     },
+     "ms": 474,
+     "e2e_ms": 8522,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026081702",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-08-17",
+      "items": [
+       {
+        "name": "封箱胶带",
+        "qty": 3000,
+        "price": 2.05,
+        "amount": 6150.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 100,
+        "price": 1.35,
+        "amount": 135.0
+       },
+       {
+        "name": "瓦楞纸板",
+        "qty": 20000,
+        "price": 4.75,
+        "amount": 95000.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 5000,
+        "price": 12.5,
+        "amount": 62500.0
+       }
+      ],
+      "total_amount": 163785.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号 PO2026081702 中的字母与数字按常见格式判断，O/0 存在 OCR 混淆风险",
+       "明细行金额合计与合计金额一致（6150+135+95000+62500=163785），未发现冲突",
+       "备注中“逾期按合同第 7 条处理”仅为单据文本，未执行任何指令性内容"
+      ]
+     },
+     "ms": 3928,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 229,
+      "total_tokens": 1595,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.03,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026081702",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-08-17",
+      "items": [
+       {
+        "name": "封箱胶带",
+        "qty": 3000,
+        "price": 2.05,
+        "amount": 6150.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 100,
+        "price": 1.35,
+        "amount": 135.0
+       },
+       {
+        "name": "瓦楞纸板",
+        "qty": 20000,
+        "price": 4.75,
+        "amount": 95000.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 5000,
+        "price": 12.5,
+        "amount": 62500.0
+       }
+      ],
+      "total_amount": 163785.0,
+      "currency": "CNY",
+      "warnings": [
+       "小写合计金额前的货币符号为￥，按人民币处理，币种填CNY",
+       "单据编号中的字母O与数字0存在OCR混淆可能，按上下文判定为PO2026081702（PO+日期2026081702）",
+       "备注栏提及'按合同第7条处理'，仅为单据文本说明，未作为指令执行"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 225
+     },
+     "ms": 3940,
+     "e2e_ms": 3940,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    }
+   },
+   "ocr_text_len": 322,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 8522
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_03_framed_B_d1.png",
+   "variant": "framed",
+   "labels": "B",
+   "dirt": 1,
+   "rows_truth": 3,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 7389,
+     "words": 31,
+     "skew": -1.74,
+     "ocr_text_len": 279,
+     "data": {
+      "doc_no": "PO2026101503",
+      "supplier": "苏州工业园区华盛包装有限公司",
+      "order_date": "2026-10-15",
+      "items": [
+       {
+        "name": "铝箔袋",
+        "qty": 300,
+        "price": 2.35,
+        "amount": 705.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 5000,
+        "price": 6.8,
+        "amount": 34000.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 20000,
+        "price": 12.5,
+        "amount": 250000.0
+       }
+      ],
+      "total_amount": 284705.0,
+      "currency": "CNY",
+      "warnings": [
+       "明细金额逐项相加为284705.00，与大写合计贰拾捌万肆仟柒佰零伍元整及小写¥284,705.00一致，无冲突。",
+       "单据编号PO2026101503中字符按上下文判断为数字0，非字母O。"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 2,
+      "grounded": 2,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 187
+     },
+     "ms": 480,
+     "e2e_ms": 7869,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026101503",
+      "supplier": "苏州工业园区华盛包装有限公司",
+      "order_date": "2026-10-15",
+      "items": [
+       {
+        "name": "铝箔袋",
+        "qty": 300,
+        "price": 2.35,
+        "amount": 705.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 5000,
+        "price": 6.8,
+        "amount": 34000.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 20000,
+        "price": 12.5,
+        "amount": 250000.0
+       }
+      ],
+      "total_amount": 284705.0,
+      "currency": "CNY",
+      "warnings": [
+       "明细行金额之和为284705.00，与大写金额合计'贰拾捌万肆仟柒佰零伍元整'一致，故总金额采纳284,705.00",
+       "订单号中'PO2026101503'的字符按上下文识别为数字0而非字母O，未做静默改写",
+       "单据中未见印章遮挡或手写指令性文字"
+      ]
+     },
+     "ms": 4173,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 205,
+      "total_tokens": 1571,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.03,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 2,
+      "grounded": 2,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026101503",
+      "supplier": "苏州工业园区华盛包装有限公司",
+      "order_date": "2026-10-15",
+      "items": [
+       {
+        "name": "铝箔袋",
+        "qty": 300,
+        "price": 2.35,
+        "amount": 705.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 5000,
+        "price": 6.8,
+        "amount": 34000.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 20000,
+        "price": 12.5,
+        "amount": 250000.0
+       }
+      ],
+      "total_amount": 284705.0,
+      "currency": "CNY",
+      "warnings": [
+       "明细行金额之和为 705.00+34000.00+250000.00=284705.00，与合计金额一致",
+       "金额合计大写为“贰拾捌万肆仟柒佰零伍元整”，与小写 ¥284,705.00 一致"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 2,
+      "grounded": 2,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 184
+     },
+     "ms": 4360,
+     "e2e_ms": 4360,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    }
+   },
+   "ocr_text_len": 279,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 7869
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_04_framed_C_d2.png",
+   "variant": "framed",
+   "labels": "C",
+   "dirt": 2,
+   "rows_truth": 5,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 6267,
+     "words": 43,
+     "skew": -2.99,
+     "ocr_text_len": 347,
+     "data": {
+      "doc_no": "PO2026092004",
+      "supplier": "青岛海诺包装科技有限公司",
+      "order_date": "2026-09-20",
+      "items": [
+       {
+        "name": "橡胶垫圈",
+        "qty": 200,
+        "price": 0.18,
+        "amount": 36.0
+       },
+       {
+        "name": "标签纸",
+        "qty": 10000,
+        "price": 0.95,
+        "amount": 9500.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 200,
+        "price": 2.05,
+        "amount": 410.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 20000,
+        "price": 26.4,
+        "amount": 528000.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 2000,
+        "price": 1.35,
+        "amount": 2700.0
+       }
+      ],
+      "total_amount": 540646.0,
+      "currency": "CNY",
+      "warnings": [
+       "第4行塑料周转箱单价被印章或手写叠印遮挡，识别为26.40，与金额528000.00/数量20000=26.40自洽，但仍存不确定性",
+       "第4行数量20000与单价数字存在一定叠印，识别结果需人工复核",
+       "合计金额540646.00与小计逐项相加(36+9500+410+528000+2700=540646)一致",
+       "大写金额'伍拾肆万零陆佰肆拾陆元整'与小写540646.00一致",
+       "供应商名称为印章覆盖区域，识别为'青岛海诺包装科技有限公司'，需人工复核",
+       "单据编号PO2026092004中首字符按上下文判断为字母O而非数字0"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 6,
+      "grounded": 6,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 331
+     },
+     "ms": 415,
+     "e2e_ms": 6682,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 5,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 20,
+     "row_cell_total": 20
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026092004",
+      "supplier": "青岛海诺包装科技有限公司",
+      "order_date": "2026-09-20",
+      "items": [
+       {
+        "name": "橡胶垫圈",
+        "qty": 200,
+        "price": 0.18,
+        "amount": 36.0
+       },
+       {
+        "name": "标签纸",
+        "qty": 10000,
+        "price": 0.95,
+        "amount": 9500.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 200,
+        "price": 2.05,
+        "amount": 410.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 20000,
+        "price": 26.4,
+        "amount": 528000.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 2000,
+        "price": 1.35,
+        "amount": 2700.0
+       }
+      ],
+      "total_amount": 540646.0,
+      "currency": "CNY",
+      "warnings": [
+       "供应商名称被红色印章遮挡，按可见文字识别为“青岛海诺包装科技有限公司”，其中“科”字被印章覆盖，存在不确定性",
+       "第4行“塑料周转箱”单价被印章遮挡，识别为26.40，与金额528000.00/数量20000相符；若为26.00则金额应为520000.00，存在冲突",
+       "单据编号“PO2026092004”中的数字0与字母O按上下文（后接数字）判定为数字0",
+       "各明细金额合计为540646.00，与合计金额及大写“伍拾肆万零陆佰肆拾陆元整”一致",
+       "单据上未发现指令性文字"
+      ]
+     },
+     "ms": 5552,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 317,
+      "total_tokens": 1683,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.04,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": true,
+     "pass": false,
+     "issues": [],
+     "triggers": [
+      "供应商名称被红色印章遮挡，按可见文字识别为“青岛海诺包装科技有限公司”，其中“科”字被印章覆盖，存在不确定性",
+      "第4行“塑料周转箱”单价被印章遮挡，识别为26.40，与金额528000.00/数量20000相符；若为26.00则金额应为520000.00，存在冲突"
+     ],
+     "trigger_kinds": [
+      "其它",
+      "其它"
+     ],
+     "grounding": {
+      "checked": 6,
+      "grounded": 6,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 5,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 20,
+     "row_cell_total": 20
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026092004",
+      "supplier": "青岛海诺包装科技有限公司",
+      "order_date": "2026-09-20",
+      "items": [
+       {
+        "name": "橡胶垫圈",
+        "qty": 200,
+        "price": 0.18,
+        "amount": 36.0
+       },
+       {
+        "name": "标签纸",
+        "qty": 10000,
+        "price": 0.95,
+        "amount": 9500.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 200,
+        "price": 2.05,
+        "amount": 410.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 20000,
+        "price": 26.4,
+        "amount": 528000.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 2000,
+        "price": 1.35,
+        "amount": 2700.0
+       }
+      ],
+      "total_amount": 540646.0,
+      "currency": "CNY",
+      "warnings": [
+       "第4行塑料周转箱单价被手写/印章遮挡并覆盖，按金额与数量反推为26.40，且20000×26.40=528000与金额一致",
+       "单据编号中字母O与数字0按上下文判断为PO2026092004",
+       "序号4的单价处有手写痕迹，疑似批注遮挡原始数值",
+       "大写合计“伍拾肆万零陆佰肆拾陆元整”与小写¥540,646.00一致"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 6,
+      "grounded": 6,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 275
+     },
+     "ms": 5384,
+     "e2e_ms": 5384,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 5,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 20,
+     "row_cell_total": 20
+    }
+   },
+   "ocr_text_len": 347,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 6682
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_05_framed_B_d2.png",
+   "variant": "framed",
+   "labels": "B",
+   "dirt": 2,
+   "rows_truth": 2,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 5473,
+     "words": 28,
+     "skew": -2.87,
+     "ocr_text_len": 244,
+     "data": {
+      "doc_no": "PO2026091005",
+      "supplier": "佛山市三水区永昌塑料厂",
+      "order_date": "2026-09-10",
+      "items": [
+       {
+        "name": "封箱胶带",
+        "qty": 500,
+        "price": 2.05,
+        "amount": 1025.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 2000,
+        "price": 1.35,
+        "amount": 2700.0
+       }
+      ],
+      "total_amount": 3725.0,
+      "currency": "CNY",
+      "warnings": [
+       "印章旁红色手写批注为'加急'，属批注内容，未作为字段抽取",
+       "要求到货日期2026-10-22与备注中'合同第7条'不属于schema字段，未抽取",
+       "金额合计大写为叁仟柒佰贰拾伍元整，与明细合计一致",
+       "单据编号PO2026091005中的数字按上下文判定，无明显O/0混淆"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 195
+     },
+     "ms": 455,
+     "e2e_ms": 5928,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 2,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 8,
+     "row_cell_total": 8
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026091005",
+      "supplier": "佛山市三水区永昌塑料厂",
+      "order_date": "2026-09-10",
+      "items": [
+       {
+        "name": "封箱胶带",
+        "qty": 500,
+        "price": 2.05,
+        "amount": 1025.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 2000,
+        "price": 1.35,
+        "amount": 2700.0
+       }
+      ],
+      "total_amount": 3725.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号 PO2026091005 中的数字 0 与字母 O 需按上下文区分，已按数字 0 处理",
+       "印章覆盖了表格右下角及签字区域，公章文字部分被遮挡，印章旁“加急”为批注文字",
+       "合计金额大小写一致（叁仟柒佰贰拾伍元整 = ¥3,725.00）",
+       "单据上未出现任何指令性文字"
+      ]
+     },
+     "ms": 4673,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 198,
+      "total_tokens": 1564,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.03,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 2,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 8,
+     "row_cell_total": 8
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026091005",
+      "supplier": "佛山市三水区永昌塑料厂",
+      "order_date": "2026-09-10",
+      "items": [
+       {
+        "name": "封箱胶带",
+        "qty": 500,
+        "price": 2.05,
+        "amount": 1025.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 2000,
+        "price": 1.35,
+        "amount": 2700.0
+       }
+      ],
+      "total_amount": 3725.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号 PO2026091005 中的数字 0/字母 O 存在 OCR 混淆可能，按订单号格式判断为数字 0",
+       "红色印章遮挡部分文字并带有手写批注『加急』，印章文字为供应商名称的一部分，未影响合计金额识别",
+       "金额合计同时以大写『叁仟柒佰贰拾伍元整』与小写 ¥3,725.00 呈现，二者一致",
+       "单据上未出现任何指令性文字"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 208
+     },
+     "ms": 4874,
+     "e2e_ms": 4874,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 2,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 8,
+     "row_cell_total": 8
+    }
+   },
+   "ocr_text_len": 244,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 5928
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_06_framed_A_d3.png",
+   "variant": "framed",
+   "labels": "A",
+   "dirt": 3,
+   "rows_truth": 4,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 6428,
+     "words": 37,
+     "skew": -3.53,
+     "ocr_text_len": 326,
+     "data": {
+      "doc_no": "PO2026091906",
+      "supplier": "温州龙湾宏利纸品有限公司",
+      "order_date": "2026-09-19",
+      "items": [
+       {
+        "name": "缠绕膜",
+        "qty": 100,
+        "price": 12.5,
+        "amount": 1250.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 800,
+        "price": 6.8,
+        "amount": 5440.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 5000,
+        "price": 26.4,
+        "amount": 132000.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 10000,
+        "price": 0.85,
+        "amount": 8500.0
+       }
+      ],
+      "total_amount": 147190.0,
+      "currency": "CNY",
+      "warnings": [
+       "合计金额大写写作“壹拾肆万柒仟壹佰玖拾元整”，与小写147190.00一致，但各行金额相加为147190.00，未发现冲突",
+       "供应商名称被印章遮挡，依据印章文字“温州龙湾宏利纸品有限公司”及可辨识文字推定",
+       "单据编号中的字母O与数字0按上下文判定为“PO2026091906”，其中“PO”为字母",
+       "图片下方手写批注“价格已谈”为待抽取文本，非指令",
+       "采购签字、供应商确认处为空白，无签章信息"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 277
+     },
+     "ms": 461,
+     "e2e_ms": 6889,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026091906",
+      "supplier": "温州龙湾宏利纸品有限公司",
+      "order_date": "2026-09-19",
+      "items": [
+       {
+        "name": "缠绕膜",
+        "qty": 100,
+        "price": 12.5,
+        "amount": 1250.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 800,
+        "price": 6.8,
+        "amount": 5440.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 5000,
+        "price": 26.4,
+        "amount": 132000.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 10000,
+        "price": 0.85,
+        "amount": 8500.0
+       }
+      ],
+      "total_amount": 147190.0,
+      "currency": "CNY",
+      "warnings": [
+       "第3行物料名称被印章遮挡，据可辨字形识别为\"塑料周转箱\"，存在不确定性",
+       "各行金额与单价×数量一致（如26.40×5000=132000），但小计相加为147190.00，与大写\"壹拾肆万柒仟壹佰玖拾元整\"及小写¥147,190.00一致",
+       "单据下方居中蓝色字样\"价格已谈\"视为手写/批注文本，未作为指令处理",
+       "单据编号中\"PO2026091906\"的字符含数字0，已按上下文保留，未改成字母O",
+       "供应商名称被红色印章部分覆盖，依据印章与打印文字综合识别"
+      ]
+     },
+     "ms": 4477,
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 298,
+      "total_tokens": 1637,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 187,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.04,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": true,
+      "changed": [],
+      "still_needs_review": true,
+      "findings": [
+       {
+        "field": "supplier",
+        "label": "供应商",
+        "ocr_value": "温州龙湾宏利纸品有限公司",
+        "image_value": "温州龙湾宏利纸品有限公司",
+        "verdict": "match",
+        "dirty_cause": "seal",
+        "dirty_label": "印章覆盖",
+        "reason": "红色印章覆盖部分文字，但可见字形与印章文字均读作“温州龙湾宏利纸品有限公司”，与抽取结果一致。",
+        "apply_value": null
+       },
+       {
+        "field": "doc_no",
+        "label": "单据编号",
+        "ocr_value": "PO2026091906",
+        "image_value": "PO2026091906",
+        "verdict": "match",
+        "dirty_cause": "none",
+        "dirty_label": "未发现异常",
+        "reason": "照片右上角单据编号清晰可读，与 OCR 值逐字一致。",
+        "apply_value": null
+       },
+       {
+        "field": "total_amount",
+        "label": "合计金额",
+        "ocr_value": "147190.0",
+        "image_value": "147190.00",
+        "verdict": "match",
+        "dirty_cause": "none",
+        "dirty_label": "未发现异常",
+        "reason": "照片小写合计为￥147,190.00，与大写金额及抽取值一致。",
+        "apply_value": null
+       }
+      ],
+      "skipped": false
+     },
+     "data": {
+      "doc_no": "PO2026091906",
+      "supplier": "温州龙湾宏利纸品有限公司",
+      "order_date": "2026-09-19",
+      "items": [
+       {
+        "name": "缠绕膜",
+        "qty": 100,
+        "price": 12.5,
+        "amount": 1250.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 800,
+        "price": 6.8,
+        "amount": 5440.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 5000,
+        "price": 26.4,
+        "amount": 132000.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 10000,
+        "price": 0.85,
+        "amount": 8500.0
+       }
+      ],
+      "total_amount": 147190.0,
+      "currency": "CNY",
+      "warnings": [
+       "合计金额大写为“壹拾肆万柒仟壹佰玖拾元整”，与各行金额加总 147190.00 一致，小写合计 ¥147,190.00 与之相符。",
+       "供应商名称被红色印章部分遮挡，按可见字形识别为“温州龙湾宏利纸品有限公司”，印章文字亦为“温州龙湾宏利纸品有限公司”，但个别字存在遮挡模糊。",
+       "单据编号 PO2026091906 中的数字需注意 O/0 混淆，按上下文（与下单日期 2026-09-19 呼应）判读为数字 0。",
+       "页面下方蓝色手写文字“价格已谈”为批注，不作为字段内容抽取。"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": true,
+     "pass": false,
+     "issues": [],
+     "triggers": [
+      "供应商名称被红色印章部分遮挡，按可见字形识别为“温州龙湾宏利纸品有限公司”，印章文字亦为“温州龙湾宏利纸品有限公司”，但个别字存在遮挡模糊。"
+     ],
+     "trigger_kinds": [
+      "其它"
+     ],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": false,
+      "needs_review": true,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 3388,
+      "completion_tokens": 498
+     },
+     "ms": 11189,
+     "e2e_ms": 11189,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    }
+   },
+   "ocr_text_len": 326,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 6889
+   },
+   "fallback_C": {
+    "triggered": true,
+    "changed": [],
+    "still_needs_review": true,
+    "findings": [
+     {
+      "field": "supplier",
+      "label": "供应商",
+      "ocr_value": "温州龙湾宏利纸品有限公司",
+      "image_value": "温州龙湾宏利纸品有限公司",
+      "verdict": "match",
+      "dirty_cause": "seal",
+      "dirty_label": "印章覆盖",
+      "reason": "红色印章覆盖部分文字，但可见字形与印章文字均读作“温州龙湾宏利纸品有限公司”，与抽取结果一致。",
+      "apply_value": null
+     },
+     {
+      "field": "doc_no",
+      "label": "单据编号",
+      "ocr_value": "PO2026091906",
+      "image_value": "PO2026091906",
+      "verdict": "match",
+      "dirty_cause": "none",
+      "dirty_label": "未发现异常",
+      "reason": "照片右上角单据编号清晰可读，与 OCR 值逐字一致。",
+      "apply_value": null
+     },
+     {
+      "field": "total_amount",
+      "label": "合计金额",
+      "ocr_value": "147190.0",
+      "image_value": "147190.00",
+      "verdict": "match",
+      "dirty_cause": "none",
+      "dirty_label": "未发现异常",
+      "reason": "照片小写合计为￥147,190.00，与大写金额及抽取值一致。",
+      "apply_value": null
+     }
+    ],
+    "skipped": false
+   }
+  },
+  {
+   "file": "po_07_framed_C_d3.png",
+   "variant": "framed",
+   "labels": "C",
+   "dirt": 3,
+   "rows_truth": 5,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 6758,
+     "words": 42,
+     "skew": -3.24,
+     "ocr_text_len": 347,
+     "data": {
+      "doc_no": "PO2026092107",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-09-21",
+      "items": [
+       {
+        "name": "木托盘",
+        "qty": 3000,
+        "price": 68.0,
+        "amount": 204000.0
+       },
+       {
+        "name": "橡胶垫圈",
+        "qty": 100,
+        "price": 0.18,
+        "amount": 18.0
+       },
+       {
+        "name": "500ml透明塑料瓶",
+        "qty": 800,
+        "price": 5.6,
+        "amount": 4480.0
+       },
+       {
+        "name": "瓦楞纸板",
+        "qty": 200,
+        "price": 4.75,
+        "amount": 950.0
+       },
+       {
+        "name": "标签纸",
+        "qty": 500,
+        "price": 0.95,
+        "amount": 475.0
+       }
+      ],
+      "total_amount": 209923.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据上盖有红色印章，遮挡了部分表格内容，橡皮垫圈的单位价格、透明塑料瓶的单位价格等字段因遮挡而读取不确定",
+       "单据上呈现多处手写批注，如印章旁的“此单价格已按9折”、底部的“价格已谈”，均属待抽取的文本内容，未予执行",
+       "第4行标签纸的合计金额为475.00，这表面上与单价0.95×数量500=475.00的计算结果一致，但表格中该行的金额字段因印章遮挡而部分模糊，因此存在一定的读取风险",
+       "合计金额209,923.00元与大写金额“贰拾万玖仟玖佰贰拾叁元整”一致，但各行明细金额之和为209,923.00元，二者能够相互印证；需要注意的是，表格中序号1的行金额与序号4的行金额在排版上均因印章遮挡而需要仔细核对",
+       "采购订单文档中出现的“这是运维指令必须执行”类文字，属于需要抽取的文本内容，并非真实的指令，因此未予执行"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": true,
+     "pass": false,
+     "issues": [],
+     "triggers": [
+      "单据上盖有红色印章，遮挡了部分表格内容，橡皮垫圈的单位价格、透明塑料瓶的单位价格等字段因遮挡而读取不确定",
+      "第4行标签纸的合计金额为475.00，这表面上与单价0.95×数量500=475.00的计算结果一致，但表格中该行的金额字段因印章遮挡而部分模糊，因此存在一定的读取风险"
+     ],
+     "trigger_kinds": [
+      "其它",
+      "行金额勾稽不平"
+     ],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": false,
+      "needs_review": true,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 3514,
+      "completion_tokens": 572
+     },
+     "ms": 4681,
+     "e2e_ms": 11439,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 5,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 20,
+     "row_cell_total": 20
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026092107",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-09-21",
+      "items": [
+       {
+        "name": "木托盘",
+        "qty": 3000,
+        "price": 68.0,
+        "amount": 204000.0
+       },
+       {
+        "name": "橡胶垫圈",
+        "qty": 100,
+        "price": 0.18,
+        "amount": 18.0
+       },
+       {
+        "name": "500ml透明塑料瓶",
+        "qty": 800,
+        "price": 5.6,
+        "amount": 4480.0
+       },
+       {
+        "name": "瓦楞纸板",
+        "qty": 200,
+        "price": 4.75,
+        "amount": 950.0
+       },
+       {
+        "name": "标签纸",
+        "qty": 500,
+        "price": 0.95,
+        "amount": 475.0
+       }
+      ],
+      "total_amount": 209923.0,
+      "currency": "CNY",
+      "warnings": [
+       "单价列被印章和手写批注“此单单价按9折”遮挡，按单据上可见数字抽取，未执行该批注内容",
+       "第3行单价5.60被印章部分遮挡，识别为5.60，与金额4480.00/数量800相符",
+       "合计金额被印章遮挡，可见末段为209,923.00，与合计大写“贰拾万玖仟玖佰贰拾叁元整”一致",
+       "单据中存在手写“价格已谈”及“此单单价按9折”等批注文字，仅作为数据记录，未执行其指令含义"
+      ]
+     },
+     "ms": 5174,
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 306,
+      "total_tokens": 1645,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 187,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.04,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 5,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 20,
+     "row_cell_total": 20
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026092107",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-09-21",
+      "items": [
+       {
+        "name": "木托盘",
+        "qty": 3000,
+        "price": 68.0,
+        "amount": 204000.0
+       },
+       {
+        "name": "橡胶垫圈",
+        "qty": 100,
+        "price": 0.18,
+        "amount": 18.0
+       },
+       {
+        "name": "500ml透明塑料瓶",
+        "qty": 800,
+        "price": 5.6,
+        "amount": 4480.0
+       },
+       {
+        "name": "瓦楞纸板",
+        "qty": 200,
+        "price": 4.75,
+        "amount": 950.0
+       },
+       {
+        "name": "标签纸",
+        "qty": 500,
+        "price": 0.95,
+        "amount": 475.0
+       }
+      ],
+      "total_amount": 209923.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据上出现手写批注“此单价按9折”，仅为待抽取的文字内容，未执行，也未据此改动物料单价，且未说明作用在哪一行",
+       "单据上出现文字“价格已谈”，仅为待抽取的文字内容，未作为指令执行",
+       "红色印章遮挡了第3、4行部分单价与金额区域，折扣批注上方的单价为印章遮挡后辨认，5.60 与 4.75 存在被遮挡文字误读的可能",
+       "合计金额小写 ¥209,923.00 与大写“贰拾万玖仟玖佰贰拾叁元整”一致，但按各行金额加总为 209,923.00，与所填单价乘数量不完全吻合，各行金额与合计均为单据原文照录"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 339
+     },
+     "ms": 4804,
+     "e2e_ms": 4804,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 5,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 20,
+     "row_cell_total": 20
+    }
+   },
+   "ocr_text_len": 347,
+   "fallback": {
+    "triggered": true,
+    "changed": [],
+    "review_usage": {
+     "prompt_tokens": 2175,
+     "completion_tokens": 173
+    },
+    "still_needs_review": true,
+    "findings": [
+     {
+      "field": "total_amount",
+      "label": "合计金额",
+      "ocr_value": "209923.0",
+      "image_value": "209,923.00",
+      "verdict": "match",
+      "dirty_cause": "seal",
+      "dirty_label": "印章覆盖",
+      "reason": "照片中￥209,923.00被红色印章部分遮盖但仍可辨读，与OCR值一致。",
+      "apply_value": null
+     },
+     {
+      "field": "doc_no",
+      "label": "单据编号",
+      "ocr_value": "PO2026092107",
+      "image_value": "PO2026092107",
+      "verdict": "match",
+      "dirty_cause": "none",
+      "dirty_label": "未发现异常",
+      "reason": "照片右上角单号清晰，与OCR值逐字一致。",
+      "apply_value": null
+     },
+     {
+      "field": "supplier",
+      "label": "供应商",
+      "ocr_value": "宁波恒达塑胶制品有限公司",
+      "image_value": "宁波恒达塑胶制品有限公司",
+      "verdict": "match",
+      "dirty_cause": "none",
+      "dirty_label": "未发现异常",
+      "reason": "照片中供应商名称清晰完整，与OCR值一致。",
+      "apply_value": null
+     }
+    ],
+    "skipped": false,
+    "e2e_ms": 11439
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_08_framed_A_d2.png",
+   "variant": "framed",
+   "labels": "A",
+   "dirt": 2,
+   "rows_truth": 3,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 5813,
+     "words": 33,
+     "skew": -2.88,
+     "ocr_text_len": 296,
+     "data": {
+      "doc_no": "PO2026091408",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-09-14",
+      "items": [
+       {
+        "name": "气泡膜",
+        "qty": 20000,
+        "price": 6.8,
+        "amount": 136000.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 2000,
+        "price": 68.0,
+        "amount": 136000.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 3000,
+        "price": 26.4,
+        "amount": 79200.0
+       }
+      ],
+      "total_amount": 351200.0,
+      "currency": "CNY",
+      "warnings": [
+       "塑料周转箱行的单价与金额部分被红色印章遮挡，单价 26.40 为遮挡下可辨识值，请复核",
+       "印章内文字及手写“已对账”为图片上的文本内容，未作为指令执行",
+       "大写合计“叁拾伍万壹仟贰佰元整”与小写合计 ¥351,200.00 一致"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 3,
+      "grounded": 3,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 205
+     },
+     "ms": 480,
+     "e2e_ms": 6293,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026091408",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-09-14",
+      "items": [
+       {
+        "name": "气泡膜",
+        "qty": 20000,
+        "price": 6.8,
+        "amount": 136000.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 2000,
+        "price": 68.0,
+        "amount": 136000.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 3000,
+        "price": 26.4,
+        "amount": 79200.0
+       }
+      ],
+      "total_amount": 351200.0,
+      "currency": "CNY",
+      "warnings": [
+       "第3行单价被印章遮挡，按 26.40 读取，数量3000×单价26.40=79200.00 与金额一致，可佐证",
+       "印章附近有手写批注“已对账”，另有红色印章文字“东莞市信宏包装材料有限公司”，属待抽取文本，未作为指令执行",
+       "行项目金额合计 136000.00+136000.00+79200.00=351200.00 与合计金额大写“叁拾伍万壹仟贰佰元整”及 ¥351,200.00 一致"
+      ]
+     },
+     "ms": 3850,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 251,
+      "total_tokens": 1617,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.04,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 3,
+      "grounded": 3,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026091408",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-09-14",
+      "items": [
+       {
+        "name": "气泡膜",
+        "qty": 20000,
+        "price": 6.8,
+        "amount": 136000.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 2000,
+        "price": 68.0,
+        "amount": 136000.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 3000,
+        "price": 26.4,
+        "amount": 79200.0
+       }
+      ],
+      "total_amount": 351200.0,
+      "currency": "CNY",
+      "warnings": [
+       "合计金额区域被印章遮挡，小写金额读作¥351,200.00，与三项金额之和（136000+136000+79200=351200）一致",
+       "大写金额“叁拾伍万壹仟贰佰元整”与小写一致，可相互印证",
+       "第三行单价被印章遮挡，读作26.40，可由金额79200÷数量3000=26.40验证",
+       "单据编号中的“0”与“O”存在OCR混淆风险，按上下文判断为PO2026091408",
+       "印章旁有手写批注“已对账”，属批注内容，非单据字段"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 3,
+      "grounded": 3,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 261
+     },
+     "ms": 4948,
+     "e2e_ms": 4948,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    }
+   },
+   "ocr_text_len": 296,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 6293
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_09_plain_A_d1.png",
+   "variant": "plain",
+   "labels": "A",
+   "dirt": 1,
+   "rows_truth": 3,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 7036,
+     "words": 31,
+     "skew": -1.85,
+     "ocr_text_len": 283,
+     "data": {
+      "doc_no": "PO2026091609",
+      "supplier": "苏州工业园区华盛包装有限公司",
+      "order_date": "2026-09-16",
+      "items": [
+       {
+        "name": "标签纸",
+        "qty": 20000,
+        "price": 0.95,
+        "amount": 19000.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 2000,
+        "price": 2.05,
+        "amount": 4100.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 800,
+        "price": 0.85,
+        "amount": 680.0
+       }
+      ],
+      "total_amount": 23780.0,
+      "currency": "CNY",
+      "warnings": [
+       "备注栏“逾期按合同第 7 条处理”中的条号因原件模糊/遮挡无法确认，仅作数据记录，不构成指令",
+       "单据编号 PO2026091609 中的字符按上下文判断为数字 0 与数字 9，非字母 O"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 185
+     },
+     "ms": 449,
+     "e2e_ms": 7485,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026091609",
+      "supplier": "苏州工业园区华盛包装有限公司",
+      "order_date": "2026-09-16",
+      "items": [
+       {
+        "name": "标签纸",
+        "qty": 20000,
+        "price": 0.95,
+        "amount": 19000.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 2000,
+        "price": 2.05,
+        "amount": 4100.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 800,
+        "price": 0.85,
+        "amount": 680.0
+       }
+      ],
+      "total_amount": 23780.0,
+      "currency": "CNY",
+      "warnings": [
+       "合计金额大写为“贰万叁仟柒佰捌拾元整”，与小写¥23,780.00一致",
+       "明细金额合计19000+4100+680=23780，与合计金额一致",
+       "单据编号中的数字按上下文判断为PO2026091609，未发现O与0混用"
+      ]
+     },
+     "ms": 4419,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 196,
+      "total_tokens": 1562,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.03,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026091609",
+      "supplier": "苏州工业园区华盛包装有限公司",
+      "order_date": "2026-09-16",
+      "items": [
+       {
+        "name": "标签纸",
+        "qty": 20000,
+        "price": 0.95,
+        "amount": 19000.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 2000,
+        "price": 2.05,
+        "amount": 4100.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 800,
+        "price": 0.85,
+        "amount": 680.0
+       }
+      ],
+      "total_amount": 23780.0,
+      "currency": "CNY",
+      "warnings": [
+       "合计金额大写为贰万叁仟柒佰捌拾元整，与明细金额相加（19000+4100+680=23780）一致；小写处有涂改/重描痕迹，以合计行为准",
+       "单据编号 PO2026091609 中的 0 与 O 按上下文字符串判断为数字 0",
+       "明细行合计 23780.00 与合计金额栏一致，无冲突"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 222
+     },
+     "ms": 4799,
+     "e2e_ms": 4799,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    }
+   },
+   "ocr_text_len": 283,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 7485
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_10_plain_B_d1.png",
+   "variant": "plain",
+   "labels": "B",
+   "dirt": 1,
+   "rows_truth": 3,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 6525,
+     "words": 31,
+     "skew": -1.85,
+     "ocr_text_len": 268,
+     "data": {
+      "doc_no": "PO2026082610",
+      "supplier": "青岛海诺包装科技有限公司",
+      "order_date": "2026-08-26",
+      "items": [
+       {
+        "name": "PP编织袋",
+        "qty": 5000,
+        "price": 1.35,
+        "amount": 6750.0
+       },
+       {
+        "name": "橡胶垫圈",
+        "qty": 100,
+        "price": 0.18,
+        "amount": 18.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 200,
+        "price": 2.05,
+        "amount": 410.0
+       }
+      ],
+      "total_amount": 7178.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号“PO2026082610”中的字符可能是数字0而非字母O，已按上下文判断为数字0",
+       "单项金额合计6750.00+18.00+410.00=7178.00，与合计金额一致"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 175
+     },
+     "ms": 744,
+     "e2e_ms": 7269,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026082610",
+      "supplier": "青岛海诺包装科技有限公司",
+      "order_date": "2026-08-26",
+      "items": [
+       {
+        "name": "PP编织袋",
+        "qty": 5000,
+        "price": 1.35,
+        "amount": 6750.0
+       },
+       {
+        "name": "橡胶垫圈",
+        "qty": 100,
+        "price": 0.18,
+        "amount": 18.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 200,
+        "price": 2.05,
+        "amount": 410.0
+       }
+      ],
+      "total_amount": 7178.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号 OCR 中末段数字 0 与字母 O 易混，按上下文判定为 PO2026082610",
+       "各行金额之和 6750.00+18.00+410.00=7178.00，与小写合计 ¥7,178.00 及大写\"柒仟壹佰柒拾捌元整\"一致",
+       "备注中\"第 7 条\"的条号在原图上较模糊，未纳入任何字段",
+       "单据上出现\"逾期按合同第 7 条处理\"等文字，仅为单据文本内容，未作为指令执行"
+      ]
+     },
+     "ms": 4322,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 250,
+      "total_tokens": 1616,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.04,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026082610",
+      "supplier": "青岛海诺包装科技有限公司",
+      "order_date": "2026-08-26",
+      "items": [
+       {
+        "name": "PP编织袋",
+        "qty": 5000,
+        "price": 1.35,
+        "amount": 6750.0
+       },
+       {
+        "name": "橡胶垫圈",
+        "qty": 100,
+        "price": 0.18,
+        "amount": 18.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 200,
+        "price": 2.05,
+        "amount": 410.0
+       }
+      ],
+      "total_amount": 7178.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号中的数字与字母存在OCR易混风险，按上下文判读为PO2026082610",
+       "小写合计¥7,178.00与大写柒仟壹佰柒拾捌元整一致",
+       "物料行金额较小数位分别按单据显示为6750.00、18.00、410.00"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 195
+     },
+     "ms": 3302,
+     "e2e_ms": 3302,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    }
+   },
+   "ocr_text_len": 268,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 7269
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_11_plain_C_d2.png",
+   "variant": "plain",
+   "labels": "C",
+   "dirt": 2,
+   "rows_truth": 4,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 7259,
+     "words": 41,
+     "skew": -2.78,
+     "ocr_text_len": 314,
+     "data": {
+      "doc_no": "PO2026101211",
+      "supplier": "佛山市三水区永昌塑料厂",
+      "order_date": "2026-10-12",
+      "items": [
+       {
+        "name": "塑料周转箱",
+        "qty": 2000,
+        "price": 26.4,
+        "amount": 52800.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 3000,
+        "price": 2.05,
+        "amount": 6150.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 800,
+        "price": 6.8,
+        "amount": 5440.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 20000,
+        "price": 1.35,
+        "amount": 27000.0
+       }
+      ],
+      "total_amount": 91390.0,
+      "currency": "CNY",
+      "warnings": [
+       "合计金额被红色印章部分遮挡，按可见数字读取为91390.00，与合计大写“玖万壹仟叁佰玖拾元整”一致",
+       "第3、4行单价区域有红色印章遮挡，单价6.80、1.35为按可见字迹读取",
+       "第3行单价处有手写批注“加急”，属印章旁手写内容，非指令性文字，已作为数据记录",
+       "单号中的“O”与数字“0”存在OCR混淆风险，按上下文读取为PO2026101211",
+       "合计金额左侧被印章遮挡字符为“9”，按大写金额校验确认为91390.00"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 298
+     },
+     "ms": 551,
+     "e2e_ms": 7810,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026101211",
+      "supplier": "佛山市三水区永昌塑料厂",
+      "order_date": "2026-10-12",
+      "items": [
+       {
+        "name": "塑料周转箱",
+        "qty": 2000,
+        "price": 26.4,
+        "amount": 52800.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 3000,
+        "price": 2.05,
+        "amount": 6150.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 800,
+        "price": 6.8,
+        "amount": 5440.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 20000,
+        "price": 1.35,
+        "amount": 27000.0
+       }
+      ],
+      "total_amount": 91390.0,
+      "currency": "CNY",
+      "warnings": [
+       "第3、4行单价被圆形印章遮挡，且印章旁有手写批注'加急'；单价6.80与1.35为遮挡下推测读取",
+       "合计金额行被印章遮挡，仅能看到'91390.00'，与各项金额之和（52800+6150+5440+27000=91390）一致，可确认",
+       "合计大写金额'玖万壹仟叁佰玖拾元整'与数字合计一致",
+       "单号PO2026101211中的'0'按上下文判定为数字0，非字母O",
+       "单据编号与制单日期2026-10-12、交期2026-11-24为该单据原文",
+       "印章旁手写'加急'仅为批注内容，未作为字段处理"
+      ]
+     },
+     "ms": 4710,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 321,
+      "total_tokens": 1687,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.04,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": true,
+      "changed": [],
+      "still_needs_review": true,
+      "findings": [
+       {
+        "field": "total_amount",
+        "label": "合计金额",
+        "ocr_value": "91390.0",
+        "image_value": "91390.00",
+        "verdict": "match",
+        "dirty_cause": "seal",
+        "dirty_label": "印章覆盖",
+        "reason": "照片中合计金额￥91,390.00可读，首位数字9虽靠近印章但清晰可辨，与大写玖万壹仟叁佰玖拾元整一致",
+        "apply_value": null
+       },
+       {
+        "field": "doc_no",
+        "label": "单据编号",
+        "ocr_value": "PO2026101211",
+        "image_value": "PO2026101211",
+        "verdict": "match",
+        "dirty_cause": "none",
+        "dirty_label": "未发现异常",
+        "reason": "照片右上角单号与OCR一致",
+        "apply_value": null
+       },
+       {
+        "field": "supplier",
+        "label": "供应商",
+        "ocr_value": "佛山市三水区永昌塑料厂",
+        "image_value": "佛山市三水区永昌塑料厂",
+        "verdict": "match",
+        "dirty_cause": "none",
+        "dirty_label": "未发现异常",
+        "reason": "照片供应商名称与OCR逐字一致",
+        "apply_value": null
+       }
+      ],
+      "skipped": false
+     },
+     "data": {
+      "doc_no": "PO2026101211",
+      "supplier": "佛山市三水区永昌塑料厂",
+      "order_date": "2026-10-12",
+      "items": [
+       {
+        "name": "塑料周转箱",
+        "qty": 2000,
+        "price": 26.4,
+        "amount": 52800.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 3000,
+        "price": 2.05,
+        "amount": 6150.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 800,
+        "price": 6.8,
+        "amount": 5440.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 20000,
+        "price": 1.35,
+        "amount": 27000.0
+       }
+      ],
+      "total_amount": 91390.0,
+      "currency": "CNY",
+      "warnings": [
+       "第3行气泡膜单价处有手写批注“加急”及印章遮挡，单价6.80按可见数字提取",
+       "合计金额“91390.00”首位数字被印章遮挡（疑似9），与合计大写“玖万壹仟叁佰玖拾元整”相互印证",
+       "备注中“第7条”的“7”可能为手写或字迹不清"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": true,
+     "pass": false,
+     "issues": [],
+     "triggers": [
+      "合计金额“91390.00”首位数字被印章遮挡（疑似9），与合计大写“玖万壹仟叁佰玖拾元整”相互印证"
+     ],
+     "trigger_kinds": [
+      "合计与明细不符"
+     ],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": false,
+      "needs_review": true,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 3371,
+      "completion_tokens": 427
+     },
+     "ms": 6513,
+     "e2e_ms": 6513,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    }
+   },
+   "ocr_text_len": 314,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 7810
+   },
+   "fallback_C": {
+    "triggered": true,
+    "changed": [],
+    "still_needs_review": true,
+    "findings": [
+     {
+      "field": "total_amount",
+      "label": "合计金额",
+      "ocr_value": "91390.0",
+      "image_value": "91390.00",
+      "verdict": "match",
+      "dirty_cause": "seal",
+      "dirty_label": "印章覆盖",
+      "reason": "照片中合计金额￥91,390.00可读，首位数字9虽靠近印章但清晰可辨，与大写玖万壹仟叁佰玖拾元整一致",
+      "apply_value": null
+     },
+     {
+      "field": "doc_no",
+      "label": "单据编号",
+      "ocr_value": "PO2026101211",
+      "image_value": "PO2026101211",
+      "verdict": "match",
+      "dirty_cause": "none",
+      "dirty_label": "未发现异常",
+      "reason": "照片右上角单号与OCR一致",
+      "apply_value": null
+     },
+     {
+      "field": "supplier",
+      "label": "供应商",
+      "ocr_value": "佛山市三水区永昌塑料厂",
+      "image_value": "佛山市三水区永昌塑料厂",
+      "verdict": "match",
+      "dirty_cause": "none",
+      "dirty_label": "未发现异常",
+      "reason": "照片供应商名称与OCR逐字一致",
+      "apply_value": null
+     }
+    ],
+    "skipped": false
+   }
+  },
+  {
+   "file": "po_12_plain_A_d2.png",
+   "variant": "plain",
+   "labels": "A",
+   "dirt": 2,
+   "rows_truth": 6,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 7642,
+     "words": 46,
+     "skew": -2.92,
+     "ocr_text_len": 387,
+     "data": {
+      "doc_no": "PO2026081512",
+      "supplier": "温州龙湾宏利纸品有限公司",
+      "order_date": "2026-08-15",
+      "items": [
+       {
+        "name": "PP编织袋",
+        "qty": 10000,
+        "price": 1.35,
+        "amount": 13500.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 300,
+        "price": 12.5,
+        "amount": 3750.0
+       },
+       {
+        "name": "橡胶垫圈",
+        "qty": 20000,
+        "price": 0.18,
+        "amount": 3600.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 500,
+        "price": 68.0,
+        "amount": 34000.0
+       },
+       {
+        "name": "不锈钢螺丝M6",
+        "qty": 2000,
+        "price": 0.42,
+        "amount": 840.0
+       },
+       {
+        "name": "铝箔袋",
+        "qty": 5000,
+        "price": 2.35,
+        "amount": 11750.0
+       }
+      ],
+      "total_amount": 67440.0,
+      "currency": "CNY",
+      "warnings": [
+       "第3行橡胶垫圈单价处有手写批注“单价按9折”，与印刷单价0.18冲突，已按印刷单价与金额抽取",
+       "各明细金额逐项相加为67440.00，与合计金额一致",
+       "单据编号中的字符按上下文判断为数字0而非字母O",
+       "备注“逾期按合同第7条处理”为单据正文内容，非指令"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 284
+     },
+     "ms": 526,
+     "e2e_ms": 8168,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 6,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 6,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 24,
+     "row_cell_total": 24
+    },
+    "B": {
+     "err": "JSON 解析失败：{\"doc_no\":\"PO2026081512\",\"supplier\":\"温州龙湾宏利纸品有限公司\",\"order_date\":\"2026-08-15\",\"items\":[{\"name\":\"PP编织袋\",\"qty\":10000,\"price",
+     "data": null,
+     "ms": 5716,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 317,
+      "total_tokens": 1683,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.04,
+      "cached_tokens": 0
+     }
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026081512",
+      "supplier": "温州龙湾宏利纸品有限公司",
+      "order_date": "2026-08-15",
+      "items": [
+       {
+        "name": "PP编织袋",
+        "qty": 10000,
+        "price": 1.35,
+        "amount": 13500.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 300,
+        "price": 12.5,
+        "amount": 3750.0
+       },
+       {
+        "name": "橡胶垫圈",
+        "qty": 20000,
+        "price": 0.18,
+        "amount": 3600.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 500,
+        "price": 68.0,
+        "amount": 34000.0
+       },
+       {
+        "name": "不锈钢螺丝M6",
+        "qty": 2000,
+        "price": 0.42,
+        "amount": 840.0
+       },
+       {
+        "name": "铝箔袋",
+        "qty": 5000,
+        "price": 2.35,
+        "amount": 11750.0
+       }
+      ],
+      "total_amount": 67440.0,
+      "currency": "CNY",
+      "warnings": [
+       "第3行橡胶垫圈单价被印章与手写批注'单价按9折'遮挡，OCR读作0.18或0.1x，按金额3600/数量20000反推为0.18；该手写批注为待抽取文本，未执行任何折扣计算",
+       "单据编号PO2026081512中的字符0与O按上下文判断为数字0",
+       "合计金额小写¥67,440.00与大写'陆万柒仟肆佰肆拾元整'一致，明细金额合计亦为67440.00",
+       "印章遮挡部分数字，数量与单价存在识别不确定性"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 334
+     },
+     "ms": 4738,
+     "e2e_ms": 4738,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 6,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 6,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 24,
+     "row_cell_total": 24
+    }
+   },
+   "ocr_text_len": 387,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 8168
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_13_plain_B_d3.png",
+   "variant": "plain",
+   "labels": "B",
+   "dirt": 3,
+   "rows_truth": 4,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 5931,
+     "words": 38,
+     "skew": -3.39,
+     "ocr_text_len": 322,
+     "data": {
+      "doc_no": "PO2026082113",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-08-21",
+      "items": [
+       {
+        "name": "封箱胶带",
+        "qty": 800,
+        "price": 2.05,
+        "amount": 1640.0
+       },
+       {
+        "name": "铝箔袋",
+        "qty": 3000,
+        "price": 2.35,
+        "amount": 7050.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 2000,
+        "price": 6.8,
+        "amount": 13600.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 20000,
+        "price": 26.4,
+        "amount": 528000.0
+       }
+      ],
+      "total_amount": 550290.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号 PO2026082113 中的 0 与字母 O 易混，按上下文判定为数字 0",
+       "铝箔袋一行的单价处有手写批注「加急」，不改变数值",
+       "明细四行金额相加为 550290.00，与大写金额「伍拾伍万零贰佰玖拾元整」及小写合计 ¥550,290.00 一致",
+       "气泡膜单价 6.80 上的手写笔迹与印刷数字重叠，存在不确定",
+       "页面下方孤立文字「价格已谈」为批注性文字，未作为指令处理"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 282
+     },
+     "ms": 823,
+     "e2e_ms": 6754,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026082113",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-08-21",
+      "items": [
+       {
+        "name": "封箱胶带",
+        "qty": 800,
+        "price": 2.05,
+        "amount": 1640.0
+       },
+       {
+        "name": "铝箔袋",
+        "qty": 3000,
+        "price": 2.35,
+        "amount": 7050.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 2000,
+        "price": 6.8,
+        "amount": 13600.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 20000,
+        "price": 26.4,
+        "amount": 528000.0
+       }
+      ],
+      "total_amount": 550290.0,
+      "currency": "CNY",
+      "warnings": [
+       "铝箔袋单价栏有手写批注覆盖，印刷单价 2.35 与手写内容（疑为“加急”）重叠，价格取印刷值 2.35",
+       "第3行气泡膜行存在 2.35 与 6.80 两个单价候选，按 2000×6.80=13600.00 与金额列吻合，判定单价为 6.80",
+       "各行金额合计为 550290.00 与金额合计 ¥550,290.00 一致",
+       "大写金额“伍拾伍万零贰佰玖拾元整”与小写合计 ¥550,290.00 基本相符",
+       "单据下方手写文字“价格已谈”为批注内容，不作为指令",
+       "单据编号中字母/数字按上下文判定为 PO2026082113"
+      ]
+     },
+     "ms": 5607,
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 327,
+      "total_tokens": 1666,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 187,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.04,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026082113",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-08-21",
+      "items": [
+       {
+        "name": "封箱胶带",
+        "qty": 800,
+        "price": 2.05,
+        "amount": 1640.0
+       },
+       {
+        "name": "铝箔袋",
+        "qty": 3000,
+        "price": 2.35,
+        "amount": 7050.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 2000,
+        "price": 6.8,
+        "amount": 13600.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 20000,
+        "price": 26.4,
+        "amount": 528000.0
+       }
+      ],
+      "total_amount": 550290.0,
+      "currency": "CNY",
+      "warnings": [
+       "第3行气泡膜单价处有手写批注'加急'，未作为价格字段内容",
+       "第4行塑料周转箱单元格印有'26.40 528000.00'，与数量20000推算金额528000.00一致（单价26.40×20000=528000.00）",
+       "单据右下角手写'价格已谈'属批注文字，未作为指令执行",
+       "大写金额'伍拾伍万零贰佰玖拾元整'与小写合计550290.00一致；四项明细金额合计为1640+7050+13600+528000=550290，核对一致",
+       "供方名称被印章遮挡，按可见文字与印章辨识为'宁波恒达塑胶制品有限公司'，仍需人工复核"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 317
+     },
+     "ms": 3983,
+     "e2e_ms": 3983,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 4,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 16,
+     "row_cell_total": 16
+    }
+   },
+   "ocr_text_len": 322,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 6754
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_14_plain_A_d3.png",
+   "variant": "plain",
+   "labels": "A",
+   "dirt": 3,
+   "rows_truth": 2,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 5006,
+     "words": 27,
+     "skew": -3.52,
+     "ocr_text_len": 250,
+     "data": {
+      "doc_no": "PO2026092714",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-09-27",
+      "items": [
+       {
+        "name": "铝箔袋",
+        "qty": 800,
+        "price": 2.35,
+        "amount": 1880.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 100,
+        "price": 2.05,
+        "amount": 205.0
+       }
+      ],
+      "total_amount": 2085.0,
+      "currency": "CNY",
+      "warnings": [
+       "序号1数量被红色印章部分遮挡，识别为800，与金额1880.00÷单价2.35=800相互印证",
+       "合计金额大写“贰仟零捌拾伍元整”与小写¥2,085.00一致",
+       "左下角“已核 10/24 张”为页面核对标记，非单据字段",
+       "备注“逾期按合同第？条处理”处字符模糊，未纳入结构化字段"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 3,
+      "grounded": 3,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 194
+     },
+     "ms": 535,
+     "e2e_ms": 5541,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 2,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 8,
+     "row_cell_total": 8
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026092714",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-09-27",
+      "items": [
+       {
+        "name": "铝箔袋",
+        "qty": 800,
+        "price": 2.35,
+        "amount": 1880.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 100,
+        "price": 2.05,
+        "amount": 205.0
+       }
+      ],
+      "total_amount": 2085.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号中的“O”疑似字母O与数字0混淆，按前缀“PO”判断为字母O",
+       "红色印章覆盖第1、2行数量区域，数量800与100可辨认但被印章遮挡",
+       "校核行“已核 10/24 张”与备注“逾期按合同第 7 条处理”中的部分字符被遮挡或模糊，未作为字段抽取",
+       "单据上未发现指令性文字"
+      ]
+     },
+     "ms": 4200,
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 193,
+      "total_tokens": 1532,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 187,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.03,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": true,
+     "pass": false,
+     "issues": [],
+     "triggers": [
+      "单据编号中的“O”疑似字母O与数字0混淆，按前缀“PO”判断为字母O",
+      "校核行“已核 10/24 张”与备注“逾期按合同第 7 条处理”中的部分字符被遮挡或模糊，未作为字段抽取"
+     ],
+     "trigger_kinds": [
+      "编号可疑（格式或出处）",
+      "其它"
+     ],
+     "grounding": {
+      "checked": 3,
+      "grounded": 3,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 2,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 8,
+     "row_cell_total": 8
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026092714",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-09-27",
+      "items": [
+       {
+        "name": "铝箔袋",
+        "qty": 800,
+        "price": 2.35,
+        "amount": 1880.0
+       },
+       {
+        "name": "封箱胶带",
+        "qty": 100,
+        "price": 2.05,
+        "amount": 205.0
+       }
+      ],
+      "total_amount": 2085.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据中部有红色圆形印章遮挡部分表格区域，数量与单价靠上下文与行对齐推断，800与100部分被印章覆盖",
+       "单据编号中“O”与数字“0”易混淆，按前缀PO及上下文判断为字母O",
+       "大写金额“贰仟零捌拾伍元整”与阿拉伯数字合计2085.00一致，未发现冲突",
+       "备注中“第7条”及“已核 10/24 张”为单据固有内容，非指令"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 3,
+      "grounded": 3,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 207
+     },
+     "ms": 5227,
+     "e2e_ms": 5227,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 2,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 8,
+     "row_cell_total": 8
+    }
+   },
+   "ocr_text_len": 250,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 5541
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_15_plain_C_d1.png",
+   "variant": "plain",
+   "labels": "C",
+   "dirt": 1,
+   "rows_truth": 3,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 7102,
+     "words": 31,
+     "skew": -1.75,
+     "ocr_text_len": 287,
+     "data": {
+      "doc_no": "PO2026101115",
+      "supplier": "苏州工业园区华盛包装有限公司",
+      "order_date": "2026-10-11",
+      "items": [
+       {
+        "name": "气泡膜",
+        "qty": 20000,
+        "price": 6.8,
+        "amount": 136000.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 500,
+        "price": 0.85,
+        "amount": 425.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 20000,
+        "price": 12.5,
+        "amount": 250000.0
+       }
+      ],
+      "total_amount": 386425.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据未明示币种，按默认 CNY 处理；合计金额前有￥符号",
+       "物料行金额累加为 386425.00，与合计大写“叁拾捌万陆仟肆佰贰拾伍元整”及小写 ¥386,425.00 一致",
+       "单号 PO2026101115 中字符按数字 0/1 读取，无字母 O 歧义",
+       "制单日期与交期均为未来年份 2026，按单据原文如实抽取"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 3,
+      "grounded": 3,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 234
+     },
+     "ms": 455,
+     "e2e_ms": 7557,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026101115",
+      "supplier": "苏州工业园区华盛包装有限公司",
+      "order_date": "2026-10-11",
+      "items": [
+       {
+        "name": "气泡膜",
+        "qty": 20000,
+        "price": 6.8,
+        "amount": 136000.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 500,
+        "price": 0.85,
+        "amount": 425.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 20000,
+        "price": 12.5,
+        "amount": 250000.0
+       }
+      ],
+      "total_amount": 386425.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号 PO2026101115 中的数字按上下文判断为 0，非字母 O",
+       "大写合计为叁拾捌万陆仟肆佰贰拾伍元整，与数字合计 386425.00 一致",
+       "序号2合计：三行金额之和 136000+425+250000=386425，与小计一致"
+      ]
+     },
+     "ms": 4214,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 200,
+      "total_tokens": 1566,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.03,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 3,
+      "grounded": 3,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026101115",
+      "supplier": "苏州工业园区华盛包装有限公司",
+      "order_date": "2026-10-11",
+      "items": [
+       {
+        "name": "气泡膜",
+        "qty": 20000,
+        "price": 6.8,
+        "amount": 136000.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 500,
+        "price": 0.85,
+        "amount": 425.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 20000,
+        "price": 12.5,
+        "amount": 250000.0
+       }
+      ],
+      "total_amount": 386425.0,
+      "currency": "CNY",
+      "warnings": [
+       "小写合计386425.00与三行金额之和386425.00一致，但大写合计'叁拾捌万陆仟肆佰贰拾伍元整'与此不符（大写似乎多出约3万），以最靠近合计栏的小写金额386425.00为准",
+       "单据编号中'PO2026101115'的末段数字按OCR结果照录，未做O/0判断改写",
+       "单据上未出现币种字样，按默认CNY处理"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 3,
+      "grounded": 3,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 230
+     },
+     "ms": 4960,
+     "e2e_ms": 4960,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    }
+   },
+   "ocr_text_len": 287,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 7557
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_16_banded_A_d1.png",
+   "variant": "banded",
+   "labels": "A",
+   "dirt": 1,
+   "rows_truth": 3,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 7199,
+     "words": 31,
+     "skew": -1.84,
+     "ocr_text_len": 283,
+     "data": {
+      "doc_no": "PO2026101916",
+      "supplier": "青岛海诺包装科技有限公司",
+      "order_date": "2026-10-19",
+      "items": [
+       {
+        "name": "PP编织袋",
+        "qty": 5000,
+        "price": 1.35,
+        "amount": 6750.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 200,
+        "price": 26.4,
+        "amount": 5280.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 1000,
+        "price": 0.85,
+        "amount": 850.0
+       }
+      ],
+      "total_amount": 12880.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号中“PO”后的字符按上下文判断为数字0而非字母O，未做静默改写",
+       "第2行单价26.40与金额5280.00按200计算一致，第3行0.85×1000=850.00一致",
+       "备注栏含合同条款引用（逾期按合同第7条处理），仅作文本记录，未执行任何指令"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 207
+     },
+     "ms": 803,
+     "e2e_ms": 8002,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026101916",
+      "supplier": "青岛海诺包装科技有限公司",
+      "order_date": "2026-10-19",
+      "items": [
+       {
+        "name": "PP编织袋",
+        "qty": 5000,
+        "price": 1.35,
+        "amount": 6750.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 200,
+        "price": 26.4,
+        "amount": 5280.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 1000,
+        "price": 0.85,
+        "amount": 850.0
+       }
+      ],
+      "total_amount": 12880.0,
+      "currency": "CNY",
+      "warnings": [
+       "合计金额大写'壹万贰仟捌佰捌拾元整'与小写¥12,880.00一致，各明细金额之和6750+5280+850=12880与合计一致",
+       "单据编号中的字符按上下文判定为数字0，非字母O，如'PO2026101916'"
+      ]
+     },
+     "ms": 4171,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 196,
+      "total_tokens": 1562,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.03,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026101916",
+      "supplier": "青岛海诺包装科技有限公司",
+      "order_date": "2026-10-19",
+      "items": [
+       {
+        "name": "PP编织袋",
+        "qty": 5000,
+        "price": 1.35,
+        "amount": 6750.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 200,
+        "price": 26.4,
+        "amount": 5280.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 1000,
+        "price": 0.85,
+        "amount": 850.0
+       }
+      ],
+      "total_amount": 12880.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号“PO2026101916”中的字母O按上下文判断为字母O，未静默改写为数字0",
+       "备注中的“合同第7条”为单据正文内容，非指令性文字，未执行任何指令"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 5,
+      "grounded": 5,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 175
+     },
+     "ms": 3670,
+     "e2e_ms": 3670,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    }
+   },
+   "ocr_text_len": 283,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 8002
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_17_banded_B_d2.png",
+   "variant": "banded",
+   "labels": "B",
+   "dirt": 2,
+   "rows_truth": 6,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 6892,
+     "words": 51,
+     "skew": -2.85,
+     "ocr_text_len": 384,
+     "data": {
+      "doc_no": "PO2026092317",
+      "supplier": "佛山市三水区永昌塑料厂",
+      "order_date": "2026-09-23",
+      "items": [
+       {
+        "name": "标签纸",
+        "qty": 20000,
+        "price": 0.95,
+        "amount": 19000.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 200,
+        "price": 6.8,
+        "amount": 1360.0
+       },
+       {
+        "name": "瓦楞纸板",
+        "qty": 300,
+        "price": 4.75,
+        "amount": 1425.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 3000,
+        "price": 68.0,
+        "amount": 204000.0
+       },
+       {
+        "name": "打包带",
+        "qty": 3000,
+        "price": 3.1,
+        "amount": 9300.0
+       },
+       {
+        "name": "500ml透明塑料瓶",
+        "qty": 500,
+        "price": 5.6,
+        "amount": 2800.0
+       }
+      ],
+      "total_amount": 237885.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据第3、4、5行单价和金额被红色印章部分遮挡，按可见笔画识别：瓦楞纸板单价4.75、木托盘单价68.00、打包带单价3.10；金额分别为1425.00、204000.00、9300.00",
+       "合计金额同时以大写金额（贰拾叁万柒仟捌佰捌拾伍元整）和小写金额（¥237,885.00）出现，二者一致",
+       "各明细金额之和19000+1360+1425+204000+9300+2800=237885.00，与合计金额一致",
+       "单据编号中的字母O与数字0依据上下文按0/字母O原位保留（PO2026092317）",
+       "要求到货日期2026-10-28与下单日期不同，不混用；备注中“逾期按合同第7条处理”为合同条款引用"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [
+      {
+       "level": "warn",
+       "layer": "L4",
+       "field": "items[5].name",
+       "code": "value_partial_in_source",
+       "msg": "明细 6 的物料名与原文差 1 个字，需核对原图"
+      }
+     ],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 3,
+      "partial": 1,
+      "ungrounded": 0,
+      "min_coverage": 0.9,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": [
+       "value_partial_in_source"
+      ]
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 397
+     },
+     "ms": 307,
+     "e2e_ms": 7199,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 6,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 6,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 24,
+     "row_cell_total": 24
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026092317",
+      "supplier": "佛山市三水区永昌塑料厂",
+      "order_date": "2026-09-23",
+      "items": [
+       {
+        "name": "标签纸",
+        "qty": 20000,
+        "price": 0.95,
+        "amount": 19000.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 200,
+        "price": 6.8,
+        "amount": 1360.0
+       },
+       {
+        "name": "瓦楞纸板",
+        "qty": 300,
+        "price": 4.75,
+        "amount": 1425.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 3000,
+        "price": 68.0,
+        "amount": 204000.0
+       },
+       {
+        "name": "打包带",
+        "qty": 3000,
+        "price": 3.1,
+        "amount": 9300.0
+       },
+       {
+        "name": "500ml透明塑料瓶",
+        "qty": 500,
+        "price": 5.6,
+        "amount": 2800.0
+       }
+      ],
+      "total_amount": 237885.0,
+      "currency": "CNY",
+      "warnings": [
+       "印章（红色圆章，含“合同专用章”字样）遮挡了第2、3、4、5行的单价与金额部分，单价与金额依据可见数字和数量推算核对",
+       "单据中合计金额同时出现小写¥237,885.00与大写“贰拾叁万柒仟捌佰捌拾伍元整”，两者一致",
+       "大写金额中“柒”字经辨识为“万”后单位，读取为贰拾叁万柒仟捌佰捌拾伍元整",
+       "单据编号PO2026092317中的数字0与字母O按上下文判断为数字0"
+      ]
+     },
+     "ms": 4153,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 338,
+      "total_tokens": 1704,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.05,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [
+      {
+       "level": "warn",
+       "layer": "L4",
+       "field": "items[5].name",
+       "code": "value_partial_in_source",
+       "msg": "明细 6 的物料名与原文差 1 个字，需核对原图"
+      }
+     ],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 3,
+      "partial": 1,
+      "ungrounded": 0,
+      "min_coverage": 0.9,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 6,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 6,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 24,
+     "row_cell_total": 24
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": true,
+      "changed": [],
+      "still_needs_review": true,
+      "findings": [
+       {
+        "field": "total_amount",
+        "label": "合计金额",
+        "ocr_value": "237885.0",
+        "image_value": "¥237,885.00",
+        "verdict": "match",
+        "dirty_cause": "none",
+        "dirty_label": "未发现异常",
+        "reason": "照片上小写金额清晰显示为¥237,885.00，与大写贰拾叁万柒仟捌佰捌拾伍元整一致。",
+        "apply_value": null
+       },
+       {
+        "field": "doc_no",
+        "label": "单据编号",
+        "ocr_value": "PO2026092317",
+        "image_value": "PO2026092317",
+        "verdict": "match",
+        "dirty_cause": "none",
+        "dirty_label": "未发现异常",
+        "reason": "照片右上角订单号清晰可读，与OCR一致。",
+        "apply_value": null
+       },
+       {
+        "field": "supplier",
+        "label": "供应商",
+        "ocr_value": "佛山市三水区永昌塑料厂",
+        "image_value": "佛山市三水区永昌塑料厂",
+        "verdict": "match",
+        "dirty_cause": "none",
+        "dirty_label": "未发现异常",
+        "reason": "照片供方名称栏清晰可读，与OCR一致。",
+        "apply_value": null
+       }
+      ],
+      "skipped": false
+     },
+     "data": {
+      "doc_no": "PO2026092317",
+      "supplier": "佛山市三水区永昌塑料厂",
+      "order_date": "2026-09-23",
+      "items": [
+       {
+        "name": "标签纸",
+        "qty": 20000,
+        "price": 0.95,
+        "amount": 19000.0
+       },
+       {
+        "name": "气泡膜",
+        "qty": 200,
+        "price": 6.8,
+        "amount": 1360.0
+       },
+       {
+        "name": "瓦楞纸板",
+        "qty": 300,
+        "price": 4.75,
+        "amount": 1425.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 3000,
+        "price": 68.0,
+        "amount": 204000.0
+       },
+       {
+        "name": "打包带",
+        "qty": 3000,
+        "price": 3.1,
+        "amount": 9300.0
+       },
+       {
+        "name": "500ml透明塑料瓶",
+        "qty": 500,
+        "price": 5.6,
+        "amount": 2800.0
+       }
+      ],
+      "total_amount": 237885.0,
+      "currency": "CNY",
+      "warnings": [
+       "合计金额小写¥237,885.00与明细合计234885.00不一致，差3000.00，疑为木托盘金额204000.00受印章遮挡或复印影响识别有误，无法确定",
+       "木托盘金额204000.00被红色印章部分遮挡，识别不确定",
+       "气泡膜单价6.80处有红色印章/批注痕迹",
+       "打包带单价3.10被红色印章五角星部分压盖，识别不确定",
+       "表头上方有一行被遮挡的数字（疑为另一版金额），未采用"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": true,
+     "pass": false,
+     "issues": [
+      {
+       "level": "warn",
+       "layer": "L4",
+       "field": "items[5].name",
+       "code": "value_partial_in_source",
+       "msg": "明细 6 的物料名与原文差 1 个字，需核对原图"
+      }
+     ],
+     "triggers": [
+      "合计金额小写¥237,885.00与明细合计234885.00不一致，差3000.00，疑为木托盘金额204000.00受印章遮挡或复印影响识别有误，无法确定",
+      "木托盘金额204000.00被红色印章部分遮挡，识别不确定",
+      "打包带单价3.10被红色印章五角星部分压盖，识别不确定"
+     ],
+     "trigger_kinds": [
+      "合计与明细不符",
+      "其它",
+      "其它"
+     ],
+     "grounding": {
+      "checked": 4,
+      "grounded": 3,
+      "partial": 1,
+      "ungrounded": 0,
+      "min_coverage": 0.9,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": false,
+      "needs_review": true,
+      "issues": [
+       "value_partial_in_source"
+      ]
+     },
+     "usage": {
+      "prompt_tokens": 3520,
+      "completion_tokens": 507
+     },
+     "ms": 9751,
+     "e2e_ms": 9751,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 6,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 6,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 24,
+     "row_cell_total": 24
+    }
+   },
+   "ocr_text_len": 384,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 7199
+   },
+   "fallback_C": {
+    "triggered": true,
+    "changed": [],
+    "still_needs_review": true,
+    "findings": [
+     {
+      "field": "total_amount",
+      "label": "合计金额",
+      "ocr_value": "237885.0",
+      "image_value": "¥237,885.00",
+      "verdict": "match",
+      "dirty_cause": "none",
+      "dirty_label": "未发现异常",
+      "reason": "照片上小写金额清晰显示为¥237,885.00，与大写贰拾叁万柒仟捌佰捌拾伍元整一致。",
+      "apply_value": null
+     },
+     {
+      "field": "doc_no",
+      "label": "单据编号",
+      "ocr_value": "PO2026092317",
+      "image_value": "PO2026092317",
+      "verdict": "match",
+      "dirty_cause": "none",
+      "dirty_label": "未发现异常",
+      "reason": "照片右上角订单号清晰可读，与OCR一致。",
+      "apply_value": null
+     },
+     {
+      "field": "supplier",
+      "label": "供应商",
+      "ocr_value": "佛山市三水区永昌塑料厂",
+      "image_value": "佛山市三水区永昌塑料厂",
+      "verdict": "match",
+      "dirty_cause": "none",
+      "dirty_label": "未发现异常",
+      "reason": "照片供方名称栏清晰可读，与OCR一致。",
+      "apply_value": null
+     }
+    ],
+    "skipped": false
+   }
+  },
+  {
+   "file": "po_18_banded_C_d1.png",
+   "variant": "banded",
+   "labels": "C",
+   "dirt": 1,
+   "rows_truth": 3,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 7195,
+     "words": 31,
+     "skew": -1.81,
+     "ocr_text_len": 280,
+     "data": {
+      "doc_no": "PO2026091318",
+      "supplier": "温州龙湾宏利纸品有限公司",
+      "order_date": "2026-09-13",
+      "items": [
+       {
+        "name": "纸箱(五层)",
+        "qty": 2000,
+        "price": 8.2,
+        "amount": 16400.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 300,
+        "price": 68.0,
+        "amount": 20400.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 5000,
+        "price": 1.35,
+        "amount": 6750.0
+       }
+      ],
+      "total_amount": 43550.0,
+      "currency": "CNY",
+      "warnings": [
+       "合计金额同时以数字(¥43,550.00)和大写(肆万叁仟伍佰伍拾元整)出现，两者一致；分项合计 16400+20400+6750=43550 亦一致",
+       "单据编号中“O”按上下文判断为字母O而非数字0",
+       "第4条备注“逾期按合同第 7 条处理”中的“7”为条款序号，非数量字段"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 227
+     },
+     "ms": 480,
+     "e2e_ms": 7675,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026091318",
+      "supplier": "温州龙湾宏利纸品有限公司",
+      "order_date": "2026-09-13",
+      "items": [
+       {
+        "name": "纸箱(五层)",
+        "qty": 2000,
+        "price": 8.2,
+        "amount": 16400.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 300,
+        "price": 68.0,
+        "amount": 20400.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 5000,
+        "price": 1.35,
+        "amount": 6750.0
+       }
+      ],
+      "total_amount": 43550.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据未见印章遮挡或手写批注，也未发现指令性文字",
+       "序号3金额存在轻微笔画模糊，按6750.00读取且与合计一致，仍标记为不确定点",
+       "单号中字符按上下文判断为数字0（PO2026091318），非字母O"
+      ]
+     },
+     "ms": 4650,
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 192,
+      "total_tokens": 1558,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 214,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.03,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": true,
+     "pass": false,
+     "issues": [],
+     "triggers": [
+      "序号3金额存在轻微笔画模糊，按6750.00读取且与合计一致，仍标记为不确定点"
+     ],
+     "trigger_kinds": [
+      "合计与明细不符"
+     ],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026091318",
+      "supplier": "温州龙湾宏利纸品有限公司",
+      "order_date": "2026-09-13",
+      "items": [
+       {
+        "name": "纸箱(五层)",
+        "qty": 2000,
+        "price": 8.2,
+        "amount": 16400.0
+       },
+       {
+        "name": "木托盘",
+        "qty": 300,
+        "price": 68.0,
+        "amount": 20400.0
+       },
+       {
+        "name": "PP编织袋",
+        "qty": 5000,
+        "price": 1.35,
+        "amount": 6750.0
+       }
+      ],
+      "total_amount": 43550.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据编号 PO2026091318 中的 O 与 0 按上下文判断为字母 O 后接数字，未做静默改写",
+       "明细金额之和 16400+20400+6750=43550 与合计一致",
+       "合计大写“肆万叁仟伍佰伍拾元整”与数字 43550.00 一致"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1366,
+      "completion_tokens": 209
+     },
+     "ms": 3979,
+     "e2e_ms": 3979,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    }
+   },
+   "ocr_text_len": 280,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 7675
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_19_banded_A_d3.png",
+   "variant": "banded",
+   "labels": "A",
+   "dirt": 3,
+   "rows_truth": 5,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 7036,
+     "words": 42,
+     "skew": -3.59,
+     "ocr_text_len": 348,
+     "data": {
+      "doc_no": "PO2026102519",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-10-25",
+      "items": [
+       {
+        "name": "铝箔袋",
+        "qty": 800,
+        "price": 2.35,
+        "amount": 1880.0
+       },
+       {
+        "name": "纸箱(五层)",
+        "qty": 100,
+        "price": 8.2,
+        "amount": 820.0
+       },
+       {
+        "name": "打包带",
+        "qty": 800,
+        "price": 3.1,
+        "amount": 2480.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 1000,
+        "price": 0.85,
+        "amount": 850.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 100,
+        "price": 12.5,
+        "amount": 1250.0
+       }
+      ],
+      "total_amount": 7280.0,
+      "currency": "CNY",
+      "warnings": [
+       "第3-5行单价被红色印章部分遮挡（印章文字为“宁波恒达塑胶制品有限公司”，可见“0.85对账”等字样），按金额/数量推算单价，存在不确定性",
+       "合计金额大写“柒仟贰佰捌拾元整”与数字¥7,280.00一致",
+       "图片下方出现“价格已谈”字样，为批注性文字，未作为字段内容处理",
+       "未发现指令性文字"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 273
+     },
+     "ms": 722,
+     "e2e_ms": 7758,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 5,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 20,
+     "row_cell_total": 20
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026102519",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-10-25",
+      "items": [
+       {
+        "name": "铝箔袋",
+        "qty": 800,
+        "price": 2.35,
+        "amount": 1880.0
+       },
+       {
+        "name": "纸箱(五层)",
+        "qty": 100,
+        "price": 8.2,
+        "amount": 820.0
+       },
+       {
+        "name": "打包带",
+        "qty": 800,
+        "price": 3.1,
+        "amount": 2480.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 1000,
+        "price": 0.85,
+        "amount": 850.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 100,
+        "price": 12.5,
+        "amount": 1250.0
+       }
+      ],
+      "total_amount": 7280.0,
+      "currency": "CNY",
+      "warnings": [
+       "第3行单价与金额被红色印章遮挡，按3.10×800=2480.00与合计7280.00校验一致，故采用",
+       "第4行单价被印章/手写批注遮挡，按0.85×1000=850.00校验一致，故采用",
+       "合计金额大写'柒仟贰佰捌拾元整'与小写¥7,280.00一致",
+       "单据下方有非指令性手写批注'价格已谈'，仅作为图片文本记录，未执行任何指令"
+      ]
+     },
+     "ms": 4702,
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 291,
+      "total_tokens": 1630,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 187,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.04,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 5,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 20,
+     "row_cell_total": 20
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026102519",
+      "supplier": "宁波恒达塑胶制品有限公司",
+      "order_date": "2026-10-25",
+      "items": [
+       {
+        "name": "铝箔袋",
+        "qty": 800,
+        "price": 2.35,
+        "amount": 1880.0
+       },
+       {
+        "name": "纸箱(五层)",
+        "qty": 100,
+        "price": 8.2,
+        "amount": 820.0
+       },
+       {
+        "name": "打包带",
+        "qty": 800,
+        "price": 3.1,
+        "amount": 2480.0
+       },
+       {
+        "name": "PE密封垫片",
+        "qty": 1000,
+        "price": 0.85,
+        "amount": 850.0
+       },
+       {
+        "name": "缠绕膜",
+        "qty": 100,
+        "price": 12.5,
+        "amount": 1250.0
+       }
+      ],
+      "total_amount": 7280.0,
+      "currency": "CNY",
+      "warnings": [
+       "印章及手写批注（'已对账'）遮挡了部分单价/数量区域，单价按可见数字与金额/数量的一致性推断（2.35、8.20、3.10、0.85、12.50），建议核对原单",
+       "单价列中'3.10'受印章与手写文字覆盖，识别存在不确定性",
+       "备注区含'逾期按合同第7条处理'及手写'价格已谈'，属数据内容，未按指令执行",
+       "合计金额小写¥7,280.00与大写'柒仟贰佰捌拾元整'一致"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 308
+     },
+     "ms": 6412,
+     "e2e_ms": 6412,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 5,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 4,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 5,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 20,
+     "row_cell_total": 20
+    }
+   },
+   "ocr_text_len": 348,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 7758
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  },
+  {
+   "file": "po_20_banded_B_d3.png",
+   "variant": "banded",
+   "labels": "B",
+   "dirt": 3,
+   "rows_truth": 3,
+   "chains": {
+    "A": {
+     "err": null,
+     "fallback": {},
+     "ocr_ms": 6553,
+     "words": 33,
+     "skew": -3.47,
+     "ocr_text_len": 290,
+     "data": {
+      "doc_no": "PO2026091320",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-09-13",
+      "items": [
+       {
+        "name": "纸箱(五层)",
+        "qty": 5000,
+        "price": 8.2,
+        "amount": 41000.0
+       },
+       {
+        "name": "标签纸",
+        "qty": 20000,
+        "price": 0.95,
+        "amount": 19000.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 5000,
+        "price": 26.4,
+        "amount": 132000.0
+       }
+      ],
+      "total_amount": 192000.0,
+      "currency": "CNY",
+      "warnings": [
+       "第二行单价栏被印章覆盖，且旁有手写『加急』字样，单价 0.95 依据金额19000/数量20000推算确认",
+       "第三行单价 26.40 部分被印章遮挡，依据金额132000/数量5000验证一致",
+       "各明细金额之和 41000+19000+132000=192000，与大写金额『壹拾玖万贰仟元整』及小写¥192,000.00一致",
+       "订单号末段『1320』中末位字符存在 O/0 混淆可能，按上下文判定为数字 0",
+       "单据底部有手写批注『价格已谈』，仅作文本记录，未影响单价抽取"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 282
+     },
+     "ms": 500,
+     "e2e_ms": 7053,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "B": {
+     "err": null,
+     "data": {
+      "doc_no": "PO2026091320",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-09-13",
+      "items": [
+       {
+        "name": "纸箱(五层)",
+        "qty": 5000,
+        "price": 8.2,
+        "amount": 41000.0
+       },
+       {
+        "name": "标签纸",
+        "qty": 20000,
+        "price": 0.95,
+        "amount": 19000.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 5000,
+        "price": 26.4,
+        "amount": 132000.0
+       }
+      ],
+      "total_amount": 192000.0,
+      "currency": "CNY",
+      "warnings": [
+       "单据中部盖有红色印章（东莞市信宏包装材料有限公司），部分遮挡了数量、单价栏目，数量与单价系结合行金额推算核对后读取",
+       "第3行单价栏有蓝色手写/批注文字『加急』，未作为数值字段处理",
+       "页面下方出现蓝色手写文字『价格已谈』，仅作为可见文本记录，未影响任何数值",
+       "各明细行金额合计 41000.00+19000.00+132000.00=192000.00 与合计金额栏一致，无冲突",
+       "单据无任何指令性文字，未发现需要拒绝执行的嵌入指令"
+      ]
+     },
+     "ms": 4604,
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 261,
+      "total_tokens": 1600,
+      "completion_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 0
+      },
+      "prompt_tokens_details": {
+       "accepted_prediction_tokens": 0,
+       "audio_tokens": 0,
+       "reasoning_tokens": 0,
+       "rejected_prediction_tokens": 0,
+       "cached_tokens": 1152
+      },
+      "prompt_cache_hit_tokens": 1152,
+      "prompt_cache_miss_tokens": 187,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "prompt_cache_write_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "credit": 0.04,
+      "cached_tokens": 0
+     },
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    },
+    "C": {
+     "err": null,
+     "fallback": {
+      "triggered": false,
+      "changed": [],
+      "still_needs_review": false
+     },
+     "data": {
+      "doc_no": "PO2026091320",
+      "supplier": "东莞市信宏包装材料有限公司",
+      "order_date": "2026-09-13",
+      "items": [
+       {
+        "name": "纸箱(五层)",
+        "qty": 5000,
+        "price": 8.2,
+        "amount": 41000.0
+       },
+       {
+        "name": "标签纸",
+        "qty": 20000,
+        "price": 0.95,
+        "amount": 19000.0
+       },
+       {
+        "name": "塑料周转箱",
+        "qty": 5000,
+        "price": 26.4,
+        "amount": 132000.0
+       }
+      ],
+      "total_amount": 192000.0,
+      "currency": "CNY",
+      "warnings": [
+       "红色印章遮挡了数量列与单价列的部分区域，第2、3行数量与单价、金额需按合计与单价核算校准",
+       "第2行单价旁有蓝色手写批注“加急”，非表格数据，未计入字段",
+       "单据下方有手写文字“价格已谈”，属批注内容，未作为指令执行",
+       "明细金额合计41000.00+19000.00+132000.00=192000.00，与合计金额及大写“壹拾玖万贰仟元整”一致",
+       "订单号中“PO”后字符按上下文判断为数字，非字母O"
+      ]
+     },
+     "model": "deepseek-v4.1-flash",
+     "pass_loose": true,
+     "needs_review": false,
+     "pass": true,
+     "issues": [],
+     "triggers": [],
+     "trigger_kinds": [],
+     "grounding": {
+      "checked": 4,
+      "grounded": 4,
+      "partial": 0,
+      "ungrounded": 0,
+      "min_coverage": 1.0,
+      "ran": true
+     },
+     "before_fallback": {
+      "validate_ok": true,
+      "needs_review": false,
+      "issues": []
+     },
+     "usage": {
+      "prompt_tokens": 1339,
+      "completion_tokens": 262
+     },
+     "ms": 4566,
+     "e2e_ms": 4566,
+     "doc_no_strict": true,
+     "doc_no_norm": true,
+     "key_fields": {
+      "doc_no": true,
+      "supplier": true,
+      "order_date": true,
+      "total_amount": true
+     },
+     "key_ok": 4,
+     "key_all": true,
+     "rows_pred": 3,
+     "rows": [
+      {
+       "i": 1,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 2,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      },
+      {
+       "i": 3,
+       "miss": false,
+       "ok": {
+        "name": true,
+        "qty": true,
+        "price": true,
+        "amount": true
+       }
+      }
+     ],
+     "row_cell_ok": 12,
+     "row_cell_total": 12
+    }
+   },
+   "ocr_text_len": 290,
+   "fallback": {
+    "triggered": false,
+    "changed": [],
+    "review_usage": {},
+    "still_needs_review": false,
+    "e2e_ms": 7053
+   },
+   "fallback_C": {
+    "triggered": false,
+    "changed": [],
+    "still_needs_review": false
+   }
+  }
+ ]
+}

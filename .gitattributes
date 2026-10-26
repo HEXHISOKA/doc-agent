@@ -1,0 +1,8 @@
+# 统一换行符，避免 Windows 端提交产生全文件 diff
+* text=auto eol=lf
+
+# 二进制资源不做行尾转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.parquet binary

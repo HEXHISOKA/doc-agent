@@ -1,0 +1,8 @@
+# 核心运行依赖（服务本体 + OCR）
+rapidocr-onnxruntime>=1.2,<2.0
+numpy
+pillow>=10,<13
+opencv-python-headless>=4.8      # src/preprocess.py 图像预处理
+
+# 可选：仅在需要重新下载公开数据集时使用
+# pyarrow>=14                      # src/fetch_hf_testset.py
